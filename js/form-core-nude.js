@@ -14,11 +14,11 @@
 
   var THANKYOU_URL = 'https://landingops.com/result';
 
-  // 버튼 컬러(활성/비활성) – 필요하면 여기서만 수정하면 됨
-  var BTN_ACTIVE_BG   = '#1f5fae'; // 기본 파란색
-  var BTN_ACTIVE_TEXT = '#ffffff';
-  var BTN_DISABLED_BG = '#7b8a97'; // 비활성 회색
-  var BTN_DISABLED_TX = '#ffffff';
+// 버튼 컬러(활성/비활성)
+  var BTN_ACTIVE_BG   = '';
+  var BTN_ACTIVE_TEXT = '';
+  var BTN_DISABLED_BG = '';
+  var BTN_DISABLED_TX = '';
 
   // ─────────────────────────────
   // 2. DOM 로드 후 초기화
@@ -36,6 +36,32 @@
 
     // 사용자가 한 번이라도 입력/선택을 했는지 여부
     var hasInteracted = false;
+
+    // ─────────────────────────────
+    // brand.css 토큰에서 버튼 색상 읽기
+    // 패턴/primary 변경 시 자동 반영됨
+    // ─────────────────────────────
+    function getCssVar(name) {
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim();
+    }
+
+    // 활성 버튼 (브랜드 기반)
+    BTN_ACTIVE_BG   = getCssVar('--color-cta-main') 
+                    || getCssVar('--primary') 
+                    || '#1f5fae';
+
+    BTN_ACTIVE_TEXT = getCssVar('--color-cta-main-text') 
+                    || '#ffffff';
+
+    // 비활성 버튼 (무채색 토큰 기반)
+    BTN_DISABLED_BG = getCssVar('--neutral-600') 
+                    || '#7b8a97';
+
+    BTN_DISABLED_TX = getCssVar('--neutral-50') 
+                    || '#ffffff';
+
 
     // (2) 필드 설정
     // 광고주/폼 항목이 바뀌면 "여기 FIELD_CONFIG만" 수정하면 됨
