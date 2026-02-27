@@ -1,0 +1,988 @@
+/*===================================[1번] 디자인 토큰(변수) (시작) ===================================
+★가장 중요한 규칙★
+토큰은 아주 적게 만들고, 컴포넌트는 아주 많이 생성하기!
+토큰 1개가 바뀌면, 모든 컴포넌트가 자동으로 변해야한다.
+
+토큰(brand.css)은 실제 "색/모양 값"만 들고있음.
+Primary가 바뀌면, brand.css토큰들이 재계산되고
+그 토큰을 쓰던 모든 컴포넌트들이 자동으로 새 디자인 스킨을 얻는다.  ★★디자인 시스템의 핵심원리★★
+따라서 토큰은 많이 생성하면 안되고
+최대한 적게 생산해서 재사용성이 극대화되어야 한다.
+========================================================================================================================
+*색상(Color)시스템 3층구조
+
+1층: 브랜드 계층 - [ Primary / Secondary / Accent ]
+                 - 광고주마다 달라지는 색 → 브랜드아이덴티티(메인톤)
+
+2층: UI 상태 계층 - [ 성공 / 실패 / 오류 ]
+                  - 기능적인 색 → 거의 고정
+
+3층: Surface & Container 계층 - [ 배경 / 카드 / 섹션 / 레이어 ]
+                              - UI(사용자와 상호작용하는 시각화면)가 
+                                "어떤 깊이, 톤, 계층감"을 가지는지 결정하는 색상군 →  ★실무에서 톤앤매너의 80% 담당★
+========================================================================================================================
+
+/* ====================================================================
+   BRAND COLOR SYSTEM (auto-generated from #346cb3)
+   ==================================================================== */
+
+/* ------------------------------------------------
+   [1] PALETTE — 브랜드 기본 색상 (원재료)
+-------------------------------------------------*/
+:root {
+
+/* =========================================================================
+   PRIMARY COLOR SYSTEM (5 tokens)
+   =========================================================================*/
+  --primary: hsl(214 55% 45%);                /* 메인 포인트 컬러: 버튼 배경, 강한 아이콘, 핵심 강조 텍스트 */
+  --primary-soft: hsla(214 55% 45% / 0.12);           /* 하이라이트, 모달 오버레이, 얇은 강조줄(형광펜 느낌) */
+  --primary-bg: hsl(214 14% 88%);               /* 카드/박스/섹션 라이트 배경용 */
+  --primary-border: hsl(214 27% 63%);       /* 테두리, 구분선(라인 전용 컬러) */
+  --primary-text: hsl(214 49% 35%);           /* 텍스트 전용 포인트 컬러: 링크, 상태 배지, 작은 강조 문장 */
+
+/* =========================================================================
+   SECONDARY COLOR SYSTEM (5 tokens)
+   =========================================================================*/
+  --secondary: hsl(232 50% 51%);              /* 메인 포인트 컬러: 버튼 배경, 강한 아이콘, 핵심 강조 텍스트 */
+  --secondary-soft: hsla(232 50% 51% / 0.12);         /* 하이라이트, 모달 오버레이, 얇은 강조줄(형광펜 느낌) */
+  --secondary-bg: hsl(232 12% 93%);             /* 카드/박스/섹션 라이트 배경용 */
+  --secondary-border: hsl(232 25% 69%);     /* 테두리, 구분선(라인 전용 컬러) */
+  --secondary-text: hsl(232 45% 41%);         /* 텍스트 전용 포인트 컬러: 링크, 상태 배지, 작은 강조 문장 */
+
+/* =========================================================================
+   ACCENT COLOR SYSTEM (5 tokens)
+   =========================================================================*/
+  --accent: hsl(44 67% 55%);                    /* 메인 포인트 컬러: 버튼 배경, 강한 아이콘, 핵심 강조 텍스 트 */
+  --accent-soft: hsla(44 67% 55% / 0.12);               /* 하이라이트, 모달 오버레이, 얇은 강조줄(형광펜 느 낌) */
+  --accent-bg: hsl(44 17% 97%);                   /* 카드/박스/섹션 라이트 배경용 */
+  --accent-border: hsl(44 33% 73%);           /* 테두리, 구분선(라인 전용 컬러) */
+  --accent-text: hsl(44 60% 45%);               /* 텍스트 전용 포인트 컬러: 링크, 상태 배지, 작은 강조 문장 */
+
+
+/* =========================================================================
+   NEUTRAL SCALE (항상 cool gray) - 무채색 계열
+   =========================================================================*/
+  --neutral-900: hsl(220 13% 12%);
+  --neutral-800: hsl(220 13% 18%);
+  --neutral-700: hsl(220 11% 30%);
+  --neutral-600: hsl(220 10% 40%);
+  --neutral-400: hsl(220 9% 55%);
+  --neutral-300: hsl(220 9% 70%);
+  --neutral-200: hsl(220 10% 82%);
+  --neutral-100: hsl(220 13% 92%);
+  --neutral-50:  hsl(220 14% 97%);
+
+/* =========================================================================
+   SURFACES / OVERLAYS - 무채색 계열
+   =========================================================================*/
+  --surface: hsl(220 14% 97%);
+  --surface-alt: hsl(220 13% 92%);
+  --overlay-soft: hsla(0 0% 0% / 0.03);
+  --overlay-medium: hsla(0 0% 0% / 0.06);
+  --overlay-strong: hsla(0 0% 0% / 0.12);
+
+/* =========================================================================
+   GRADIENT 토큰 (3종)
+   =========================================================================*/
+  --gradient-primary: linear-gradient(60deg, hsl(214 55% 45%) 0%, hsl(44 67% 55%) 100%);
+  --gradient-primary-diagonal: linear-gradient(135deg, hsl(214 55% 45%) 0%, hsl(44 67% 55%) 100%);
+  --gradient-primary-horizontal: linear-gradient(90deg, hsl(214 55% 45%) 0%, hsl(44 67% 55%) 100%);
+
+}
+
+/* ------------------------------------------------
+  [2-1] SEMANTIC SURFACES — 의미토큰 (페이지/섹션/카드/모달)
+  → 무채색 계열, 브랜드 무관 기본 UI 구성요소.
+-------------------------------------------------*/
+:root {
+
+  --page-bg: var(--neutral-50);          /* 전체 페이지 배경: 거의 흰색 */
+  --section-bg: var(--neutral-50);       /* 기본 섹션 배경   */
+  --section-alt-bg: var(--neutral-100);  /* 교대 섹션 배경   */
+
+  --card-bg: var(--surface);             /* 기본 카드 배경   */
+  --card-elevated-bg: var(--surface-alt);/* 떠 있는 카드     */
+  --modal-bg: var(--surface-alt);        /* 모달/패널 배경   */
+
+  /* ------------------------------------------------
+  [2-2] SEMANTIC BORDERS — 보더 계층
+  → 무채색 계열
+  -------------------------------------------------*/
+
+  --border-subtle: var(--neutral-100);  /* 아주 연한 보더 (그리드, 구분선) */
+  --soft-border: var(--border-subtle);  /* 가장 부드러운 보더 의미 토큰 */
+  --border-default: var(--neutral-200); /* 일반 보더 (폼, 카드)          */
+  --border-strong: var(--neutral-300);  /* 강조 보더 (알림, 강조박스) */
+
+}
+
+  /* ---------------------------------------------------------------------------
+  [3] ROLE TOKENS (색상 역할토큰) — 브랜딩/인터랙션용 의미 색상   [★유지해야할것★]
+  → 실제 컴포넌트(.btn-primary, .pain-point-box 등)에 매핑되는 토큰
+  → 값은 패턴1(Primary 중심) 기준 기본값, 패턴2~5에서 교체
+  ----------------------------------------------------------------------------*/
+
+/* ==========================================================
+   PATTERN 01 — PRIMARY CORE (P-Core)
+   Primary 1색을 중심으로 전체 브랜드 톤을 만드는 안정형 패턴
+   ========================================================== */
+
+:root[data-color-pattern="1"] {   
+
+/* 역할토큰 패턴 연결은 <html lang="ko" data-color-pattern="1"> << 이렇게 ★<html>에 해야함★*/
+
+/* ------------------------------------------------
+   1) CTA (버튼)
+   - .btn-primary  → 메인 CTA
+   - .btn-secondary → 서브 CTA
+-------------------------------------------------*/
+--color-cta-main: var(--primary);           /* 메인 CTA 버튼 배경 (.btn-primary) */
+--color-cta-main-text: #fff;                /* 메인 CTA 버튼 텍스트 색 */
+--color-cta-main-hover: var(--primary);     /* 메인 CTA hover 배경 (패턴1에선 기본값과 동일로 시작) */
+
+--color-cta-sub-bg: var(--secondary-soft);  /* 서브 CTA 배경 (.btn-secondary) */
+--color-cta-sub-text: var(--secondary-text);/* 서브 CTA 텍스트 */
+--color-cta-sub-hover: var(--secondary-soft);/* 서브 CTA hover 배경 (필요 시 패턴별로 조정) */
+
+
+/* ------------------------------------------------
+   2) Badge / Tag / Label
+-------------------------------------------------*/
+--color-badge-main-bg: var(--primary-soft);      /* 정석 배지 배경 */
+--color-badge-main-text: var(--primary-text);    /* 정석 배지 텍스트 */
+--color-badge-main-icon: var(--primary);         /* 정색 배지 아이콘 (필요시) */
+
+--color-badge-rivers-bg: var(--primary);      /* 반전 배지 배경 */
+--color-badge-rivers-text: #fff;            /* 반전 배지 텍스트 */
+
+--color-badge-border: var(--primary-border);   /* 보더 강조형 배지 배경 */
+--color-badge-border-text: var(--primary-text); /* 보더 강조형 배지 텍스트*/
+
+
+/* ------------------------------------------------
+   3) 텍스트 꾸미기 5종 (Highlight / Underline / Accent Text)
+   형광펜(soft), 밑줄, 텍스트 강조, 기울임, 강한 형광펜
+-------------------------------------------------*/
+--color-highlight-bg: var(--primary-soft);        /* 형광펜(소프트) — Primary-soft */
+--color-highlight-underline: var(--primary-border);/* 밑줄/보더 — Primary */
+                                                   
+--color-highlight-strong-text: var(--primary);      /* 텍스트 메인원색 강조 — Primary */
+--color-highlight-text: var(--primary-text);      /* 텍스트 폰트색 강조 — Primary */
+--color-highlight-italic: var(--primary-soft);    /* 기울임 텍스트 포인트 — Primary-soft */
+
+--color-highlight-riverse-strong-bg: var(--primary);  /* 강한 형광펜 배경 — Primary */
+--color-highlight-riverse-text: #fff;              /* 강형광펜 시 텍스트는 무조건 white */
+
+
+/* ------------------------------------------------
+   4) 아이콘 색
+   - .icon-square 안의 아이콘 색 등
+-------------------------------------------------*/
+--color-icon-main: var(--primary);    /* 핵심 아이콘 색 (기본) */
+--color-icon-sub: var(--primary);     /* 기능/보조 아이콘 (PATTERN 3 등에서 secondary로 변경) */
+--color-icon-impact: var(--primary);  /* 혜택/감성 아이콘 (PATTERN 2,5에서 accent로 변경) */
+
+
+/* ------------------------------------------------
+   5) Pain-point Box (문제 강조 박스)
+   - .pain-point-box
+-------------------------------------------------*/
+--color-pain-bg: var(--primary-bg);        /* 박스 배경 */
+--color-pain-border: var(--primary-border);/* 박스 테두리 */
+--color-pain-text: var(--primary-text);    /* 타이틀/아이콘 포인트 (컴포넌트 맵핑 대기) */
+
+
+/* ------------------------------------------------
+   6) Solution Box (해결책/프로세스 박스)
+   - .solution-box
+   - 해결/긍정 = Accent 계열
+-------------------------------------------------*/
+--color-solution-bg: var(--accent-bg);        /* 해결책 박스 배경 */
+--color-solution-border: var(--accent-border);/* 해결책 박스 테두리 */
+--color-solution-text: var(--accent-text);    /* 해결 텍스트 포인트 컬러 (컴포넌트 맵핑 대기)  */
+
+
+/* ------------------------------------------------
+   7) Form Focus / Active State
+   - .input:focus, .textarea:focus, .form-card 내부 포커스 링
+   폼은 “행동의 시작” → Primary 고정
+-------------------------------------------------*/
+--color-form-focus-ring: var(--primary);     /* 인풋 포커스 아웃라인/보더 */
+--color-form-hover-bg: var(--primary-soft);  /* 인풋 hover 시 살짝 들어가는 배경 */
+
+
+/* ------------------------------------------------
+   8) Step Indicator / Progress UI (향후 도입용)
+   - 스텝 점/라인/대체 색
+-------------------------------------------------*/
+--color-step-active: var(--primary);         /* 현재 단계 색 */
+--color-step-inactive: var(--neutral-300);   /* 비활성 단계 점/아이콘 */
+--color-step-line: var(--primary-border);    /* 단계 사이 라인 색 */
+--color-step-alt: var(--primary);            /* 보조 스텝 색 (PATTERN 2~3에서 secondary/accent로 변경 가능) */
+
+
+/* ------------------------------------------------
+   9) 데이터/그래프 포인트 (차트/그래프)
+   - 메인 데이터 = Primary, 서브/강조 데이터 = Accent
+-------------------------------------------------*/
+--color-chart-main: var(--primary);          /* 메인 데이터 라인/바 */
+--color-chart-sub: var(--accent);            /* 보조 데이터 라인/바 */
+--color-chart-highlight: var(--accent-soft); /* 강조 포인트(하이라이트 영역)용 */
+
+}
+
+
+/* ==========================================================
+   PATTERN 02 — PRIMARY + ACCENT DUAL (PA-Dual)
+   Primary = 행동/신뢰  |  Accent = 감정/혜택/밝은 리듬
+   스타트업·교육·서비스에서 가장 널리 쓰는 이중강조형
+   ========================================================== */
+
+:root[data-color-pattern="2"] {
+
+  /* ------------------------------------------------
+     1) CTA (버튼)
+     - .btn-primary  → 메인 CTA = Primary
+     - .btn-secondary → 서브 CTA = Accent-soft + Accent
+  -------------------------------------------------*/
+  --color-cta-main: var(--primary);              /* 메인 CTA 버튼 배경 (.btn-primary) */
+  --color-cta-main-text: #fff;                   /* 메인 CTA 텍스트 */
+  --color-cta-main-hover: var(--primary);   /* 메인 CTA hover */
+
+  --color-cta-sub-bg: var(--accent-soft);        /* 서브 CTA 배경 (.btn-secondary) */
+  --color-cta-sub-text: var(--accent-text);      /* 서브 CTA 텍스트 */
+  --color-cta-sub-hover: var(--accent-soft);     /* 서브 CTA hover */
+
+
+  /* ------------------------------------------------
+     2) Badge / Tag / Label
+     - 강조가 필요한 요소에 Accent 적극 사용
+  -------------------------------------------------*/
+  --color-badge-main-bg: var(--accent-soft);          /* 정석 배지 배경 */
+  --color-badge-main-text: var(--accent-text);        /* 정석 배지 텍스트 */
+  --color-badge-main-icon: var(--accent);            /* 정색 배지 아이콘 (필요시) */
+
+  --color-badge-rivers-bg: var(--primary);        /* 반전 배지 배경 - 프라이머리*/ 
+  --color-badge-rivers-text: #fff;              /* 반전 배지 텍스트  */ 
+
+  --color-badge-border: var(--accent-border);      /* 보더 강조형 배지 배경 */
+  --color-badge-border-text: var(--accent-text);    /* 보더 강조형 배지 텍스트*/
+
+
+/* ---------------------------------------------------------------------
+   3) 텍스트 꾸미기 5종 (Highlight / Underline / Accent Text)
+   형광펜(soft), 밑줄, 텍스트 강조, 기울임, 강한 형광펜
+   -> 감정·강조·혜택 = Accent 중, 텍스트 관련된 강조는 전부 Accent 계열
+-------------------------------------------------------------------------*/
+  --color-highlight-bg: var(--accent-soft);          /* 형광펜(soft) — 감성톤 Accent-soft */
+  --color-highlight-underline: var(--accent-border); /* 밑줄 — Accent (강조/감정) */
+
+  --color-highlight-strong-text: var(--accent);      /* 텍스트 메인원색 강조 — Accent */
+  --color-highlight-text: var(--accent-text);        /* 텍스트 색 강조 — Accent */
+  --color-highlight-italic: var(--accent-soft);      /* 기울임 텍스트 — 부드러운 Accent-soft */
+
+  --color-highlight-riverse-strong-bg: var(--accent);   /* 강한 형광펜 배경 — Accent */
+  --color-highlight-riverse-text: #fff;               /* 강형광펜 텍스트 white */
+
+
+  /* ------------------------------------------------
+     4) 아이콘 색
+     - Primary = 기능/행동
+     - Accent = 감정/혜택 아이콘
+  -------------------------------------------------*/
+  --color-icon-main: var(--primary);           /* 핵심 기능 아이콘 */
+  --color-icon-sub: var(--primary);            /* fallback */
+  --color-icon-impact: var(--accent);          /* 감성/혜택 아이콘 */
+
+
+  /* ------------------------------------------------
+     5) Pain-point Box
+     - Pain은 감정이지만 Accent를 쓰면 ‘긍정’ 톤이 섞임 → Primary 고정
+  -------------------------------------------------*/
+  --color-pain-bg: var(--primary-bg);          /* Pain 박스 배경 */
+  --color-pain-border: var(--primary-border);  /* Pain 박스 보더 */
+  --color-pain-text: var(--primary-text);      /* Pain 텍스트/아이콘  (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     6) Solution Box
+     - 해결/긍정 = Accent 계열
+  -------------------------------------------------*/
+  --color-solution-bg: var(--accent-bg);          /* Solution 박스 배경 */
+  --color-solution-border: var(--accent-border);  /* Solution 박스 보더 */
+  --color-solution-text: var(--accent-text);      /* Solution 텍스트 (컴포넌트 맵핑 대기)*/
+
+
+  /* ------------------------------------------------
+     7) Form Focus / Active State
+     - Form은 행동(Action) → Primary 유지
+  -------------------------------------------------*/
+  --color-form-focus-ring: var(--primary);        /* 포커스 링 */
+  --color-form-hover-bg: var(--primary-soft);     /* hover 강조 */
+
+
+  /* ------------------------------------------------
+     8) Step Indicator / Progress UI
+     - Active는 Primary
+     - Sub 포인트는 Accent 가능
+  -------------------------------------------------*/
+  --color-step-active: var(--primary);            /* 활성 단계 */
+  --color-step-inactive: var(--neutral-300);      /* 비활성 */
+  --color-step-line: var(--primary-border);       /* 연결 라인 */
+  --color-step-alt: var(--accent);                /* 보조 단계 색 */
+
+
+  /* ------------------------------------------------
+     9) 차트/그래프 포인트
+     - 메인(P) / 보조(A)
+  -------------------------------------------------*/
+  --color-chart-main: var(--primary);             /* 메인데이터 */
+  --color-chart-sub: var(--accent);               /* 보조데이터 */
+  --color-chart-highlight: var(--accent-soft);    /* 하이라이트 포인트 */
+}
+
+/* ==========================================================
+   PATTERN 03 — PRIMARY + SECONDARY BALANCED (PS-Balance)
+   Primary = 핵심 행동/메시지, Secondary = 구조/가이드/리듬
+   기업형·시스템형 UI에 최적화된 안정형 컬러 패턴
+   ========================================================== */
+
+:root[data-color-pattern="3"] {
+
+  /* ------------------------------------------------
+     1) CTA (버튼)
+     - .btn-primary  → 메인 CTA = Primary
+     - .btn-secondary → 서브 CTA = Secondary
+  -------------------------------------------------*/
+  --color-cta-main: var(--primary);              /* 메인 CTA 버튼 배경 (.btn-primary) */
+  --color-cta-main-text: #fff;                   /* 메인 CTA 버튼 텍스트 색 */
+  --color-cta-main-hover: var(--primary);   /* 메인 CTA hover 배경 */
+
+  --color-cta-sub-bg: var(--secondary-soft);     /* 서브 CTA 배경 (.btn-secondary) */
+  --color-cta-sub-text: var(--secondary-text);   /* 서브 CTA 텍스트 */
+  --color-cta-sub-hover: var(--secondary-soft);  /* 서브 CTA hover 배경 */
+
+
+  /* ------------------------------------------------
+     2) Badge / Tag / Label
+     Secondary 계열로 정보 계층, Primary는 중요 태그에만 사용
+  -------------------------------------------------*/
+  --color-badge-main-bg: var(--secondary-soft);       /* 정석 배지 배경 */
+  --color-badge-main-text: var(--secondary-text);     /* 정석 배지 텍스트 */
+  --color-badge-main-icon: var(--secondary);          /* 정색 배지 아이콘 (필요시) */
+
+  --color-badge-rivers-bg: var(--primary);           /* 반전 배지 배경 primary */
+  --color-badge-rivers-text: #fff;                 /* 반전 배지 텍스트 */
+
+  --color-badge-border: var(--secondary-border);   /* 보더 강조형 배지 배경 */
+  --color-badge-border-text: var(--secondary-text); /* 보더 강조형 배지 텍스트*/
+
+
+/* ---------------------------------------------------------------------
+   3) 텍스트 꾸미기 5종 (Highlight / Underline / Accent Text)
+   형광펜(soft), 밑줄, 텍스트 강조, 기울임, 강한 형광펜
+   -> 기본적인 텍스트 강조는 Secondary, “강한 강조”는 Primary (브랜드 중심)
+-------------------------------------------------------------------------*/
+
+  --color-highlight-bg: var(--secondary-soft);        /* 형광펜(soft) — Secondary-soft */
+  --color-highlight-underline: var(--secondary-border); /* 밑줄 — Secondary (가이드/리듬) */
+
+  --color-highlight-strong-text: var(--secondary);      /* 텍스트 메인원색 강조 — Secondary */
+  --color-highlight-text: var(--secondary-text);      /* 텍스트 강조 색 — Secondary */
+  --color-highlight-italic: var(--secondary-soft);    /* 기울임 텍스트 — Secondary-soft */
+
+  --color-highlight-riverse-strong-bg: var(--primary);    /* 강한 형광펜 — Primary(중요 강조는 Primary) */
+  --color-highlight-riverse-text: #fff;                /* 텍스트 white */
+
+
+  /* ------------------------------------------------
+     4) 아이콘 색
+     - .icon-square 안의 아이콘 색 등
+     Primary = 핵심/행동, Secondary = 안내/보조
+  -------------------------------------------------*/
+  --color-icon-main: var(--primary);           /* 핵심 아이콘 색 (기본 컨트롤, 주요 기능) */
+  --color-icon-sub: var(--secondary);          /* 보조/안내용 아이콘 */
+  --color-icon-impact: var(--secondary);       /* 감성 아이콘도 기본은 secondary로 최소 구성 */
+
+
+  /* ------------------------------------------------
+     5) Pain-point Box (문제 강조 박스)
+     - .pain-point-box
+     Pain = 항상 Primary 계열 (전 패턴 공통 규칙)
+  -------------------------------------------------*/
+  --color-pain-bg: var(--primary-bg);          /* Pain 박스 배경 */
+  --color-pain-border: var(--primary-border);  /* Pain 박스 테두리 */
+  --color-pain-text: var(--primary-text);      /* Pain 텍스트/아이콘 포인트 (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     6) Solution Box (해결책/프로세스 박스)
+     - .solution-box
+     Solution = Secondary 계열로 안정·해결 톤
+  -------------------------------------------------*/
+  --color-solution-bg: var(--secondary-bg);        /* 해결책 박스 배경 */
+  --color-solution-border: var(--secondary-border);/* 해결책 박스 테두리 */
+  --color-solution-text: var(--secondary-text);    /* 해결 텍스트 포인트 컬러 (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     7) Form Focus / Active State
+     - .input:focus, .textarea:focus, .form-card 내부 포커스 링
+     폼은 “행동의 시작” → Primary 고정
+  -------------------------------------------------*/
+  --color-form-focus-ring: var(--primary);        /* 인풋 포커스 아웃라인/보더 */
+  --color-form-hover-bg: var(--primary-soft);     /* 인풋 hover 시 살짝 들어가는 배경 */
+
+
+  /* ------------------------------------------------
+     8) Step Indicator / Progress UI (향후 도입용)
+     - 스텝 점/라인/대체 색
+     Active = Primary, 선/보조 = Secondary
+  -------------------------------------------------*/
+  --color-step-active: var(--primary);            /* 현재 단계 색 */
+  --color-step-inactive: var(--neutral-300);      /* 비활성 단계 점/아이콘 */
+  --color-step-line: var(--secondary-border);     /* 단계 사이 라인 색 */
+  --color-step-alt: var(--secondary);             /* 보조 스텝 색 */
+
+
+  /* ------------------------------------------------
+     9) 데이터/그래프 포인트 (차트/그래프)
+     - 메인 = Primary, 보조 = Secondary
+  -------------------------------------------------*/
+  --color-chart-main: var(--primary);             /* 메인 데이터 라인/바 */
+  --color-chart-sub: var(--secondary);            /* 보조 데이터 라인/바 */
+  --color-chart-highlight: var(--secondary-soft); /* 강조 포인트(하이라이트 영역)용 */
+}
+
+
+
+/* ==========================================================
+   PATTERN 04 — PRIMARY MONOCHROME MINIMAL (P-Mono-Min)
+   Primary 단일색 + 무채색 중심 미니멀 고급형
+   Secondary/Accent는 거의 사용하지 않고 구조는 회색조로 해결
+   ========================================================== */
+
+:root[data-color-pattern="4"] {
+
+  /* ------------------------------------------------
+     1) CTA (버튼)
+     - .btn-primary  → 메인 CTA = Primary 단색
+     - .btn-secondary → 서브 CTA = Primary-soft / outline
+  -------------------------------------------------*/
+  --color-cta-main: var(--primary);                /* 메인 CTA 배경 */
+  --color-cta-main-text: #fff;                     /* 메인 CTA 텍스트 */
+  --color-cta-main-hover: var(--primary);     /* 메인 CTA hover = 약한 Tint */
+
+  --color-cta-sub-bg: var(--primary-soft);         /* 서브 CTA 배경 */
+  --color-cta-sub-text: var(--primary-text);       /* 서브 CTA 텍스트 */
+  --color-cta-sub-hover: var(--primary);           /* 서브 CTA hover = 반전 */
+
+
+  /* ------------------------------------------------
+     2) Badge / Tag / Label
+     Primary 단일색 체계로 배지 구성
+  -------------------------------------------------*/
+   --color-badge-main-bg: var(--primary-soft);      /* 정석 배지 배경 */
+   --color-badge-main-text: var(--primary-text);    /* 정석 배지 텍스트 */
+   --color-badge-main-icon: var(--primary);         /* 정색 배지 아이콘 (필요시) */
+
+   --color-badge-rivers-bg: var(--primary);      /* 반전 배지 배경 */
+   --color-badge-rivers-text: #fff;            /* 반전 배지 텍스트 */
+
+   --color-badge-border: var(--primary-border);   /* 보더 강조형 배지 배경 */
+   --color-badge-border-text: var(--primary-text); /* 보더 강조형 배지 텍스트*/
+
+
+   /* ---------------------------------------------------------------------
+   3) 텍스트 꾸미기 5종 (Highlight / Underline / Accent Text)
+   형광펜(soft), 밑줄, 텍스트 강조, 기울임, 강한 형광펜
+   -> 전체 95% 무채색 + Primary 단일색만, 기울임만 아주 연한 tint로 변형하여 단조로움 방지
+   -------------------------------------------------------------------------*/
+  --color-highlight-bg: var(--primary-soft);                      /* 형광펜(soft) — 절제된 Primary-soft */
+  --color-highlight-underline: var(--primary-border);             /* 밑줄 — Primary 단일색(라인 역할 → border) */
+
+  --color-highlight-strong-text: var(--primary);                   /* 텍스트 메인원색 강조 — Primary */
+  --color-highlight-text: var(--primary-text);                    /* 텍스트 강조 — Primary 텍스트 전용 */
+  --color-highlight-italic: color-mix(in srgb, var(--primary-text) 50%, white); 
+                                                                  /* 기울임 — Primary-text 50% tint */
+  --color-highlight-riverse-strong-bg: var(--primary);            /* 강한 형광펜 — 단일 Primary */
+  --color-highlight-riverse-text: #fff;                         /* 텍스트 white */
+
+
+  /* ------------------------------------------------
+     4) 아이콘 색
+     - 아이콘은 항상 Primary 단일색 사용
+  -------------------------------------------------*/
+  --color-icon-main: var(--primary);          /* 핵심 아이콘 */
+  --color-icon-sub: var(--primary);           /* 보조 아이콘도 Primary로 통일 */
+  --color-icon-impact: var(--primary);        /* 액센트 아이콘도 동일 */
+
+
+  /* ------------------------------------------------
+     5) Pain-point Box (문제 강조 박스)
+     Pain = Primary-soft 기반
+  -------------------------------------------------*/
+  --color-pain-bg: var(--primary-bg);       /* Pain 박스 배경 (강조 박스 → soft 하이라이트) */
+  --color-pain-border: var(--primary-border); /* Pain 테두리 */
+  --color-pain-text: var(--primary-text);     /* Pain 텍스트/아이콘  (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     6) Solution Box (해결책 박스)
+     Solution = Primary 계열이지만 Pain보다 더 연하고 부드럽게
+  -------------------------------------------------*/
+  --color-solution-bg: var(--primary-bg);         /* Solution 박스 배경 (카드/섹션 배경용) */
+  --color-solution-border: var(--primary-border); /* Solution 테두리 */
+  --color-solution-text: var(--primary-text);     /* 해결책 텍스트 (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     7) Form Focus / Active State
+     Form = 행동의 시작 → Primary 유지
+  -------------------------------------------------*/
+  --color-form-focus-ring: var(--primary);        /* 포커스 링 */
+  --color-form-hover-bg: var(--primary-soft);     /* hover */
+
+
+  /* ------------------------------------------------
+     8) Step Indicator / Progress UI
+     전부 Primary 단색으로 통일
+  -------------------------------------------------*/
+  --color-step-active: var(--primary);            /* 현재 단계 */
+  --color-step-inactive: var(--neutral-300);      /* 비활성 */
+  --color-step-line: var(--primary-border);       /* 라인 (라인 역할 → border) */
+  --color-step-alt: var(--primary);               /* 보조 스텝 */
+
+
+  /* ------------------------------------------------
+     9) 데이터/그래프 포인트
+     - 메인 = Primary
+     - 보조 = Primary-soft
+  -------------------------------------------------*/
+  --color-chart-main: var(--primary);             /* 메인 그래프 */
+  --color-chart-sub: var(--primary-soft);         /* 보조 그래프 */
+  --color-chart-highlight: var(--primary-soft);   /* 하이라이트 영역 */
+}
+
+
+/* ==========================================================
+   PATTERN 05 — PRIMARY + ACCENT HIGH-CONTRAST (P+A High-Impact)
+   Primary = 브랜드/신뢰, Accent = 전환/임팩트
+   퍼포먼스형 랜딩, 강한 CTA에 최적화된 하이컨트라스트 패턴
+   ========================================================== */
+
+:root[data-color-pattern="5"] {
+
+  /* ------------------------------------------------
+     1) CTA (버튼)
+     - .btn-primary  → 메인 전환 CTA = Accent
+     - .btn-secondary → 서브/보조 CTA = Primary
+  -------------------------------------------------*/
+  --color-cta-main: var(--accent);              /* 메인 CTA 버튼 배경 (.btn-primary) */
+  --color-cta-main-text: #fff;                  /* 메인 CTA 텍스트 */
+  --color-cta-main-hover: var(--accent);   /* 메인 CTA hover = Accent-soft로 한 단계 완화 */
+
+  --color-cta-sub-bg: var(--primary);           /* 서브 CTA 배경 (.btn-secondary) = Primary */
+  --color-cta-sub-text: #fff;                   /* 서브 CTA 텍스트 */
+  --color-cta-sub-hover: var(--primary-soft);   /* 서브 CTA hover = Primary-soft로 완화 */
+
+
+  /* ------------------------------------------------
+     2) Badge / Tag / Label
+     → 정보용은 Primary-soft, 전환/혜택 강조용은 Accent-soft
+  -------------------------------------------------*/
+  --color-badge-main-bg: var(--primary-soft);        /* 정석 배지 배경 */
+  --color-badge-main-text: var(--primary-text);      /* 정석 배지 텍스트 */
+  --color-badge-main-icon: var(--primary);           /* 정색 배지 아이콘 (필요시) */
+
+  --color-badge-rivers-bg: var(--primary);        /* 반전 배지 배경 */
+  --color-badge-rivers-text: #fff;              /* 반전 배지 텍스트 */
+
+  --color-badge-border: var(--accent-border);     /* 보더 강조형 배지 배경  - 악센트 */
+  --color-badge-border-text: var(--accent-text);   /* 보더 강조형 배지 텍스트  - 악센트 */
+
+
+   /* ---------------------------------------------------------------------
+   3) 텍스트 꾸미기 5종 (Highlight / Underline / Accent Text)
+   형광펜(soft), 밑줄, 텍스트 강조, 기울임, 강한 형광펜
+   -> 전환/액션/임팩트에 필요한 텍스트 강조는 모두 Accent
+   -> 강형광펜도 Accent 고정 (전환 강제 패턴)
+   -------------------------------------------------------------------------*/
+
+  --color-highlight-bg: var(--accent-soft);          /* 형광펜(soft) — Accent-soft */
+  --color-highlight-underline: var(--accent-border); /* 밑줄 — Accent (고대비 강조, 라인 컬러) */
+
+  --color-highlight-strong-text: var(--accent);      /* 텍스트 메인원색 강조 — Accent */
+  --color-highlight-text: var(--accent-text);        /* 텍스트 강조 — Accent 텍스트 전용 */
+  --color-highlight-italic: var(--accent-soft);      /* 기울임 텍스트 — Accent-soft */
+
+  --color-highlight-riverse-strong-bg: var(--accent);    /* 강형광펜/전환 강조 — Accent */
+  --color-highlight-riverse-text: #fff;               /* 텍스트 white */
+
+
+  /* ------------------------------------------------
+     4) 아이콘 색
+     - .icon-square 안의 아이콘 색 등
+     → 기본 = Primary, 전환/임팩트 아이콘 = Accent
+  -------------------------------------------------*/
+  --color-icon-main: var(--primary);           /* 핵심/기본 아이콘 색 */
+  --color-icon-sub: var(--primary);            /* 기능/보조 아이콘도 기본은 Primary */
+  --color-icon-impact: var(--accent);          /* 전환/혜택/임팩트 아이콘 색 */
+
+
+  /* ------------------------------------------------
+     5) Pain-point Box (문제 강조 박스)
+     - .pain-point-box
+     → 패턴5에서는 Pain도 Accent 계열로 강하게 드러냄
+  -------------------------------------------------*/
+  --color-pain-bg: var(--accent-bg);         /* Pain 박스 배경 = Accent-soft */
+  --color-pain-border: var(--accent-border);   /* Pain 테두리 = Accent border */
+  --color-pain-text: var(--accent-text);       /* Pain 타이틀/아이콘 색  (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     6) Solution Box (해결책/프로세스 박스)
+     - .solution-box
+     → Pain과 대비되게 Primary-soft로 안정감 부여
+  -------------------------------------------------*/
+  --color-solution-bg: var(--primary-bg);      /* Solution 박스 배경 = Primary-bg (카드/박스 배경) */
+  --color-solution-border: var(--primary-border); /* Solution 테두리 = Primary-border */
+  --color-solution-text: var(--primary-text);  /* Solution 텍스트/아이콘 색 (컴포넌트 맵핑 대기) */
+
+
+  /* ------------------------------------------------
+     7) Form Focus / Active State
+     - .input:focus, .textarea:focus, .form-card 내부 포커스 링
+     → 입력/포커스 = 행동의 시작 → Accent 사용
+  -------------------------------------------------*/
+  --color-form-focus-ring: var(--accent);      /* 인풋 포커스 아웃라인/보더 = Accent */
+  --color-form-hover-bg: var(--accent-soft);   /* 인풋 hover 배경 = Accent-soft */
+
+
+  /* ------------------------------------------------
+     8) Step Indicator / Progress UI (향후 도입용)
+     - 스텝 점/라인/대체 색
+     → Active = Accent, Line = Primary, Inactive = Primary-soft
+  -------------------------------------------------*/
+  --color-step-active: var(--accent);          /* 현재 단계 색 = Accent */
+  --color-step-inactive: var(--primary-soft);  /* 비활성 단계 점/아이콘 = Primary-soft */
+  --color-step-line: var(--primary-border);    /* 단계 사이 라인 색 = Primary-border */
+  --color-step-alt: var(--accent);             /* 보조 스텝/특수 단계 강조 = Accent */
+
+
+  /* ------------------------------------------------
+     9) 데이터/그래프 포인트 (차트/그래프)
+     → 메인 데이터 = Primary, 서브/강조 데이터 = Accent
+  -------------------------------------------------*/
+  --color-chart-main: var(--primary);          /* 메인 데이터 라인/바 */
+  --color-chart-sub: var(--accent);            /* 보조 데이터 라인/바 */
+  --color-chart-highlight: var(--accent-soft); /* 강조 포인트(하이라이트 영역) */
+}
+
+
+  /* =====================================================================================
+     [5] UI STATE COLORS — 상태색 (성공/경고/에러/정보)
+     → Primary와 독립적으로 유지 (가독성을 위해 고정 팔레트 사용)
+  -------------------------------------------------*/
+:root {
+  --success: hsl(142 72% 35%);
+  --success-soft: hsl(142 76% 97%);
+
+  --warning: hsl(38 92% 50%);
+  --warning-soft: hsl(38 100% 96%);
+
+  --error: hsl(0 72% 50%);
+  --error-soft: hsl(0 100% 97%);
+
+  --info: hsl(210 90% 56%);
+  --info-soft: hsl(210 100% 97%);
+}
+
+
+/* =====================================================================================
+   [GRADIENT USAGE GUIDELINE v2 — 그라데이션 사용 규칙서]
+
+   ⚙ 전제
+   - 그라데이션은 "브랜드 에너지·집중도"를 올리는 하이라이트 도구다.
+   - 남용하면 정보 구조가 흐려지고, 메인 CTA/오퍼의 힘이 약해진다.
+   - 따라서 아래 규칙에 따라 "최소 지점"에만 사용한다.
+
+   ----------------------------------------------------------------------
+   1. 절대 금지 영역 (NO GRADIENT)
+   ----------------------------------------------------------------------
+   [1) LAYOUT WRAPPERS]
+     - .page-shell, .page-main, .page-section-group
+     - .section, .section-alt, .section-muted
+     - .section-inner, .section-inner-narrow, .section-inner-wide
+     - .section-header-wrap, .section-body, .section-cta
+     - .page-panel*, .page-aside* 전부 (배경/보더/섀도우만 사용)
+
+   [2) 대부분의 CONTENT BLOCKS]
+     - 문제/솔루션/정보/후기/칼럼 등 "읽기·설명·스토리" 위주의 카드:
+       .problem-box, .problem-list, .solution-box, .benefit-list,
+       .info-box, .highlight-box, .note-box, .quote-box,
+       .testimonial-card, .case-study-box, .faq-item 등
+     - 이들은 의미토큰(card-bg, surface, border, shadow)로만 스타일링.
+
+   [3) FORM / NAV / FOOTER 기본 구조
+     - .form-card, .form-group, .input*, .select-box, .form-note 등
+     - .navbar, .mobile-nav, .sidebar-nav, .footer, .footer-meta 등
+     - 여기서 그라디언트는 사용하지 않는다 (브랜드 신뢰·가독성 우선).
+
+   ----------------------------------------------------------------------
+   2. 강하게 허용되는 영역 (PRIMARY GRADIENT ZONE)
+   ----------------------------------------------------------------------
+   → "전환에 직결되는 최상위 액션 / 오퍼 / 히어로 집중 영역"만 사용
+
+   [2-1) HERO 영역]
+     - 섹션/서피스 계층
+       - .section-hero-gradient   → 히어로 전체 섹션 배경
+       - .surface-hero            → 히어로 안쪽 주요 카드/랩퍼 배경
+     - 컨텐츠 블록
+       - .hero-main, .hero-cta-wrap는 필요 시 
+         surface-hero 또는 gradient-hero-bg 역할토큰을 통해 한 번만 사용.
+
+   [2-2) 메인 CTA 버튼]
+     - UI COMPONENTS / BUTTONS
+       - .btn-cta-main (메인 전환 버튼 1종)
+       - 기본 상태, hover 상태 모두 gradient 역할토큰을 사용.
+       - .btn-cta-sub, .btn-ghost, .btn-icon 등은 단색(brand / accent)만 사용.
+
+   [2-3) 최종 오퍼 / 핵심 패키지 박스]
+     - CONTENT BLOCKS / G.OFFER · PRICING
+       - .offer-box               → 메인 오퍼 강조 박스
+       - .pricing-card (메인 요금제 1개에 한정)
+     - 전체 요금제 카드 모두에 그라디언트를 뿌리지 않고,
+       "대표 요금제 카드 1개"만 gradient-offer/gradient-pricing 역할토큰으로 강조.
+
+   ----------------------------------------------------------------------
+   3. 조건부/보조 허용 영역 (SECONDARY GRADIENT ZONE)
+   ----------------------------------------------------------------------
+   [3-1) Progress / Step / Carousel]
+     - UI COMPONENTS
+       - .carousel-progress-bar      → 슬라이드 진행바
+       - (필요 시) .step-line       → 단계 진행을 시각적으로 강조할 때 한정 사용
+     - 역할: "지금 어디까지 왔는지"를 보여주는 진행감 강화용.
+     - 여기서는 단색 progress-bar 대신 gradient-progress 역할토큰 사용.
+
+   [3-2) 데이터 하이라이트 (선택적)]
+     - METRICS / TABLE / LIST
+       - .metric-number              → 중요한 지표/퍼센트에
+       - .metric-item 내부에서 보조적으로 gradient-soft 계열을 사용할 수 있음.
+     - 단, 카드 전체 배경보다 "작은 칩/하이라이트 박스" 수준으로만.
+
+   ----------------------------------------------------------------------
+   4. 사용 원칙 요약
+   ----------------------------------------------------------------------
+   1) 그라데이션은 "히어로 + 메인 CTA + 대표 오퍼 + 진행바"에만 집중한다.
+   2) 문제·솔루션·정보·후기·폼·네비·푸터는 단색·톤 변화만으로 표현한다.
+   3) 같은 화면 내에서 그라데이션이 동시에 3곳 이상 나타나지 않도록 설계한다.
+   4) 메인 CTA 버튼과 최종 오퍼 박스가 항상 가장 눈에 띄도록 우선순위를 둔다.
+   ===================================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     [GRADIENT ROLE TOKENS] — 그라디언 역할토큰
+     - 이하 토큰만 common.css / premium.css에서 참조해서 사용
+  --------------------------------------------------------------------*/
+
+  /* 1) HERO / 상단 집중 영역 */
+  
+  --gradient-hero-bg: var(--gradient-primary-diagonal);    /* 히어로 전체 섹션 배경 (예: .section-hero-gradient) */
+  --gradient-hero-inner-bg: var(--gradient-primary);      /* 히어로 내부 CTA 래퍼/메인 카드 (예: .surface-hero, .hero-cta-wrap) */
+
+  /* 2) 메인 CTA 버튼 */
+  --gradient-cta-main-bg: var(--gradient-primary);                    /* 기본 메인 CTA 버튼 배경 (예: .btn-cta-main) */
+  --gradient-cta-main-hover-bg: var(--gradient-primary-diagonal);     /* hover 시 살짝 각도/강도만 다른 버전 (없어도 되지만 확장 여지용) */
+
+
+  /* 3) 오퍼 / 요금제 하이라이트 */
+  --gradient-offer-main-bg: var(--gradient-primary);                      /* 대표 오퍼 박스 배경 (예: .offer-box 중 메인 1개) */
+  --gradient-pricing-main-border: var(--gradient-primary-horizontal);     /* 대표 요금제 카드 보더/레일용 (예: .pricing-card--main border-image 등) */
+  --gradient-pricing-main-bg: var(--gradient-primary-diagonal);           /* 필요 시, 요금제 카드 배경으로도 사용 가능 (1개 카드에만) */
+
+
+  /* 4) 진행바 / 단계 표시 / 캐러셀 */
+  --gradient-progress-main: var(--gradient-primary-horizontal);        /* 캐러셀 진행바/폼 진행상황 바 (예: .carousel-progress-bar) */
+  --gradient-step-active-line: var(--gradient-primary-horizontal);     /* 스텝/타임라인 진행선 강조용 (예: .step-line.is-active 구간 등에서 선택적 사용) */
+
+
+  /* 5) 데이터/지표 하이라이트 (선택적) */
+  --gradient-metric-highlight-bg: var(--gradient-primary);                /* 중요한 지표 칩/숫자 백그라운드 (예: .metric-number 강조형 버전) */
+  --gradient-chart-highlight-bg: var(--gradient-primary-horizontal);      /* 표/그래프 상 강조 구간 (예: hover 영역, 선택된 범위 등) */
+
+}
+
+
+/* ===========================================================================================================
+   [C] 업종별 폰트 프리셋 (data-industry 기반 토큰 교체)
+   -----------------------------------------------------------------------------------------------------------
+   디자인 10년 실무: 업종별 폰트가 정해져있다. 업종마다 사람들의 "기대 폰트"가 있다.
+   폰트는 디자인(레이아웃, 색상, 이미지)을 기준으로 고르는게 아니라, "업종"에 따라 "폰트"를 고른다.
+   폰트 패밀리는 "폰트 이름"만 지정.
+   -----------------------------------------------------------------------------------------------------------
+   사용법:
+   <body data-industry="finance"> ... 
+   <body data-industry="education"> ...
+   =========================================================================================================== */
+
+/* 1) 금융·투자·법률·보험·정책자금·컨설팅 B2B (신뢰·안정)
+
+타겟업종 )
+:정책자금, 대출, 금융컨설팅, 법률사무소, 개인회생, 노무·세무, B2B 솔루션, 기업 교육, 보험, 컨설팅
+폰트무드 )
+:딱딱하지만 너무 올드하지 않은 모던 고딕 */
+body[data-industry="finance"],
+body[data-industry="insurance"],
+body[data-industry="policy funds"],
+body[data-industry="stock investment"],
+body[data-industry="legal"],
+body[data-industry="b2b-consulting"] {
+  --font-heading: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 2) 교육·자격증·국비지원 (체계·신뢰·친근)
+
+타겟업종 )
+:자격증 학원, 국비지원 교육원, 온라인 클래스, 스터디, 고시/공무원
+폰트무드 )
+:읽기 편한 고딕 + 약간 부드러운 느낌 */
+body[data-industry="education"],
+body[data-industry="license"],
+body[data-industry="academy"] {
+  --font-heading: 'Spoqa Han Sans Neo', 'Pretendard', system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 3-1) 뷰티·클리닉·의료미용 (고급·세련)
+
+타겟 업종 ) 
+:피부과, 성형외과, 치과 / 에스테틱, 스파, 헤어샵, 반영구
+폰트 무드 ) 
+:얇고 세련된 고딕 + 약간 명조 느낌 섞기 가능 */
+body[data-industry="beauty"],
+body[data-industry="clinic"],
+body[data-industry="aesthetic"] {
+  --font-heading: 'SUIT', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 3-2) 병원·의원 (내과·정형·소아과 등) — 의료(순수 의료) */
+
+body[data-industry="medical"],
+body[data-industry="hospital"],
+body[data-industry="healthcare"] {
+  --font-heading: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 4) 헬스·PT·필라테스·다이어트 (에너지·활력)
+
+타겟 업종 ) 
+:헬스장, PT 스튜디오, 필라테스, 다이어트 프로그램, 바디프로필, 체형교정
+폰트 무드 ) 
+:굵기가 조금 살아있는 힘 있는 고딕 */
+body[data-industry="fitness"],
+body[data-industry="gym"],
+body[data-industry="pilates"],
+body[data-industry="diet"] {
+  --font-heading: 'SUIT','Gmarket Sans Bold', system-ui, sans-serif;
+  --font-body: 'Spoqa Han Sans Neo','Gmarket Sans Medium', system-ui, sans-serif;
+}
+
+/* 5) 키즈·육아·아동 프로그램 (귀여움·둥글둥글·친근함)
+
+타겟 업종 )
+:키즈모델, 아동 교육, 놀이학교,육아용품, 키즈카페, 어린이 프로그램
+폰트 무드 )
+:살짝 둥글고 귀여운 고딕/디스플레이 폰트 */
+body[data-industry="kids"],
+body[data-industry="kids-model"],
+body[data-industry="child-edu"] {
+  --font-heading: 'Gowun Dodum','CookieRun Bold', system-ui, sans-serif;
+  --font-body: 'Gowun Dodum','Noto Sans KR',ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 6) 인테리어·리빙·라이프스타일 (감성·여백·미니멀·세련됨)
+
+타겟 업종 )
+:인테리어, 리모델링, 가구, 홈스타일링,라이프스타일 브랜드, 카페, 소규모 샵
+폰트 무드 )
+:정갈한 여백 + 고급스러운 미니멀리즘 */
+body[data-industry="interior"],
+body[data-industry="living"],
+body[data-industry="lifestyle"] {
+  --font-heading: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 7) 요식업·프랜차이즈·카페 (맛·활기)
+
+타겟 업종 ) 
+:음식점, 프랜차이즈, 카페, 배달전문점
+폰트 무드 ) 
+:맛있어 보이는, 굵직하고 눈에 띄는 디스플레이형 + 읽기 쉬운 본문 */
+body[data-industry="food"],
+body[data-industry="franchise"],
+body[data-industry="cafe"] {
+  --font-heading: 'Do Hyeon', system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 8) IT·SaaS·스타트업 (모던·미니멀)
+
+타겟 업종 )
+:SaaS, 스타트업, IT 서비스, 앱/웹
+폰트 무드 )
+:심플하고 각진 모던 고딕 */
+body[data-industry="it"],
+body[data-industry="saas"],
+body[data-industry="startup"] {
+  --font-heading: 'SUIT', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'SUIT', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 9) 공공·기관·협회 (중립·공신력) 
+
+타겟 업종 )
+:협회, 재단, 공공기관 느낌의 브랜드,교육 진흥원, 문화원, 직능 협회
+폰트 무드 )
+:튀지 않고 공공기관스럽게 정돈된 고딕 */
+body[data-industry="public"],
+body[data-industry="association"],
+body[data-industry="ngo"] {
+  --font-heading: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 10) 제조·산업·장비·B2B
+
+타겟 업종 )
+:제조업, 공장, 산업 솔루션, 설비
+폰트 무드 )
+:너무 얇지 않은 단단한 고딕 */
+body[data-industry="manufacturing"],
+body[data-industry="industrial"],
+body[data-industry="b2b"] {
+  --font-heading: 'IBM Plex Sans KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 11) 엔터테인먼트·공연·예술·스튜디오 (감성·크리에이티브) */
+body[data-industry="entertainment"],
+body[data-industry="music"],
+body[data-industry="performance"],
+body[data-industry="studio"],
+body[data-industry="artist"] {
+  --font-heading: 'LINE Seed KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'LINE Seed KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/*12) 여행·레저·관광 (부드러움·감성) */
+body[data-industry="travel"],
+body[data-industry="leisure"],
+body[data-industry="tour"] {
+  --font-heading: 'LINE Seed KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}

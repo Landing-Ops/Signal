@@ -1,0 +1,39 @@
+{
+  "name": "db-landing-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "brand-auto-palette tool.js",
+  "type": "commonjs",
+  "scripts": {
+  "_comment_build": "전체 빌드 실행법(오른쪽만 치면됨) 암호화 한큐에 끝. 뒤졌다 → npm run build",
+  "_comment_css": "CSS 압축 → npm run build:css",
+  "_comment_js": "JS 난독화(하드버전) → npm run obfuscate:core",
+  "_comment_html": "HTML 압축 → npm run build:html",
+
+  "build:css": "echo [CSS] common-nude.css → common.css && cleancss -O2 -o css/common.css css/common-nude.css && echo [CSS] brand-nude.css → brand.css && cleancss -O2 -o css/brand.css css/brand-nude.css && echo [CSS] typography-nude.css → typography.css && cleancss -O2 -o css/typography.css css/typography-nude.css && echo [CSS] premium-nude.css → premium.css && cleancss -O2 -o css/premium.css css/premium-nude.css",
+
+  "obfuscate:core": "node obfuscate-form.js",
+
+  "build:html": "node build-html.js",
+
+  "build": "npm run build:css && npm run obfuscate:core && npm run build:html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minwookang5687/DB-Landing-Service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minwookang5687/DB-Landing-Service/issues"
+  },
+  "homepage": "https://github.com/minwookang5687/DB-Landing-Service#readme",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "glob": "^13.0.0",
+    "html-minifier-terser": "^7.2.0",
+    "javascript-obfuscator": "^4.1.0",
+    "terser": "^5.19.0"
+  }
+}

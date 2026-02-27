@@ -1,0 +1,320 @@
+
+/* =========  [1] CTA 버튼 - 타이포 ========= */
+
+.btn-text {
+font-size: 1.25rem; /* 22px - pt 나누기 16 rem값 */
+font-weight: 700;
+}
+
+/* =========  [2] 공통헤더 5단구조 - 타이포 =========
+→ 헤드,서브,리드,노트" 각각 폰트값(종류,크기,굵기,색상,자간,행간) 정의
+→ 5단구조 모두가 모든 섹션에서 전부다 필요하진 않음. 섹션마다 다름
+→ 계층별 폰트크기 4pt차이, 굵기차이 200
+
+"라벨/뱃지(badge)의 타이포 설정은 common.css에서 전부관리 (예외 1% 해당)
+
+Note뜻: 참고사항/주의문/추가설명
+*/
+
+
+/*헤드라인*/
+.header-head-text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.85rem; /* 26px - pt 나누기 16 rem값 */
+  color: var(--neutral-900);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.header-sub-text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.375rem; /* 22px */
+  color: var(--neutral-600);
+  line-height: 1.5;
+}
+
+.header-lead-text {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1.125rem;      /* 18px 정도 */
+  color: var(--neutral-700);
+  line-height: 1.5;
+}
+
+.header-note-text {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 0.875rem;      /* 14px 정도 */
+  color: var(--neutral-700);
+  line-height: 1.5;
+}
+
+/* ===== [3] 콘텐츠 5계층 (타이포값) =====*/
+
+/* 강조된 본문 (키워드 중심 짧은 문장에 사용) */
+.content-text-strong {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.25rem;          /* 20px */
+  color: var(--neutral-900);
+  line-height: 1.7;
+}
+
+/* 살짝 큰 본문 (중요 설명, 인용, 리드 문단) */
+.content-text-lg {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1.125rem;     /* 18px */
+  color: var(--neutral-800);
+  line-height: 1.5;
+}
+
+/* 기본 본문(가장 자주 쓰는 사이즈) */
+.content-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;          /* 16px */
+  color: var(--neutral-800);
+  line-height: 1.5;
+}
+
+/* 작은 본문 (보조 설명, 카드 안 한 줄 설명 등) */
+.content-text-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9375rem;     /* 15px */
+  color: var(--neutral-700);
+  line-height: 1.5;
+}
+
+/* 캡션/주석 (figcaption, 아주 작은 참고글) */
+.content-caption {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.8125rem;     /* 13px */
+  color: var(--neutral-600);
+  line-height: 1.5;
+}
+
+
+
+/* ========================================================================
+   🟪 HEADER 영역 전역 강조레벨 시스템 (대표님 전역 규칙)
+   ------------------------------------------------------------------------
+   헤더 영역은 아래 4개 텍스트 요소로 구성됨:
+   1) Headline (.header-head-text)
+   2) Subheadline (.header-sub-text)
+   3) Lead copy (.header-lead-text)
+   4) Note copy (.header-note-text)
+   (※ Badge는 별도 컴포넌트 → 강조레벨 시스템 적용 제외)
+
+   강조레벨 정의:
+   - Lv0: 기본 텍스트  
+   - Lv1: 약한 텍스트 강조 (highlight-text)
+   - Lv2: 소프트 형광펜 강조 (highlight-bg)
+   - Lv3: 메인 원색 텍스트 강조 (highlight-strong-text)
+   - Lv4: 굵은 언더라인 강조 (highlight-underline)
+   - Lv5: 강한 리버스 형광펜 (highlight-rivers-bg)
+   - Italic: 뉘앙스 도구 (highlight-italic)
+
+   ------------------------------------------------------------------------
+   [헤더 요소별 허용 레벨 표]
+
+   1) Headline (.header-head-text)
+      - 허용 강조레벨: Lv0, Lv2, Lv3, (가끔 Lv4, Lv5)
+      - 비고: 섹션에서 가장 강하게 강조되는 영역.
+
+   2) Subheadline (.header-sub-text)
+      - 허용 강조레벨: Lv0~Lv2
+      - 비고: Lv3 이상은 금지. 헤드라인과 힘 싸우면 안 됨.
+
+   3) Lead copy (.header-lead-text)
+      - 허용 강조레벨: Lv0~Lv1
+      - 비고: 형광펜·언더라인·리버스(Lv2~Lv5) 전부 금지.
+
+   4) Note copy (.header-note-text)
+      - 허용 강조레벨: Lv0, (가끔 Lv1, Italic)
+      - 비고: 거의 기본 유지. 튀면 안 되는 보조 정보.
+
+   ------------------------------------------------------------------------
+   요약:
+   - 헤더는 강하게: Headline 중심으로 Lv2~Lv5까지 가능.
+   - Subheadline은 보완 역할: Lv1~Lv2까지만 얌전히.
+   - Lead/Note는 자연스럽게: Lv0~Lv1만 허용.
+
+   이 규칙은 모든 랜딩/홈페이지 섹션의 "헤더 영역"에 공통 적용.
+   ======================================================================== */
+  
+   /* ========================================================================
+   🟦 CONTENT 본문 텍스트 전역 강조레벨 시스템 (대표님 전역 규칙)
+   ------------------------------------------------------------------------
+   본문 영역은 다음 텍스트 요소들로 구성됨:
+   - 본문 텍스트: .content-text-md / .content-text-lg
+   - 카드/박스 텍스트: .card-text / .info-text / .step-text
+   - 리스트 텍스트: .list-text / .checklist-text
+   - 캡션/보조텍스트: .caption-text / .meta-text
+
+   본문은 헤더와 달리 “읽히는 흐름"이 핵심이므로
+   강조는 최소한 + 자연스러움 유지가 전제.
+
+   강조레벨 정의:
+   - Lv0: 기본 텍스트  
+   - Lv1: 약한 텍스트 강조 (highlight-text)
+   - Lv2: 소프트 형광펜 강조 (highlight-bg)
+   - Lv3: 메인 원색 텍스트 강조 (highlight-strong-text)
+   - Lv4: 굵은 언더라인 강조 (highlight-underline)
+   - Lv5: 강한 리버스 형광펜 (highlight-rivers-bg)
+   - Italic: 뉘앙스 도구 (highlight-italic)
+
+   ------------------------------------------------------------------------
+   [본문 요소별 허용 레벨 표]
+
+   1) 일반 본문 (.content-text-md / .content-text-lg)
+      - 허용 강조레벨: Lv0~Lv2
+      - 비고: 본문은 읽히는 구간 → Lv3 이상은 가급적 금지
+              (섹션 내 "단 한줄" 정도만 예외 허용)
+
+   2) 카드/박스 텍스트 (.card-text / .problem-box / .info-box 등)
+      - 허용 강조레벨: Lv0~Lv2, (가끔 Lv3)
+      - 비고: 카드 형태는 시각적으로 이미 강조되어 있음.
+              Lv3은 카드 내 핵심 문구 1개만 허용.
+
+   3) 리스트 텍스트 (.list-text / .checklist-text)
+      - 허용 강조레벨: Lv0~Lv1
+      - 비고: 리스트는 가독성 최우선 → 형광펜·강조색 과다 금지.
+
+   4) 캡션/메타 텍스트 (.caption-text / .meta-text)
+      - 허용 강조레벨: Lv0, (가끔 Italic)
+      - 비고: 강조 거의 금지. 정보적 성격이므로 최소한 유지.
+
+   ------------------------------------------------------------------------
+   [본문 전역 규칙 요약]
+
+   ✔ 본문은 약하게: Lv1 중심  
+   ✔ 형광펜(Lv2)은 “문단당 1개”만  
+   ✔ 강한 강조(Lv3)는 “섹션당 1~2회” 제한  
+   ✔ 카드/박스 내부는 Lv3 절약 사용  
+   ✔ 캡션/메타는 기본만 (Lv0~Italic)
+
+   목적:
+   - 본문은 읽히고 스크롤되기 위한 영역.
+   - 강조는 리듬을 만들고 시선을 흘러가게 하는 도구.
+   - 과다 강조금지 = 고급스러움 유지.
+
+   이 규칙은 모든 랜딩/홈페이지 섹션의
+   “본문 영역(헤더 제외 전체)”에 공통 적용.
+   ======================================================================== */
+
+
+/* ===== [4] 카피라이팅 강조 도구 6종(유틸) - 역할토큰 맵핑 =======
+값을 미리 지정해놓고, 내가 원하는 곳에서 "카피 강조"
+/* =================================================================== 
+[ 폰트 굵기 (font-weight) 값 참조표 ]
+--------------------------------------------------------
+100: Thin (Hairline)
+200: Extra Light (Ultra Light)
+300: Light
+400: Normal (Regular, Book) - 키워드 'normal'과 동일
+500: Mediu(약간굵음)
+600: Semi Bold (Demi Bold)
+700: Bold - 키워드 'bold'와 동일
+800: Extra Bold (Ultra Bold)
+900: Black (Heavy) 
+=========================================================================*/
+
+
+/* 레벨1 - 하이라이트 (톤다운)*/
+.highlight-text { 
+  color: var(--color-highlight-text);  
+  font-weight: 700;    
+}
+
+
+/* 레벨2 - 소프트 형광펜 */
+.highlight-bg {
+  background: var(--color-highlight-bg);    
+  border-radius: 6px;
+  padding: 1px 3px;  /*위아래, 좌우*/
+  display: inline; 
+  line-height: normal;      /* 형광펜 줄 높이를 줄여 균형 맞춤 */
+}
+
+
+/* 레벨3 - 하이라이트 (메인 원색)*/
+.highlight-strong-text { 
+  color: var(--color-highlight-strong-text);   
+  font-weight: 800;    
+}
+
+
+/* 레벨4 - 밑줄 */
+.highlight-underline {
+  text-decoration: underline;                                  /* 기본 밑줄을 켬 */
+  text-decoration-color: var(--color-highlight-underline);   
+  text-decoration-thickness: 12px;                          /* 밑줄 두께 설정 */
+  text-underline-offset: -4px;                                /* 글자와 밑줄 간격, 마이너스(-)로 하면 밑줄이 글 밑으로감 야쓰! */
+}
+
+
+/* 레벨5 - 스트롱 형광펜 (리버스) */
+.highlight-rivers-bg {
+  color: var(--color-highlight-riverse-text);     
+  background: var(--color-highlight-riverse-strong-bg);  
+  border-radius: 6px;
+  padding: 1px 2px;  
+  display: inline; 
+  line-height: normal;      /* 형광펜 줄 높이를 줄여 균형 맞춤 */
+}
+
+
+/* 번외(본문) - 기울임(색상 포인트) */
+.highlight-italic  {
+  color: var(--color-highlight-italic);   
+  font-style: italic; 
+  font-weight: 500;    /*미디움(약간굵음)*/
+}
+
+
+/*
+======================================================================================================================
+■CSS 가상박스 설명 ::after 가상요소
+======================================================================================================================
+예를 들어 텍스트 밑에 네모난 하이라이트 박스를 넣고 싶은데,
+<div>를 추가하면 HTML이 지저분해지잖아?
+
+그래서 CSS가 대신 가상의 박스를 만들어 주는것:
+👉 <span> 뒤에 투명한 가짜 <div> 가상 박스를 하나 추가해주는것
+그게바로 ::after
+----------------------------------------------------------------------------------------------------------------------
+[ ::after 꼭 기억해야 할 3줄 요약 ]
+→ HTML 태그 뒤에 보이지 않는 요소를 자동 추가하는 기능
+→ 밑줄/하이라이트/라벨 같은 UI를 깨끗하게 만들 때 필수
+→ .underline-accent에만 class 넣으면 ::after는 자동 생성
+----------------------------------------------------------------------------------------------------------------------
+[ display: inline-block ]
+display: inline-block = 텍스트 길이만큼 가상박스(::after)도 같이 늘었다 줄었다 하게 만드는 설정
+가상요소(::after)로 밑줄 깔 때 필수 속성
+밑줄·형광펜·하이라이트 같은 텍스트 기반 UI 만들 때 필수설정
+======================================================================================================================
+● ::after 적용 실제 CSS코드 예시 [밑줄]
+
+.underline-accent {
+  position: relative;     가상박스 (::after)가 기준으로 삼을 좌표계 제공하는 역할
+  display: inline-block;   inline-block = 텍스트 길이만큼 가상박스(::after)도 같이 늘었다 줄었다 하게 만드는 설정. 
+  padding-bottom: 2px;     글자와 밑줄 간격
+}
+
+.underline-accent::after { 
+  content: "";                가상 박스 생성 
+  position: absolute;         부모 좌표계 기준 [left/ right / top / bottom] 값으로 원하는 위치에 놓는것
+  left: 0;                    부모 좌표계 기준으로 [left] 값 지정 
+  right: 0;                  부모 좌표계 기준으로 [right] 값 지정 
+  bottom: -2px;             부모 좌표계 기준으로 [bottom] 값 지정 
+  height: 4px;              밑줄 두께 
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  opacity: 0.9;
+}
+*/

@@ -1,0 +1,3432 @@
+
+/* ======================================================================================
+스타일 "모양,질감" 토큰 - 테두리(Border) / 모서리 둥글기(Radius) / 그림자(Shadow) (고정값)
+========================================================================================= */
+
+/*  BORDER THICKNESS (테두리 두께) */ 
+
+:root {
+  --border-0: 0;
+  --border-1: 1px;
+  --border-2: 2px;
+  --border-3: 3px;
+}
+
+/* RADIUS (모서리 둥글기) - Tailwind + 최신 UI 트렌드 기반  */
+
+:root {
+  --radius-none: 0;      
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px; /* pill / circle */
+}
+
+/* --------------------------------
+   SHADOW (기본 그림자)   
+   -------------------------------- */
+/* 카드/모달/섹션 내부박스에 쓰는 "기본 UI 그림자" */
+
+:root {
+  --shadow-none: none;
+  /* 가장 약한 그림자 — subtle card */
+  --shadow-xs: 
+    0 1px 2px rgba(0,0,0,0.04);
+
+  /* 기본 카드/섹션 박스 */
+  --shadow-sm:
+    0 1px 3px rgba(0,0,0,0.08),
+    0 1px 2px rgba(0,0,0,0.04);
+
+  /* 강조 카드 / info-box */
+  --shadow-md:
+    0 4px 6px rgba(0,0,0,0.10),
+    0 2px 4px rgba(0,0,0,0.08);
+
+  /* 모달 등 elevation 높은 경우 */
+
+  --shadow-lg:
+    0 10px 15px rgba(0,0,0,0.12),
+    0 4px 6px rgba(0,0,0,0.08);
+
+  /* 가장 높은 elevation / 드롭다운 */
+  --shadow-xl:
+    0 20px 25px rgba(0,0,0,0.16),
+    0 10px 10px rgba(0,0,0,0.10);
+}
+
+/* === 폰트 토큰 === */
+:root {
+  --font-heading: 'Pretendard', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Pretendard', 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* === 전역 베이스(Global base) === */
+
+html { 
+  -webkit-font-smoothing: antialiased;    /*폰트 안티에일리어싱 켜주는 코드?*/
+  -moz-osx-font-smoothing: grayscale;  /*크롬/사파리/macOS에서 글자가 더 부드럽게 보임*/
+
+  /*가로 스크롤 완전 차단*/
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body { 
+  font-family: var(--font-body);
+  color: var(--neutral-900);         /* 아무 클래스 안 붙인 기본 글자 색 (진한 본문 컬러토큰)*/
+  background: var(--neutral-50);     /* 페이지 전체 기본 배경 = 아주 옅은 회색(화이트 대신) */
+
+  /*가로 스크롤 완전 차단*/
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body.is-modal-open {
+  overflow: hidden;
+}
+
+/* 접근성(Accessibility) 기본매너
+-> 멀미·두통 있는 사람, 장시간 보는 유저를 위해 “강제 애니메이션 OFF 스위치”를 열어두는 것 */
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* 밝은 배경 대비 강화(선택) */
+.on-light .highlight { color: color-mix(in srgb, var(--accent) 80%, black); }
+.on-light .emphasis  { color: color-mix(in srgb, var(--primary) 80%, black); }
+
+/* ===================================================================================================
+[0] 컴포넌트 지도 v2 (COMPONENT MAP)   ★랜딩 + 확장형 랜딩, 누락없는 완전한 컴포넌트 지도★
+= 컴포넌트는 판때기
+= 그라디언트 사용가능/불가능 표기완료
+======================================================================================================
+- 공통 컴포넌트 전체 구조도 (Phase1 단일 랜딩 + Phase2 확장형 랜딩까지 커버)
+- 공통 규칙:
+1) 모든 컴포넌트는 background / border / radius / shadow 로만 스타일링한다.
+2) padding / margin / gap / width / height / grid / flex 등 
+  "레이아웃 수치"는 전부 HTML(Tailwind 유틸)에서만 제어한다.
+3) 단, Badge / Chip / 작은 Tag 등 "사이즈 자체가 정체성인 Micro UI"는
+   예외적으로 내부 padding을 포함한다. (1% 예외 규칙)
+======================================================================================================
+[ 목차 ]
+컴포넌트 지도 v2 (COMPONENT MAP) - 컴포넌트 갯수: 총 246개
+
+1) LAYOUT WRAPPERS  (레이아웃 래퍼 / 섹션 뼈대) - 21개
+2) SURFACE BLOCKS (표면·배경 서피스 계층(★Card이하★) - 13개
+3) CONTENT BLOCKS (콘텐츠 모듈 / 정보 덩어리) - 72개 
+4) UI COMPONENTS (인터랙션·상태·조작 중심) - 47개
+
+5) FORM COMPONENTS (입력 UI & 폼 카드) - 24개
+6) NAVIGATION / FOOTER (상단 메뉴바/하단 푸터 구조) - 헤더&푸터 2개다 - 무채색,질감,모양토큰만 맵핑 (25.12.02)
+7) EFFECT UTILS (표면·보더·그림자 유틸) - 34개
+8) ICON / MEDIA (아이콘·아바타·미디어 프레임) - 31개
+======================================================================================================
+[ 상세목차 ]
+1) LAYOUT WRAPPERS (레이아웃 래퍼 / 섹션 뼈대) - [v]누락없음 확인 // 21개 
+
+   - .page-shell              : 전체 페이지 틀 (페이지 공통 배경을 담당하는 최상위 래퍼)  [GRADIENT: NONE]
+   - .page-main               : 헤더/푸터를 제외한 메인 컨텐츠 영역 래퍼                  [GRADIENT: NONE]
+   - .page-section-group      : 여러 섹션을 하나의 흐름(예: 신뢰페이지, 칼럼 묶음)으로 묶는 그룹 래퍼  [GRADIENT: NONE]
+
+   - .section                 : 기본 섹션 표면 래퍼 (페이지 내 가장 많이 쓰이는 기본 섹션)   [GRADIENT: NONE]
+   - .section-alt             : 교대 배경 섹션 (section-alt-bg를 사용하는 분위기 전환 섹션)    [GRADIENT: NONE]
+   - .section-hero-gradient   : 랜딩 최상단 히어로 영역 전용 섹션 래퍼 (히어로용 배경/그래디언트 훅)  [GRADIENT: ALLOW]
+   - .section-muted           : 톤 다운된 보조 섹션 (공지/법적고지/회색톤 안내 등)             [GRADIENT: NONE]
+
+   - .section-inner           : 섹션 내부 컨텐츠 공통 박스 (기본 폭/정렬의 내부 래퍼)          [GRADIENT: NONE]
+   - .section-inner-narrow    : 읽기 중심(칼럼/장문 설명)용 좁은 폭 내부 래퍼                [GRADIENT: NONE]
+   - .section-inner-wide      : 갤러리/그리드/차트 등 넓게 쓰는 콘텐츠용 내부 래퍼            [GRADIENT: NONE]
+
+   - .section-header-wrap     : 공통섹션 상단 헤더 영역 래퍼 (라벨/헤드라인/서브헤드/리드 묶음)    [GRADIENT: NONE]
+   - .section-body            : 공통섹션 본문 영역 래퍼 (카드, 리스트, 이미지 등 주요 내용)        [GRADIENT: NONE]
+   - .section-bottom          : 공통섹션 하단 CTA/부연설명/디스크레이머 영역 래퍼                 [GRADIENT: NONE]
+
+   - .page-panel              : 페이지 내 토글/슬라이드 패널 래퍼 (공지/이벤트/간단 상담 안내 등, 화면 측면에서 열리는 패널)  [GRADIENT: NONE]
+   - .page-panel-inner        : 패널 내부 컨텐츠 박스 (스크롤/여백/레이아웃 정렬 전용)         [GRADIENT: NONE]
+   - .page-panel-header       : 패널 상단 헤더 영역 (타이틀/닫기버튼 정렬)                     [GRADIENT: NONE]
+   - .page-panel-body         : 패널 본문 영역 (텍스트·리스트·폼 등 삽입)                     [GRADIENT: NONE]
+   - .page-panel-footer       : 패널 하단 CTA/부가 안내 영역                                 [GRADIENT: NONE]
+
+   - .page-aside              : 페이지 측면 고정 보조 영역 (상담요약/퀵메뉴/요약 정보 등 우측·좌측 고정)  [GRADIENT: NONE]
+   - .page-aside-inner        : 고정 사이드 영역 내부 컨텐츠 박스 (넓이/정렬/스크롤 처리)      [GRADIENT: NONE]
+   - .page-aside-sticky       : 스크롤에 따라 고정되는 스티키 사이드 컨텐츠 (요약/CTA/상담 안내 고정)  [GRADIENT: NONE]
+
+======================================================================================================
+2) SURFACE BLOCKS (표면·배경 서피스 계층(Card단부터 해당) - [v]누락없음 확인  // 13개
+
+[ HTML 구조예시 ]
+<section class="section">
+  <div class="container">
+    <div class="grid">
+      <div class="card surface-card"> << ★Card 이하를 서피스 계층이라 부름★
+                            
+      [ 서피스 예시 ]  .info-box / .feature-item / .testimonial-item / .cta-box / .lead-form / .faq-item
+
+
+   - .surface                 : 기본 surface (기본 배경 / card-bg 기반)                     [GRADIENT: NONE]
+   - .surface-alt             : 대체 surface (section-alt-bg 기반)                          [GRADIENT: NONE]
+   - .surface-card            : 일반 카드 표면 (card-bg 매핑)                              [GRADIENT: NONE]
+   - .surface-elevated        : 떠 있는 카드 표면 (card-elevated-bg 매핑)                  [GRADIENT: NONE]
+   - .surface-muted           : 톤 다운된 보조 surface (neutral-soft / info-soft 계열)      [GRADIENT: NONE]
+   - .surface-accent          : 강조 surface (accent-soft 계열, 강조 블록/강조 안내)        [GRADIENT: NONE] - 단색/soft만 
+   - .surface-hero            : Hero 전용 surface                                         [GRADIENT: ALLOW]
+   - .surface-cta             : CTA 전용 surface (cta-soft or neutral-50 기반)              [GRADIENT: CONDITIONAL] - CTA 블록일 때 soft-gradient 허용
+   - .surface-overlay         : 반투명 오버레이 surface (overlay-soft/medium/strong)        [GRADIENT: NONE] - 필요 시 neutral tint만
+
+   - .surface-inset           : 내부 패널형 surface (모달/폼 안쪽 인셋 패널)                [GRADIENT: NONE]
+   - .surface-border          : 보더 강조가 핵심인 surface (강조 구획, Step 구간 등)        [GRADIENT: NONE]
+   - .surface-gradient        : 일반 섹션용 배경 그라디언트 surface                         [GRADIENT: ALLOW]
+   - .surface-tint            : 미세한 색 보정용 틴트 surface (light tint 계열)             [GRADIENT: NONE]
+
+======================================================================================================
+3) CONTENT BLOCKS (콘텐츠 모듈 / 정보 덩어리) - [v]누락없음 확인 // 72개
+
+  ------------------------------
+  [A] HERO BLOCKS (히어로 모듈) / 6개
+  ------------------------------ 
+   - .hero-main               : 메인 히어로 정보 박스 (타이틀+설명)                        [GRADIENT: NONE]
+   - .hero-media              : 히어로 이미지/비주얼 박스                                  [GRADIENT: NONE] - 이미지 자체가 색 역할
+   - .hero-stats              : 히어로 하단 수치/포인트 묶음                               [GRADIENT: CONDITIONAL] - 내부 프로그레스 바 등에만
+   - .hero-bullet             : 히어로 핵심 장점 3~5개 리스트                              [GRADIENT: NONE]
+   - .hero-cta-wrap           : 히어로 CTA 버튼/신청폼 래퍼                               [GRADIENT: ALLOW]
+   - .hero-trust-bar          : 히어로 상단/하단의 신뢰 요소(배지·보안·인증)              [GRADIENT: NONE]
+
+  ------------------------------
+  [B] PROBLEM–SOLUTION BLOCKS / 8개
+  ------------------------------ 
+   - .problem-box                    : 문제 제기/원인 설명 박스                           [GRADIENT: NONE]
+   - .problem-list                   : 문제 3~5개 리스트 모듈                             [GRADIENT: NONE]
+   - .pain-point-box (★역할토큰★)   : 고객 페인포인트 강조 박스                         [GRADIENT: NONE] - 색은 strong/soft 단색으로만
+   - .solution-box (★역할토큰★)     : 해결책/프로세스 설명 박스                         [GRADIENT: NONE]
+   - .solution-steps                 : 해결 과정 단계 3~6스텝 모듈                        [GRADIENT: NONE] - 단계 진행 강조는 UI Steps에서 처리
+   - .benefit-list                   : 혜택·이점 리스트(불릿 기반)                        [GRADIENT: NONE]
+   - .compare-box                    : 전/후 비교, 기존방식 vs 새로운 방식 비교 박스      [GRADIENT: NONE]
+   - .logic-flow                     : 문제→원인→해결 흐름도형 모듈                      [GRADIENT: NONE]
+
+  ------------------------------
+  [C] SOCIAL PROOF / AUTHORITY  / 5개
+  ------------------------------ 
+   - .proof-card              : 성과/후기/데이터 증거 카드                               [GRADIENT: NONE]
+   - .proof-metric            : KPI/성과/데이터 수치 강조 박스                           [GRADIENT: NONE]
+   - .logo-cloud              : 파트너·언론사·인증 로고 묶음                             [GRADIENT: NONE]
+   - .award-badge-bar         : 수상·인증·특허 등 권위 바                                [GRADIENT: NONE]
+   - .trust-stamp             : 보안·공식·인증 마크(아이콘+텍스트)                      [GRADIENT: NONE]
+
+  ------------------------------
+  [D] FEATURE / BENEFIT BLOCKS  / 6개
+  ------------------------------ 
+   - .feature-box             : 기능·강점 3~4단 그리드 아이템                           [GRADIENT: NONE]
+   - .feature-list            : 기능 리스트(아이콘 + 설명)                               [GRADIENT: NONE]
+   - .stat-box                : 숫자/퍼센트 강조 박스                                   [GRADIENT: NONE] - accent-soft 단색만
+   - .media-box               : 이미지·동영상 전용 surface 래퍼                         [GRADIENT: NONE]
+   - .comparison-table        : 표 형태 비교표                                         [GRADIENT: NONE]
+   - .step-flow               : 단계형(1~6단계) 이해 흐름 박스                          [GRADIENT: NONE]
+
+  ------------------------------
+  [E] INFORMATION BLOCKS  / 8개
+  ------------------------------
+   - .info-box                : 안내·주의·보조설명 박스                                 [GRADIENT: NONE]
+   - .highlight-box           : 강조 문장/카피용 박스                                   [GRADIENT: NONE]
+   - .note-box                : 주석/참고 사항 박스                                     [GRADIENT: NONE]
+   - .quote-box               : 인용구·대표 문장 박스                                   [GRADIENT: NONE]
+   - .tagline-box             : 브랜드 한 줄 카피 강조 모듈                             [GRADIENT: NONE]
+   - .checklist-box           : 체크리스트(✔ 아이콘 목록)                              [GRADIENT: NONE]
+   - .definition-box          : 용어정의/개념 설명 박스                                 [GRADIENT: NONE]
+   - .tip-box                 : 팁·작은 조언 박스                                       [GRADIENT: NONE]
+
+  ------------------------------
+  [F] TESTIMONIAL / REVIEW  / 5개 
+  ------------------------------ 
+   - .testimonial-card        : 후기·추천사 카드(이미지+카피)                           [GRADIENT: NONE]
+   - .testimonial-compact     : 짧은 한 줄 후기 박스                                    [GRADIENT: NONE]
+   - .testimonial-grid        : 후기 여러 개 그리드 모듈                                [GRADIENT: NONE]
+   - .case-study-box          : 사례 스토리 박스                                       [GRADIENT: NONE]
+   - .before-after            : 전·후 비교 박스 (이미지/텍스트)                         [GRADIENT: NONE]
+
+  ------------------------------
+  [G] OFFER / PRICING / FAQ  / 5개
+  ------------------------------
+   - .pricing-card            : 가격표·상품구성 카드                                   [GRADIENT: CONDITIONAL] - 메인 요금제 1개 정도만 헤더/보더 그라데이션 허용
+   - .pricing-feature-list    : 가격표 내 특징·제공항목 리스트                         [GRADIENT: NONE]
+   - .offer-box               : 패키지/혜택 강조 박스                                   [GRADIENT: CONDITIONAL] - 최종 오퍼+CTA가 붙는 박스일 때 soft-gradient 허용
+   - .faq-item-body           : FAQ 답변 영역 surface                                   [GRADIENT: NONE]
+   - .faq-item                : FAQ 전체 아이템(질문+답변)                             [GRADIENT: NONE]
+
+  ------------------------------
+  [H] MISC / ETC   / 5개
+  ------------------------------
+   - .contact-box             : 연락처/상담 안내 모듈                                   [GRADIENT: NONE]
+   - .schedule-box            : 일정/타임라인/캘린더형 안내                             [GRADIENT: NONE]
+   - .profile-box             : 인물 프로필 소개 박스                                   [GRADIENT: NONE]
+   - .team-box                : 팀 소개 그리드                                         [GRADIENT: NONE]
+   - .map-box                 : 지도/위치 안내 모듈                                    [GRADIENT: NONE]
+
+  ---------------------------------------------------------
+  [I] Timeline 타임라인형(히스토리 /프로세스) / 10개
+  ---------------------------------------------------------
+   - .timeline-box             : 타임라인 전체 모듈 래퍼 (히스토리/프로세스 흐름을 한 덩어리로 감싸는 박스)  [GRADIENT: NONE]
+   - .timeline-list            : 타임라인 항목 리스트 래퍼 (세로/가로 타임라인 공통 사용)                    [GRADIENT: NONE]
+
+   - .timeline-item            : 개별 타임라인 단계/이벤트 항목 전체 래퍼                                   [GRADIENT: NONE]
+   - .timeline-item-marker     : 타임라인 축 위의 점/아이콘/번호 마커 (축과 연결되는 시각적 포인트)          [GRADIENT: NONE]
+   - .timeline-item-line       : 타임라인을 위→아래(또는 좌→우)로 잇는 연결 선(라인)                        [GRADIENT: NONE]
+   - .timeline-item-content    : 마커 옆 컨텐츠 블록 전체 래퍼 (날짜+제목+본문 묶음)                         [GRADIENT: NONE]
+
+   - .timeline-item-date       : 날짜/연도/순번 텍스트 영역                                                  [GRADIENT: NONE]
+   - .timeline-item-title      : 해당 단계/이벤트의 제목 영역                                                [GRADIENT: NONE]
+   - .timeline-item-body       : 상세 설명/본문 텍스트 영역                                                 [GRADIENT: NONE]
+   - .timeline-item-tag        : 상태/타입을 표시하는 작은 배지/라벨 (예: 진행중, 완료, 계획)               [GRADIENT: NONE]
+
+  -------------------------------------------------------
+  [J] PROCESS MAP (복잡한 다이어그램형 프로세스)  / 14개
+  -------------------------------------------------------
+   - .process-map              : 전체 프로세스 다이어그램 모듈 래퍼 (복잡한 단계/분기 흐름을 한 덩어리로 감싸는 박스)  [GRADIENT: NONE]
+   - .process-map-grid         : 프로세스 노드들을 배치하는 내부 그리드/플로우 레이아웃 래퍼                         [GRADIENT: NONE]
+
+   - .process-step             : 개별 프로세스 단계/노드 전체 래퍼 (아이콘+텍스트를 모두 감싸는 박스)                [GRADIENT: NONE]
+   - .process-step-main        : 핵심 단계(주요 스텝)를 강조하는 노드 박스 (primary 단계용)                         [GRADIENT: NONE] - 강조는 단색/soft
+   - .process-step-sub         : 보조 단계/서브 프로세스 노드 박스 (부가 단계용)                                    [GRADIENT: NONE]
+
+   - .process-step-icon        : 단계/노드를 상징하는 아이콘/번호/심볼 영역                                        [GRADIENT: NONE]
+   - .process-step-title       : 단계 제목/라벨 텍스트 영역                                                        [GRADIENT: NONE]
+   - .process-step-body        : 단계 상세 설명/부가 안내 텍스트 영역                                              [GRADIENT: NONE]
+
+   - .process-connector        : 단계와 단계를 연결하는 기본 선/라인 (좌→우, 상→하 플로우 표현)                     [GRADIENT: NONE]
+   - .process-connector-arrow  : 방향성을 표시하는 화살표 선 (흐름 진행 방향을 시각적으로 강조)                     [GRADIENT: NONE]
+   - .process-branch           : 분기/조건 갈림을 표현하는 연결 래퍼 (한 단계에서 여러 단계로 갈라지는 지점)         [GRADIENT: NONE]
+
+   - .process-note             : 프로세스 전체 또는 특정 구간에 대한 보조 설명/주의사항 박스                        [GRADIENT: NONE]
+   - .process-legend           : 프로세스 다이어그램에 사용된 색/아이콘/노드 타입 설명 레전드 박스                 [GRADIENT: NONE]
+   - .process-legend-item      : 레전드 내 개별 항목 (마커+설명)                                                   [GRADIENT: NONE]
+
+========================================================================================
+4) UI COMPONENTS (인터랙션·상태·조작 중심) - [v] 누락없음 확인  // 47개
+========================================================================================
+   [A] BUTTONS (버튼 계층) / 7개
+     - .btn                          : 버튼 공통 베이스 (배경/보더/둥글기/그림자)                 [GRADIENT: NONE] - 변형(.btn-cta-*)에서만 사용
+     - .btn-cta-main  (★역할토큰★)  : 메인 CTA 버튼                                          [GRADIENT: ALLOW]
+     - .btn-cta-sub  (★역할토큰★)   : 서브 CTA 버튼                                          [GRADIENT: CONDITIONAL] - 메인보다 약한 soft-gradient만 가능
+     - .btn-ghost                    : 테두리/텍스트형 버튼                                   [GRADIENT: NONE]
+     - .btn-icon                     : 아이콘 버튼(작은 원형/정사각형)                        [GRADIENT: NONE]
+     - .btn-disabled                 : 비활성 버튼 상태                                       [GRADIENT: NONE]
+
+   [B] ALERTS / MESSAGE BLOCKS (알림·상태 메시지)  / 6개
+     - .alert                   : 알림 박스 베이스                                            [GRADIENT: NONE]
+     - .alert-info              : 정보 알림                                                   [GRADIENT: NONE]
+     - .alert-success           : 성공 알림                                                   [GRADIENT: NONE]
+     - .alert-warning           : 경고 알림                                                   [GRADIENT: NONE]
+     - .alert-error             : 에러 알림                                                   [GRADIENT: NONE]
+     - .alert-inline            : 인라인 문장형 알림                                          [GRADIENT: NONE]
+
+   [C] STEPS / PROCESS (단계·프로세스 UI)  / 5개    (★역할토큰★)
+     - .step-item               : 단계 카드 아이템                                            [GRADIENT: NONE]
+     - .step-item-active        : 현재 단계 강조 상태                                        [GRADIENT: CONDITIONAL] - 배경 soft-gradient 정도 허용 가능
+     - .step-line               : 단계 연결 라인                                             [GRADIENT: ALLOW] - gradient-progress 라인 전용
+     - .step-icon               : 단계 아이콘 원형 배경                                      [GRADIENT: CONDITIONAL] - active 상태에서만 soft-gradient 허용
+     - .step-number             : 숫자 단계 표식                                            [GRADIENT: CONDITIONAL] - 현재 단계 pill에 한해 soft-gradient
+
+   [D] FAQ (질문·답변 UI)  / 5개
+     - .faq-item                : FAQ 전체 아이템(질문+답변)                                 [GRADIENT: NONE]
+     - .faq-question            : 질문 헤더 래퍼                                             [GRADIENT: NONE]
+     - .faq-question-icon       : 펼침/접힘 아이콘                                           [GRADIENT: NONE]
+     - .faq-answer              : 답변 surface                                               [GRADIENT: NONE]
+     - .faq-divider             : FAQ 구분선                                                 [GRADIENT: NONE]
+ 
+   [E] TABS (탭 UI)  / 4개
+     - .tab-list                : 탭 목록 surface                                            [GRADIENT: NONE]
+     - .tab-item                : 개별 탭 버튼(비활성)                                       [GRADIENT: NONE]
+     - .tab-item-active         : 활성 탭 상태                                               [GRADIENT: NONE] - 단색 primary/secondary로만
+     - .tab-panel               : 탭 콘텐츠 surface                                          [GRADIENT: NONE]
+
+   [F] METRICS / TABLE / LIST (표·데이터 UI)  / 7개     (★역할토큰★)
+     - .metric-row              : 지표/수치 하나의 행                                       [GRADIENT: NONE]
+     - .metric-item             : 단일 지표(아이콘+수치)                                   [GRADIENT: NONE]
+     - .metric-number           : 수치 강조 요소                                           [GRADIENT: NONE] - 차트 gradient는 별도 chart 컴포넌트에서
+     - .table-surface           : 표 전체 surface                                          [GRADIENT: NONE]
+     - .table-header            : 표 헤더 row surface                                      [GRADIENT: NONE]
+     - .table-row               : 표 본문 row                                              [GRADIENT: NONE]
+     - .table-cell              : 표 셀 surface                                            [GRADIENT: NONE]
+
+   [G] BADGE / TAG / CHIP /Label (작은 UI 단위 — 내부 패딩 포함 허용되는 1% 예외)   / 6개
+     - .badge (★역할토큰★)        : 기본 배지(색상+둥글기+내부 패딩)                     [GRADIENT: NONE]
+     - .badge-main (★역할토큰★)   : 강한 강조 배지                                       [GRADIENT: NONE] - 색은 strong 단색으로만
+     - .badge-sub (★역할토큰★)    : 약한 강조 배지 (혜택/감성)                          [GRADIENT: NONE]
+     - .badge-outline              : 테두리형 배지                                        [GRADIENT: NONE]
+     - .tag                        : 태그 UI                                              [GRADIENT: NONE]
+     - .chip                       : 칩(선택/삭제 아이콘 포함 가능)                      [GRADIENT: NONE]
+     - .pill                        : 긴 알약 형태 강조 텍스트                           [GRADIENT: NONE]
+
+   [H] PAGINATION / NAV / MISC (기타 조작 UI)   / 7개
+     - .pagination              : 페이지네이션 surface                                    [GRADIENT: NONE]
+     - .page-item               : 페이지 네비게이션 버튼                                  [GRADIENT: NONE]
+     - .page-item-active        : 활성 페이지 버튼                                        [GRADIENT: NONE]
+     - .toggle-switch           : 토글 스위치 UI                                          [GRADIENT: NONE]
+     - .accordion               : 아코디언 전체 컨테이너                                 [GRADIENT: NONE]
+     - .accordion-header        : 아코디언 헤더                                          [GRADIENT: NONE]
+     - .accordion-body          : 아코디언 내용 surface                                  [GRADIENT: NONE]
+
+=======================================================================================
+5) FORM COMPONENTS (입력 UI & 폼 카드) - [v] 누락없음 확인  // 27개
+=======================================================================================
+  ------------------------------
+  [A.FORM CARD & GROUP WRAPPERS]   / 5개
+  ------------------------------
+   - .form-card                  : 폼 전체 카드 래퍼 (배경·보더·shadow 포함)                      [GRADIENT: NONE]
+   - .form-card-compact          : 간단 버전 폼 (히어로/CTA 내 미니 폼)                            [GRADIENT: NONE]
+   - .form-group                 : 라벨 + 입력 요소 한 세트 래퍼                                   [GRADIENT: NONE]
+   - .form-group-inline          : 두 개의 입력을 가로로 배치하는 그룹                             [GRADIENT: NONE]
+   - .focus-within (★역할토큰★) : 어느 input이든 focus되어 폼 그룹 전체가 활성화 될때, 보더/배경에 역할토큰 적용하는 상위래퍼  [GRADIENT: NONE]
+
+  ------------------------------
+  [B.INPUT ELEMENTS]  / 6개
+  ------------------------------ 
+   - .input                          : 공통 input 기본 스타일 (text/email/tel 등)               [GRADIENT: NONE]
+   - .textarea                       : 공통 textarea 스타일                                    [GRADIENT: NONE]
+   - .input-sm                       : 작은 사이즈 input (높이 축소형)                        [GRADIENT: NONE]
+   - .input-lg                       : 큰 사이즈 input (히어로 폼용)                          [GRADIENT: NONE]
+   - .input:hover  (★역할토큰★)     : 사용자가 인풋 위에 마우스를 올렸을때 hover배경톤만 부드럽게 적용 [GRADIENT: NONE]
+   - .input:focus-visible (★역할토큰★) : 인풋이 실제 포커스를 얻었을때, 역할토큰 기반 포커스 링·보더 강조가 적용 [GRADIENT: NONE]
+    
+  ------------------------------
+  [C.SELECT / CHECK / RADIO]  / 4개
+  ------------------------------ 
+   - .select-box              : select 요소 전용 UI 표면                                       [GRADIENT: NONE]
+   - .checkbox-wrap           : 체크박스 + 라벨 래퍼                                          [GRADIENT: NONE]
+   - .radio-wrap              : 라디오 + 라벨 래퍼                                           [GRADIENT: NONE]
+   - .toggle-switch           : 토글 스위치형 입력 UI                                        [GRADIENT: NONE]
+
+  ------------------------------
+  [D.FORM MESSAGES / STATE]   / 5개
+  ------------------------------ 
+   - .form-note               : 폼 하단 참고 메시지 박스 (중립 안내)                         [GRADIENT: NONE]
+   - .form-hint               : 입력 하단 작은 보조 힌트 텍스트                             [GRADIENT: NONE]
+   - .form-error              : 에러 상태 표시 텍스트/박스                                  [GRADIENT: NONE]
+   - .form-warning            : 경고 메시지 박스                                            [GRADIENT: NONE]
+   - .form-success            : 성공 메시지/전송 완료 상태 박스                            [GRADIENT: NONE]
+
+  ------------------------------
+  [E.FORM CTA / ACTION]  / 3개
+  ------------------------------ 
+   - .form-action             : 제출 버튼 영역 래퍼                                         [GRADIENT: NONE] - 내부 버튼이 gradient를 가짐
+   - .form-privacy            : 개인정보 수집 및 동의 박스                                 [GRADIENT: NONE]
+   - .form-disclaimer         : 폼 하단 법적 고지/안내 박스                                [GRADIENT: NONE]
+
+  ------------------------------
+  [F.SPECIAL FORM BLOCKS]  / 4개
+   ------------------------------
+   - .otp-input               : 4~6자리 인증코드 입력 UI                                   [GRADIENT: NONE]
+   - .phone-input-group       : 휴대폰번호 + 인증버튼 그리드 그룹                          [GRADIENT: NONE]
+   - .address-input-group     : 주소검색 버튼 + 주소입력 세트                              [GRADIENT: NONE]
+   - .file-upload-box         : 파일 업로드 UI 표면                                        [GRADIENT: NONE]
+
+===========================================================================
+6) NAVIGATION / FOOTER (상단/하단 구조) - 무채색,질감,모양토큰만 맵핑 (25.12.01)
+                                        
+===========================================================================
+   * PC 네비게이션 / 모바일 네비 / 사이드 네비 / 푸터
+   * 랜딩페이지 + 확장형 랜딩(미니홈페이지) 모두 대응
+   * 의미토큰 기반 surface/border/color와 연결됨
+---------------------------------------------------------------------------
+------------------------------
+[A] TOP NAVIGATION (PC)  / 6개
+------------------------------
+   - .navbar                  : 상단 네비게이션 전체 래퍼 (고정 높이/배경)                     [GRADIENT: NONE]
+   - .navbar-inner            : 내부 컨텐츠 정렬 박스 (가운데 정렬, 좌우 배치)                 [GRADIENT: NONE]
+   - .nav-logo                : 로고 영역 surface (이미지/텍스트 로고)                         [GRADIENT: NONE]
+   - .nav-links               : 상단 메뉴 링크 묶음 (가로 메뉴)                               [GRADIENT: NONE]
+   - .nav-link-item           : 개별 네비 링크 아이템                                         [GRADIENT: NONE]
+   - .nav-cta                 : 우측 CTA 영역 (버튼/전화걸기)                                [GRADIENT: NONE] - 버튼 자체가 gradient
+
+------------------------------
+[B] MOBILE NAVIGATION  / 6개
+------------------------------
+   - .mobile-nav              : 모바일 전용 상단 바 (햄버거/로고/CTA)                         [GRADIENT: NONE]
+   - .mobile-nav-toggle       : 햄버거 버튼 영역                                             [GRADIENT: NONE]
+   - .mobile-nav-panel        : 펼쳐지는 메뉴 패널 surface                                   [GRADIENT: NONE]
+   - .mobile-nav-list         : 모바일 메뉴 리스트                                           [GRADIENT: NONE]
+   - .mobile-nav-item         : 모바일 개별 메뉴 아이템                                     [GRADIENT: NONE]
+   - .mobile-nav-overlay      : 패널 펼침 시 사용하는 오버레이 layer                         [GRADIENT: NONE]
+
+------------------------------
+[C] SECONDARY NAV / SIDEBAR  / 5개
+------------------------------
+   - .breadcrumb              : 현재 위치(빵부스러기) 안내 박스                              [GRADIENT: NONE]
+   - .breadcrumb-item         : 빵부스러기 개별 항목                                         [GRADIENT: NONE]
+   - .sidebar-nav             : 좌측/우측 고정 사이드 네비 surface                           [GRADIENT: NONE]
+   - .sidebar-nav-list        : 사이드 네비 리스트                                           [GRADIENT: NONE]
+   - .sidebar-nav-item        : 개별 사이드 메뉴                                            [GRADIENT: NONE]
+
+------------------------------
+[D] FOOTER BLOCKS   / 7개
+------------------------------
+   - .footer                  : 전체 풋터 래퍼 (사이트/랜딩 하단)                            [GRADIENT: NONE]
+   - .footer-top              : 풋터 상단 (링크/메뉴/카테고리)                               [GRADIENT: NONE]
+   - .footer-bottom           : 풋터 하단 (저작권/사업자정보)                               [GRADIENT: NONE]
+   - .footer-nav              : 풋터 내 메뉴 리스트                                          [GRADIENT: NONE]
+   - .footer-nav-item         : 풋터 개별 메뉴                                               [GRADIENT: NONE]
+   - .footer-meta             : 사업자정보/정책/문구 영역 surface                            [GRADIENT: NONE]
+   - .footer-badge-bar        : 보안배지/인증/결제마크 영역(선택)                           [GRADIENT: NONE]
+
+====================================================================================
+7) EFFECT UTILS (표면·보더·그림자 유틸) - [v]누락없음 확인  // 34개
+====================================================================================
+  → "정적인 look"만 담당하는 유틸리티
+  → hover / motion / reveal 등 인터랙션은 premium.css에서 관리한다.
+------------------------------------------------------------------------------------
+------------------------------
+[A] DIVIDER / 구분선 유틸  / 4개
+------------------------------ 
+ - .divider                 : 연한 구분선 (border-subtle 기반, 섹션/블록 구획용)               [GRADIENT: NONE]
+ - .divider-strong          : 강조 구분선 (border-strong 기반, 영역 분리 강조)                [GRADIENT: NONE]
+ - .divider-muted           : 아주 옅은 점선/가느다란 구분선 (보조선)                         [GRADIENT: NONE]
+ - .divider-dashed          : 점선 스타일 구분선 (주의/보조 안내 구역 구분용)                 [GRADIENT: NONE]
+
+------------------------------
+[B] BORDER UTILS / 보더 계층  / 9개
+------------------------------
+   - .border-subtle           : 아주 연한 보더 (var(--border-subtle) 매핑)                    [GRADIENT: NONE]
+   - .border-default          : 기본 보더 (var(--border-default) 매핑)                        [GRADIENT: NONE]
+   - .border-strong           : 강한 보더 (var(--border-strong) 매핑)                         [GRADIENT: NONE]
+   - .border-accent           : 포인트색 보더 (accent 계열, 강조 박스 테두리)                [GRADIENT: NONE]
+   - .border-success          : 성공 상태 보더 (var(--success) 기반)                          [GRADIENT: NONE]
+   - .border-warning          : 경고 상태 보더 (var(--warning) 기반)                          [GRADIENT: NONE]
+   - .border-error            : 에러 상태 보더 (var(--error) 기반)                            [GRADIENT: NONE]
+   - .border-info             : 정보 상태 보더 (var(--info) 기반)                             [GRADIENT: NONE]
+   - .border-soft             : 소프트톤 보더 (success-soft / info-soft 등 연한 톤 기반)      [GRADIENT: NONE]
+
+------------------------------
+[C] RADIUS UTILS / 모서리 라운드  / 7개
+------------------------------
+   - .radius-none             : 모서리 없음 (각진 박스)                                      [GRADIENT: NONE]
+   - .radius-sm               : 작은 라운드 (버튼·배지·입력창에 사용)                        [GRADIENT: NONE]
+   - .radius-md               : 기본 라운드 (카드·블록 기본값)                               [GRADIENT: NONE]
+   - .radius-lg               : 조금 더 부드러운 라운드 (강조 카드·모달 등)                  [GRADIENT: NONE]
+   - .radius-xl               : 크게 둥근 라운드 (섹션 인너 박스·히어로 박스 등)              [GRADIENT: NONE]
+   - .radius-pill             : 좌우 긴 알약형 라운드 (버튼·배지용)                          [GRADIENT: NONE]
+   - .radius-full             : 완전 원형/칩 형태 (아이콘 배지, 동그란 아바타 등)            [GRADIENT: NONE]
+
+------------------------------
+[D] SHADOW UTILS / 그림자 레벨  / 7개
+------------------------------
+   - .shadow-none             : 그림자 없음 (플랫 디자인용)                                  [GRADIENT: NONE]
+   - .shadow-soft             : 약한 카드 그림자 (기본 카드/블록용)                          [GRADIENT: NONE]
+   - .shadow-card             : 일반 카드용 그림자 (살짝 띄운 느낌)                          [GRADIENT: NONE]
+   - .shadow-elevated         : 떠 있는 카드/모달용 그림자 (elevated 레벨)                   [GRADIENT: NONE]
+   - .shadow-strong           : 강조용 강한 그림자 (히어로·강조 CTA 등)                      [GRADIENT: NONE]
+   - .shadow-inner            : 안쪽으로 파인 느낌의 인너 섀도 (inset 효과)                  [GRADIENT: NONE]
+   - .shadow-outline-soft     : 바깥쪽 은은한 테두리 형태 그림자 (focus ring 유사 표현)      [GRADIENT: NONE]
+
+------------------------------
+[E] OVERLAY / DIM SURFACE  / 7개
+------------------------------ 
+   - .overlay-soft-bg         : 연한 오버레이 배경 (var(--overlay-soft) 매핑)                [GRADIENT: NONE]
+   - .overlay-medium-bg       : 중간 농도 오버레이 배경 (var(--overlay-medium) 매핑)         [GRADIENT: NONE]
+   - .overlay-strong-bg       : 강한 오버레이 배경 (var(--overlay-strong) 매핑)              [GRADIENT: NONE]
+   - .overlay-dark-bg         : 전체 화면 dim 처리용 어두운 오버레이 배경                   [GRADIENT: NONE]
+   - .scrim-top               : 상단에서 아래로 내려오는 그라디언트 스크림                   [GRADIENT: NONE] - NEUTRAL SCRIM 전용, 브랜드컬러 그라데이션 금지
+   - .scrim-bottom            : 하단에서 위로 올라오는 그라디언트 스크림                    [GRADIENT: NONE] - NEUTRAL SCRIM 전용
+   - .scrim-side              : 좌우에서 중앙으로 모이는 스크림 (이미지 가장자리 어둡게)     [GRADIENT: NONE] - NEUTRAL SCRIM 전용
+
+⚠ NOTE
+    - 위 유틸들은 "정적인 스타일 계층"만 담당한다.
+    - hover-raise, hover-glow, fade-up, reveal-on-scroll 등
+      인터랙션/모션은 premium.css에서 별도로 정의한다.
+=======================================================================================
+8) ICON / MEDIA (아이콘·아바타·미디어 프레임) - [v] 누락없음 확인 // 총 31개
+---------------------------------------------------------------------------------------
+→ 아이콘, 아바타, 로고, 이미지/영상 썸네일을 감싸는
+  "표면·테두리·모서리·그림자" 전용 컴포넌트 계층
+→ 크기·간격·정렬은 전부 Tailwind(레이아웃)에서 담당
+
+
+[[[ 나중 Todo ]]]
+아이콘 opacity는 나중에 추가 .icon { opacity: 0.9; }
+---------------------------------------------------------------------------------------
+[A] ICON (아이콘 자체)  / 3개
+   - .icon-main  (★역할토큰)   : 핵심/메인 아이콘 자체 색상                             [GRADIENT: NONE]
+   - .icon-sub   (★역할토큰)   : 보조·기능 아이콘 자체 색상                             [GRADIENT: NONE]
+   - .icon-impact  (★역할토큰) : 혜택·감성 아이콘 자체 색상                             [GRADIENT: NONE] - 단색이나 soft-tone만
+
+[B] ICON SURFACES (아이콘 배경/표면)  / 6개
+   - .icon-circle           : 원형 아이콘 배경 surface                                     [GRADIENT: NONE]
+   - .icon-square           : 정사각형 아이콘 배경 surface                                [GRADIENT: NONE]                 
+   - .icon-soft             : 연한 틴트 아이콘 배경 surface                                [GRADIENT: NONE]                   
+   - .icon-accent           : 강조 색상 아이콘 배경 surface                               [GRADIENT: NONE]                    
+   - .icon-outline          : 얇은 보더 중심의 아이콘 배경 surface                        [GRADIENT: NONE]                   
+   - .icon-badge            : 아주 작은 아이콘/심볼용 뱃지 surface                        [GRADIENT: NONE]         
+
+[C] AVATAR FRAMES (아바타/프로필 프레임)  / 3개
+   - .avatar-frame          : 기본 아바타 프레임 surface                                  [GRADIENT: NONE]
+                             (원형 또는 둥근 사각형, overflow: hidden + border/radius/shadow)
+   - .avatar-ring           : 강조 보더가 있는 아바타 프레임                              [GRADIENT: NONE]
+                             (후기/코치/전문가 프로필에 쓰는 링 형태 아바타)
+   - .avatar-muted          : 톤 다운된 배경의 아바타 프레임                              [GRADIENT: NONE]
+                             (회색/중립 배경 위에 프로필 이미지를 올릴 때 사용)
+
+[D] LOGO SURFACES (로고용 표면)  / 3개
+   - .logo-badge            : 단일 로고를 감싸는 캡슐형 배경 surface                      [GRADIENT: NONE]
+                             (작은 로고 뱃지, 파트너/클라이언트 로고에 사용)
+   - .logo-tile             : 그리드형 로고 타일 surface                                  [GRADIENT: NONE]
+                             (로고 여러 개를 2~4열 그리드로 배치할 때 개별 박스)
+   - .logo-strip             : 가로로 길게 이어지는 로고 스트립 surface                   [GRADIENT: NONE]
+                             (슬라이더/마르키 등 “로고 행렬” 영역의 배경)
+
+[E] MEDIA FRAMES (이미지·영상 프레임)  / 6개
+   - .media-frame           : 기본 미디어 프레임 surface                                  [GRADIENT: NONE]
+                             (이미지/영상/썸네일용 공통 박스, 배경/보더/모서리/그림자만)
+   - .media-frame-alt       : 대체 스타일 미디어 프레임                                   [GRADIENT: NONE]
+                             (살짝 다른 톤/보더/모서리 스타일의 보조 프레임)
+   - .media-frame-muted     : 톤 다운된 미디어 프레임                                     [GRADIENT: NONE]
+                             (흑백/보정된 느낌, 설명/자료 이미지용)
+   - .thumbnail-frame       : 작은 썸네일 전용 프레임                                     [GRADIENT: NONE]
+                             (칼럼 목록/블로그 카드/동영상 리스트 썸네일에 사용)
+   - .media-overlay         : 미디어 위에 씌우는 오버레이 surface                         [GRADIENT: CONDITIONAL]
+                             (그라디언트·틴트·어두운 스크림 등, 텍스트 가독성 확보용 — 히어로/CTA 이미지 위에서만 브랜드 gradient 허용)
+   - .media-badge           : 미디어 상단 모서리에 붙는 작은 뱃지용 surface              [GRADIENT: NONE]
+                             (“NEW”, “BEST”, 재생아이콘 등 라벨·아이콘 배지에 사용)
+
+[F] ICON + MEDIA COMBO (복합용 보조 표면)  / 2개
+   - .icon-with-media       : 아이콘 + 작은 이미지가 함께 올 때 쓰는 복합 surface         [GRADIENT: NONE]
+                             (예: 작은 썸네일 + 아이콘이 함께 있는 모듈용 표면 래퍼)
+   - .media-stat-chip       : 미디어 위/아래에 붙는 작은 통계/재생시간 칩 표면            [GRADIENT: NONE]
+                             (영상 길이, 조회수, 페이지 수 같은 메타정보 칩)
+
+[G] CAROUSEL CONTROLS (슬라이드 버튼·도트 내비게이션) / 11개
+   - .carousel-controls         : 캐러셀 하단/측면에 위치한 전체 내비게이션 컨트롤 래퍼 (버튼·도트·인디케이터를 모두 감싸는 박스)  [GRADIENT: NONE]
+   - .carousel-controls-inline  : 슬라이드와 같은 줄에 배치되는 인라인형 컨트롤 래퍼 (양옆 화살표+중앙 도트 배치용)                 [GRADIENT: NONE]
+
+   - .carousel-arrow            : 좌·우 공통 화살표 버튼 베이스 (원형/사각형 여부는 스타일에서 결정)                             [GRADIENT: NONE]
+   - .carousel-arrow-prev       : 이전 슬라이드로 이동하는 화살표 버튼                                                         [GRADIENT: NONE]
+   - .carousel-arrow-next       : 다음 슬라이드로 이동하는 화살표 버튼                                                         [GRADIENT: NONE]
+
+   - .carousel-dots             : 슬라이드 위치를 표시하는 도트(인디케이터) 전체 래퍼                                         [GRADIENT: NONE]
+   - .carousel-dot              : 개별 도트 버튼 (슬라이드 인덱스 선택용)                                                     [GRADIENT: NONE]
+   - .carousel-dot-active       : 현재 활성 슬라이드를 나타내는 도트 상태 클래스                                              [GRADIENT: NONE]
+
+   - .carousel-counter          : "현재 슬라이드 / 전체 슬라이드 수"를 표시하는 텍스트/배지 영역                              [GRADIENT: NONE]
+   - .carousel-progress         : 슬라이드 진행 상황을 표시하는 프로그레스 바 래퍼                                            [GRADIENT: ALLOW]
+   - .carousel-progress-bar     : 실제 진행량을 표현하는 프로그레스 막대(채워지는 바)                                         [GRADIENT: ALLOW]
+=================================================================================================================================== */
+
+/* 
+===================================================================================================================================
+=============================== 맵핑완료한 모든 컴포넌트============================================================================
+===================================================================================================================================
+[1] LAYOUT WRAPPERS STYLES - [v] 21개확인
+    - 레이아웃 뼈대용 컴포넌트에 색/보더/라운드/그림자 토큰만 매핑
+    - 여기는 "공간 배경 분위기" 위주 (세부 카드 느낌은 SURFACE / CONTENT에서 맡음)
+================================================================================================================================== */
+
+/*
+------------------------------------------------------------------
+[1-1] PAGE LEVEL WRAPPERS
+-------------------------------------------------------------------*/
+
+/* 전체 페이지 틀 (페이지 공통 배경) */
+.page-shell {
+  background: var(--page-bg);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 헤더/푸터 제외 메인 콘텐츠 래퍼 */
+.page-main {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 여러 섹션을 하나의 흐름으로 묶는 그룹 래퍼
+   (예: 신뢰페이지 구간, 칼럼 묶음 등) */
+.page-section-group {
+  background: var(--section-bg);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------
+[1-2] SECTION BAND WRAPPERS (섹션 단위 배경)
+-------------------------------------------------------------------*/
+
+/* 히어로 전용 섹션 (그래디언트 배경, 살짝 떠 있는 느낌) */
+.section-hero-gradient {
+  background: var(--gradient-primary);
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* 기본 섹션 배경 (가장 많이 쓰이는 밴드형 섹션) */
+.section {
+  background: var(--section-bg);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+  overflow-x: clip; /* premium효과 유지+가로 스크롤 차단*/
+}
+
+/* 교대 배경 섹션 (톤 조금 더 진한 밴드) */
+.section-alt {
+  background: var(--section-alt-bg);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+  overflow-x: clip; /* premium효과 유지+가로 스크롤 차단*/
+}
+
+/* 공지/법적고지/톤다운 보조 섹션 */
+.section-muted {
+  background: var(--neutral-100);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------
+[1-3] SECTION INNER WRAPPERS (폭·정렬용 내부 박스)
+-------------------------------------------------------------------*/
+
+/* 기본 내부 컨텐츠 박스 (배경/보더 없음, 폭/정렬만 Tailwind에서 제어) */
+.section-inner {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 칼럼/장문 읽기용 좁은 폭 내부 래퍼 */
+.section-inner-narrow {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 갤러리/그리드/차트 등 넓게 쓰는 콘텐츠용 내부 래퍼 */
+.section-inner-wide {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 공통섹션 상단 헤더 영역 (필요시 아래 보더만) */
+.section-header-wrap {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 공통섹션 본문 영역 */
+.section-body {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 공통섹션 맨하단 bottom CTA/디스크레이머(disclaimer)-법적·주의사항·안내문 영역 (위쪽 구분선) */
+
+.section-bottom {
+  background: var(--neutral-50);
+  border: 0;
+  border-top: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------
+[1-4] PAGE PANEL / ASIDE (토글 패널·사이드바)
+-------------------------------------------------------------------*/
+
+/* 화면 측면에서 열리는 패널 전체 래퍼 (모달/드로어 느낌) */
+.page-panel {
+  background: var(--modal-bg);
+  border-left: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: var(--shadow-lg);
+}
+
+/* 패널 내부 컨텐츠 박스 (스크롤/여백용, 스타일 최소화) */
+.page-panel-inner {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 패널 상단 헤더 (타이틀/닫기 버튼 영역 — 아래쪽 보더로만 구분) */
+.page-panel-header {
+  background: var(--neutral-100);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 패널 본문 영역 */
+.page-panel-body {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 패널 하단 CTA/추가 안내 영역 (위쪽 보더) */
+.page-panel-footer {
+  background: var(--neutral-50);
+  border-top: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 페이지 측면 고정 보조 영역 (요약/퀵메뉴 박스 느낌) */
+.page-aside {
+  background: var(--card-elevated-bg);
+  border-left: 1px solid var(--border-default);
+  border-radius: 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* 사이드 영역 내부 컨텐츠 박스 */
+.page-aside-inner {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 스크롤 따라 고정되는 스티키 요약/CTA 박스 (조금 더 카드 느낌) */
+.page-aside-sticky {
+  background: var(--card-bg);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* =======================================================================================
+[2] SURFACE BLOCKS — 표면·배경 서피스 계층 (의미토큰 맵핑 완료판) - [v] 13개확인
+======================================================================================= */
+
+/* ------------------------------------------
+   [2-1] BASE SURFACES (기본/대체/뮤트)
+------------------------------------------- */
+
+/* 기본 surface (섹션 내부의 공통 패널) */
+.surface {
+  background: var(--section-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 교대 surface (톤 전환 구역) */
+.surface-alt {
+  background: var(--section-alt-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 톤 다운된 보조 surface */
+.surface-muted {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 강조 surface */
+.surface-accent {
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  border: var(--border-1) solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ------------------------------------------
+   [2-2] CARD / ELEVATED / CTA / HERO
+------------------------------------------- */
+
+/* 일반 카드 surface */
+.surface-card {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 떠 있는 카드 / 모달 / 강조 박스 */
+.surface-elevated {
+  background: var(--card-elevated-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* CTA 전용 surface */
+.surface-cta {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* Hero 전용 surface (반투명 글래스 카드) */
+.surface-hero {
+  /* 내부 채움: fx-glass-fill-opacity 사용 */
+  background: rgba(255, 255, 255, var(--fx-glass-fill-opacity));
+
+  /* 모서리/보더/그림자 전부 기존 토큰만 */
+  border-radius: var(--radius-2xl);
+  border: var(--border-1) solid rgba(255, 255, 255, var(--fx-glass-border-opacity));
+  box-shadow: var(--fx-shadow-card);
+
+  /* 블러 강도도 fx-glass-blur-radius 토큰으로 */
+  backdrop-filter: blur(var(--fx-glass-blur-radius));
+  -webkit-backdrop-filter: blur(var(--fx-glass-blur-radius));
+}
+
+
+/* ------------------------------------------
+   [2-3] OVERLAY / INSET / BORDER / TINT
+------------------------------------------- */
+
+/* 반투명 오버레이 */
+.surface-overlay {
+  background: var(--overlay-soft);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 내부 인셋 surface */
+.surface-inset {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 보더 강조형 surface */
+.surface-border {
+  background: var(--section-bg);
+  border: var(--border-2) solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 섹션용 그라디언트 surface */
+.surface-gradient {
+  background: var(--gradient-primary-horizontal);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 아주 약한 컬러 틴트 surface (틴트는 브랜드의 주 색상 4%로 희미하게 섞어 시각적 구별을 제공) */
+.surface-tint {
+  background: color-mix(in srgb, var(--primary) 4%, white);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* =======================================================================================
+[3] CONTENT BLOCKS (콘텐츠 모듈 / 정보 덩어리)  (의미토큰 맵핑 완료판) - [v] 72개확인
+========================================================================================== */
+
+/*---------------------------------------------------------------------------------------
+[3-A] HERO BLOCKS — 히어로 섹션 전용 콘텐츠 박스 (의미토큰 맵핑 완료판) - [v] 6개확인
+---------------------------------------------------------------------------------------- */
+/* 레이아웃(그리드·간격·정렬)은 전부 HTML/Tailwind에서만 제어한다. */
+
+/* 메인 히어로 정보 박스 (타이틀 + 설명)  - 6개확인*/
+.hero-main {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 히어로 이미지/비주얼 박스 */
+.hero-media {
+  background: var(--neutral-100);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* 히어로 하단 수치/포인트 묶음 래퍼 */
+.hero-stats {
+  background: color-mix(in srgb, var(--primary) 4%, white); /*브랜드 색, 틴트(연하게 흰색과 섞음)*/
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 히어로 핵심 장점 3~5개 리스트 래퍼 */
+.hero-bullet {
+  background: var(--neutral-50);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* 히어로 CTA 버튼/신청폼 래퍼 */
+.hero-cta-wrap {
+  background: color-mix(in srgb, var(--cta) 8%, white);
+  border: var(--border-1) solid var(--cta);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* 히어로 상단/하단 신뢰 요소 바 (배지·보안·인증) */
+.hero-trust-bar {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* -----------------------------------------------------------------------------------------
+[3-B] PROBLEM–SOLUTION BLOCKS — 문제·해결·비교·혜택 모듈 (의미토큰 맵핑 완료판) - [v] 8개확인
+-----------------------------------------------------------------------------------------*/
+/* 레이아웃(그리드·간격·정렬)은 전부 HTML/Tailwind에서만 제어한다. */
+
+/* 문제 제기/원인 설명 박스 */
+.problem-box {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 문제 3~5개 리스트 모듈 래퍼 */
+.problem-list {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* 고객 페인포인트 강조 박스 - ★역할토큰★ */
+.pain-point-box {
+  background: var(--color-pain-bg);      /* ★역할토큰★  */
+  border: var(--border-1) solid var(--color-pain-border);      /* ★역할토큰★  */
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* 해결책/프로세스 설명 박스 (긍정적·해결 톤) - ★역할토큰★*/
+.solution-box {
+  background: var(--color-solution-bg);    /*★역할토큰★*/
+  border: var(--border-1) solid var(--color-solution-border);    /*★역할토큰★*/
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* 해결 과정 단계 3~6스텝 모듈 래퍼 */
+.solution-steps {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 혜택·이점 리스트(불릿 기반) 래퍼 */
+.benefit-list {
+  background: color-mix(in srgb, var(--success-soft) 50%, white);
+  border: var(--border-1) solid var(--success-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* 전/후 비교, 기존방식 vs 새로운 방식 비교 박스 */
+.compare-box {
+  background: var(--neutral-50);
+  border: var(--border-2) solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* 문제→원인→해결 흐름도형 모듈 (간단 플로우 다이어그램 용) */
+.logic-flow {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ------------------------------------------------------------------------------------------
+[3-C] SOCIAL PROOF / AUTHORITY - [v] 5개확인
+   - 성과/후기/데이터·지표·로고·권위·신뢰 마크 계층 (의미토큰 맵핑 완료)
+   - 레이아웃(그리드/간격/정렬)은 전부 HTML/Tailwind에서 제어
+-------------------------------------------------------------------------------------------- */
+
+/* 성과/후기/데이터 증거 카드
+   - 예: "3개월 만에 문의 214건", "광고비 대비 ROAS 327%" 같은 핵심 증거 카드 */
+.proof-card {
+  background: var(--card-bg);                       /* 카드 계열 기본 배경 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);                  /* 살짝 고급스러운 둥글기 */
+  box-shadow: var(--shadow-md);                     /* 일반 카드보다 한 단계 강조 */
+}
+
+/* KPI / 성과 / 데이터 수치 강조 박스
+   - 예: 전환율, 상담 수, 만족도 %, 유지율, 재구매율 등 */
+.proof-metric {
+  background: var(--neutral-50);                    /* 아주 옅은 배경으로 숫자 강조용 */
+  border: var(--border-1) solid var(--border-strong); /* 강한 보더로 수치 구획 강조 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 파트너 / 언론사 / 인증 로고 묶음
+   - 예: "네이버, 카카오, 쿠팡" 로고, 언론사 로고 모음 */
+.logo-cloud {
+  background: var(--neutral-50);                    /* 흰색에 가까운 중립 배경 */
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);                   /* 평평한 느낌, 로고 자체가 주인공 */
+}
+
+/* 수상 / 인증 / 특허 등 권위 바
+   - 예: “대한민국 OOO 대상 3년 연속 수상”, “특허 제000000호” */
+.award-badge-bar {
+  background: var(--accent-soft);                   /* 은은한 포인트 컬러 배경 */
+  border: var(--border-1) solid var(--accent);      /* 강한 포인트 보더 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);                     /* 살짝 띄워서 눈에 띄게 */
+}
+
+/* 보안 / 공식 / 인증 마크 (아이콘 + 텍스트)
+   - 예: “SSL 보안 적용”, “공식 등록기관”, “정부지원 연계 가능” */
+.trust-stamp {
+  background: var(--info-soft);                     /* 정보·신뢰 계열 소프트 톤 */
+  border: var(--border-1) solid var(--info);
+  border-radius: var(--radius-pill);                /* 알약형 → 뱃지/스탬프 느낌 */
+  box-shadow: var(--shadow-xs);                     /* 아주 은은한 그림자만 */
+}
+
+/* ---------------------------------------------------------------------------------------
+[3-D] FEATURE / BENEFIT BLOCKS - [v] 6개확인
+   - 기능/강점/숫자 강조/비교/단계 흐름을 보여주는 콘텐츠 블록 계층
+   - 레이아웃(그리드/간격/정렬)은 전부 HTML/Tailwind에서 제어
+---------------------------------------------------------------------------------------- */
+
+/* 기능·강점 3~4단 그리드 아이템
+   - 예: "정책자금 전담 매니저", "세무·법무 연계", "원스톱 서류 준비" 등 */
+.feature-box {
+  background: var(--card-bg);                          /* 기본 카드 계열 배경 */
+  border: var(--border-1) solid var(--border-default); /* 기본 카드 보더 */
+  border-radius: var(--radius-lg);                     /* 부드러운 카드 모양 */
+  box-shadow: var(--shadow-sm);                        /* 기본 카드 그림자 */
+}
+
+/* 기능 리스트 (아이콘 + 설명)
+   - 예: 아이콘 + 한 줄 설명, 체크 아이콘 + 기능 설명 목록 */
+.feature-list {
+  background: var(--neutral-50);                       /* 매우 옅은 중립 배경 */
+  border: var(--border-1) solid var(--border-subtle);  /* 살짝만 보이는 보더 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                        /* 거의 평평한 수준의 미세 그림자 */
+}
+
+/* 숫자/퍼센트 강조 박스
+   - 예: "상담 전환율 42%", "재신청률 68%", "만족도 4.8/5.0" 등 */
+.stat-box {
+  background: var(--accent-soft);                      /* 강조 컬러의 소프트 버전(눈에 띄지만 과하지 않게) */
+  border: var(--border-1) solid var(--accent);         /* 강한 포인트 보더로 숫자 강조 */
+  border-radius: var(--radius-xl);                     /* 좀 더 라운드 크게 → “뱃지형 숫자 카드” 느낌 */
+  box-shadow: var(--shadow-md);                        /* 한 단계 더 띄워서 시선 집중 */
+}
+
+/* 이미지·동영상 전용 surface 래퍼
+   - 예: 썸네일, 데모 이미지, 그래프/차트 캡처, 영상 썸네일 등 */
+.media-box {
+  background: var(--neutral-100);                      /* 이미지를 받쳐주는 중립 배경 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 표 형태 비교표
+   - 예: “타사 대비 비교표”, “기존 방식 vs 새로운 방식”, “직접 신청 vs 대행 신청” */
+.comparison-table {
+  background: var(--neutral-50);                       /* 내용 가독성이 좋은 밝은 배경 */
+  border: var(--border-1) solid var(--border-default); /* 표 전체 테두리 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                        /* 거의 플랫한 수준, 내용이 주인공 */
+}
+
+/* 단계형(1~6단계) 이해 흐름 박스
+   - 예: "1단계 상담 → 2단계 진단 → 3단계 설계 → 4단계 실행…" 등 */
+.step-flow {
+  background: var(--card-elevated-bg);                 /* 살짝 띄운 느낌의 카드 배경 */
+  border: var(--border-1) solid var(--border-subtle);  /* 부드러운 구획 보더 */
+  border-radius: var(--radius-xl);                     /* 흐름 전체를 하나의 큰 블록으로 감싸는 느낌 */
+  box-shadow: var(--shadow-md);                        /* 눈에 잘 들어오도록 적당한 elevation */
+}
+
+/* ---------------------------------------------------------------------------------------
+[3-E] INFORMATION BLOCKS - [v] 8개확인
+   - 안내/강조문/노트/인용/태그라인/체크리스트/정의/팁 박스 계층
+   - “텍스트가 주인공”인 블록들 → 과한 그림자보단 가독성 위주 톤
+   - 레이아웃(여백/정렬/간격)은 전부 HTML/Tailwind에서 제어
+----------------------------------------------------------------------------------------- */
+
+/* 안내·주의·보조설명 박스
+   - 예: "※ 신청 전 꼭 읽어주세요", "주의사항", "상담 가능 시간 안내" 등 */
+.info-box {
+  background: var(--neutral-50);                        /* 눈에 부담 없는 밝은 안내 배경 */
+  border: var(--border-1) solid var(--border-default);  /* 기본 안내용 보더 */
+  border-radius: var(--radius-lg);                      /* 부드러운 카드형 박스 */
+  box-shadow: var(--shadow-xs);                         /* 거의 플랫에 가까운 약한 그림자 */
+}
+
+/* 강조 문장/카피용 박스
+   - 예: “지금 신청하시면 비용 없이 진단부터 도와드립니다.” 같은 핵심 카피 */
+.highlight-box {
+  background: var(--accent-soft);                       /* 강조 컬러의 소프트 톤 */
+  border: var(--border-1) solid var(--accent);          /* 강한 포인트 보더로 눈에 띄게 */
+  border-radius: var(--radius-xl);                      /* 라운드를 키워서 ‘뱃지형 강조문’ 느낌 */
+  box-shadow: var(--shadow-md);                         /* 한 단계 더 띄워 시선 집중 */
+}
+
+/* 주석/참고 사항 박스
+   - 예: “* 실제 한도는 심사 결과에 따라 달라질 수 있습니다.” 같은 작은 안내 */
+.note-box {
+  background: var(--neutral-50);                        /* 본문과 잘 어울리는 옅은 배경 */
+  border: var(--border-1) solid var(--border-subtle);   /* 거의 안 보이는 수준의 얕은 보더 */
+  border-radius: var(--radius-md);                      /* 기본 라운드 */
+  box-shadow: var(--shadow-none);                       /* 완전 플랫 → 본문에 자연스럽게 녹아듦 */
+}
+
+/* 인용구·대표 문장 박스
+   - 예: 고객 후기의 한 문장, 대표의 철학 문장, 명언형 카피 등 */
+.quote-box {
+  background: var(--card-elevated-bg);                  /* 살짝 떠 있는 카드 배경 */
+  border: var(--border-1) solid var(--border-default);  /* 기본 카드 보더 */
+  border-radius: var(--radius-xl);                      /* 인용구 특유의 “말풍선/카드” 느낌 */
+  box-shadow: var(--shadow-md);                         /* 눈에 잘 띄는 정도의 그림자 */
+}
+
+/* 브랜드 한 줄 카피 강조 모듈
+   - 예: “DB 비용은 낮추고, 품질은 높이는 랜딩 운영 시스템” 같은 브랜드 태그라인 */
+.tagline-box {
+  background: var(--neutral-900);                       /* 다크 배경 위에 밝은 텍스트(타이포에서 제어) */
+  border: var(--border-1) solid var(--neutral-900);     /* 배경과 동일한 강한 테두리 */
+  border-radius: var(--radius-pill);                    /* 한 줄 카피를 감싸는 긴 알약 형태 */
+  box-shadow: var(--shadow-lg);                         /* 히어로 근처에서 강하게 떠 보이게 */
+}
+
+/* 체크리스트(✔ 아이콘 목록) 래퍼
+   - 예: "이런 분께 추천합니다" / "신청 전 체크하세요" 목록 */
+.checklist-box {
+  background: var(--neutral-50);                        /* 본문과 자연스럽게 이어지는 밝은 배경 */
+  border: var(--border-1) solid var(--border-default);  /* 리스트 전체를 감싸는 기본 보더 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                         /* 살짝만 띄워서 구획만 보여주는 정도 */
+}
+
+/* 용어정의/개념 설명 박스
+   - 예: “정책자금이란?”, “DSR 이란?”, “채무조정이란?” 같은 개념 설명 블록 */
+.definition-box {
+  background: var(--neutral-50);                        /* 텍스트 위주의 설명에 맞는 밝은 배경 */
+  border: var(--border-1) solid var(--border-default);  /* 정의 박스 테두리 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                         /* 내용이 주인공이므로 과하지 않은 그림자 */
+}
+
+/* 팁·작은 조언 박스
+   - 예: “Tip. 이런 순서로 준비하시면 심사에 훨씬 수월합니다.” */
+.tip-box {
+  background: var(--info-soft);                         /* 정보/Tip 계열 소프트 블루 */
+  border: var(--border-1) solid var(--info);            /* 정보색 계열 보더로 역할 구분 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);                         /* 안내문보다 살짝 더 띄워서 눈에 띄게 */
+}
+
+/* ---------------------------------------------------------------------------------------
+[3-F] TESTIMONIAL / REVIEW - [v] 5개확인
+   - 후기·추천사·그리드·사례·전후비교 박스 계층
+   - 신뢰/권위/실제성 강조를 위해 '중간~높은 Elevation' 사용
+----------------------------------------------------------------------------------------- */
+
+/* 후기·추천사 카드 (이미지 + 카피 조합)
+   - 예: 고객 실 후기 카드, 프로필사진 + 한 문장 후기 */
+.testimonial-card {
+  background: var(--card-bg);                           /* 기본 카드 배경 */
+  border: var(--border-1) solid var(--border-default);  /* 후기 카드 기본 보더 */
+  border-radius: var(--radius-xl);                      /* 시각적으로 고급스럽게 */
+  box-shadow: var(--shadow-md);                         /* 후기 카드니까 확실한 존재감 */
+  overflow: hidden;                                     /* 이미지 상단 클리핑 */
+}
+
+/* 짧은 한 줄 후기 (Compact)
+   - 예: “응대 빨랐어요”, “정말 친절했습니다” 같은 한 줄 텍스트 후기 */
+.testimonial-compact {
+  background: var(--neutral-50);                        /* 완전 플랫 → 텍스트 중심 */
+  border: var(--border-1) solid var(--border-subtle);   /* 아주 연한 테두리 */
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);                       /* 후기 리스트 내 자연스럽게 */
+}
+
+/* 후기 여러 개 그리드 모듈
+   - 예: 2×2 / 3×2 후기 카드 묶음 */
+.testimonial-grid {
+  background: var(--neutral-100);                       /* 그리드 전체 묶음의 부드러운 배경 */
+  border: var(--border-1) solid var(--border-default);  
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                         /* 그리드 전체를 살짝 띄움 */
+}
+
+/* 사례 스토리 박스 (Case Study)
+   - 예: 상세 후기 + 근거 + 이미지 + 전후 스토리 */
+.case-study-box {
+  background: var(--card-elevated-bg);                  /* 더 강조되는 카드 배경 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);                         /* 후기 중에서도 최고 고도 Elevation */
+  overflow: hidden;
+}
+
+/* 전·후 비교 박스 (이미지/텍스트)
+   - 예: Before → After 형태 시각 비교 */
+.before-after {
+  background: var(--neutral-50);                        /* 비교가 명확하게 보이는 밝은 배경 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);                         /* 내용 강조용 */
+  overflow: hidden;                                     /* 이미지 비율 유지 */
+}
+
+/* ---------------------------------------------------------------------------------------
+[3-G] OFFER / PRICING / FAQ - [v] 5개확인
+   - 가격표·오퍼·FAQ 블록 (상품 제안·조건·자주 묻는 질문 영역)
+----------------------------------------------------------------------------------------- */
+
+/* 가격표·상품구성 카드
+   - 예: 기본형 / 스탠다드 / 프리미엄 요금제 카드 */
+.pricing-card {
+  background: var(--card-bg);                           /* 가격표는 명확한 카드 느낌 */
+  border: var(--border-1) solid var(--border-default);  /* 기본 보더 */
+  border-radius: var(--radius-xl);                      /* 약간 고급스러운 라운드 */
+  box-shadow: var(--shadow-md);                         /* Hero 바로 아래급 중요도 */
+  overflow: hidden;
+}
+
+/* 가격표 내 제공 항목 리스트
+   - 예: “✓ 1:1 컨설팅”, “✓ 월 리포트 제공” 같은 항목 목록 */
+.pricing-feature-list {
+  background: var(--neutral-50);                        /* 리스트는 플랫하게 */
+  border: var(--border-1) solid var(--border-subtle);   /* 아주 연한 경계 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);                       /* 내용 읽기 위주 */
+}
+
+/* 오퍼/혜택 강조 박스
+   - 예: "지금 신청 시 첫 달 무료", "한정 프로모션" 등 */
+.offer-box {
+  background: var(--accent-soft);                       /* 부드러운 강조 배경 */
+  border: var(--border-2) solid var(--accent);          /* 강한 포인트 보더 */
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);                         /* 눈에 띄지만 과하지 않게 */
+}
+
+/* FAQ 답변 영역 surface
+   - 질문 아래 펼쳐지는 답변 본문 영역 */
+.faq-item-body {
+  background: var(--neutral-50);                        /* 읽기 편한 밝은 배경 */
+  border-top: var(--border-1) solid var(--border-subtle); /* 질문과의 경계선 역할 */
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg); /* 아래쪽만 둥글게 (질문과 붙을 때 자연스럽게) */
+  box-shadow: var(--shadow-none);
+}
+
+/* FAQ 전체 아이템(질문 + 답변 래퍼)
+   - 질문 헤더 + 답변 블록을 감싸는 카드형 5컨테이너 */
+.faq-card {
+  background: var(--neutral-100);                       /* 섹션 배경보다 살짝 진한 톤 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);                         /* 리스트 내에서 살짝만 띄움 */
+  overflow: hidden;
+}
+
+/* -----------------------------------------------------------------------------------------
+[3-H] MISC / ETC - [v] 5개확인
+   - 연락처 안내 / 일정 / 프로필 / 팀 / 지도 등 다양한 정보용 블록
+----------------------------------------------------------------------------------------- */
+/* 연락처·상담 안내 모듈
+   - 예: “전화상담: 010-0000-0000”, “카카오톡 문의” 등 */
+.contact-box {
+  background: var(--neutral-50);                         /* 밝고 신뢰감 있는 톤 */
+  border: var(--border-1) solid var(--border-default);   /* 기본 보더 */
+  border-radius: var(--radius-xl);                       /* 안내박스는 부드럽게 */
+  box-shadow: var(--shadow-sm);                          /* 살짝 띄워서 가독성↑ */
+}
+
+/* 일정 / 타임라인 / 캘린더형 안내
+   - 예: 교육 일정, 행사 일정, 상담 가능 시간표 */
+.schedule-box {
+  background: var(--neutral-100);                        /* 구획감을 주는 은은한 배경 */
+  border: var(--border-1) solid var(--border-subtle);    /* 아주 연한 경계선 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* 인물 프로필 소개 박스
+   - 예: “전문가 소개”, 강사·대표자·스탭 프로필 카드 */
+.profile-box {
+  background: var(--card-bg);                            /* 카드 느낌 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);                       /* 프로필 사진과 조화롭게 */
+  box-shadow: var(--shadow-md);                          /* 강조도 있는 카드 */
+  overflow: hidden;
+}
+
+/* 팀 소개 그리드
+   - 예: 여러 구성원 카드 2~4열 그리드 */
+.team-box {
+  background: var(--neutral-50);                          /* 팀 섹션 배경은 밝게 */
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);                         /* 레이아웃 자체가 강조되므로 그림자 최소화 */
+}
+
+/* 지도/위치 안내 모듈
+   - 예: 카카오맵/네이버지도 iframe, 위치 정보 박스 */
+.map-box {
+  background: var(--neutral-100);                         /* 지도와 대비되는 은은한 톤 */
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);                           /* 지도가 하나의 카드처럼 보이도록 */
+  overflow: hidden;                                       /* 지도 모서리 깔끔하게 */
+}
+
+/* =======================================================================================
+[3-I] TIMELINE BLOCKS (히스토리·프로세스 흐름) - [v] 10개확인
+========================================================================================= */
+
+/* 전체 타임라인 모듈 래퍼
+   - 섹션 안에서 하나의 큰 구획을 형성하는 프레임 역할 */
+.timeline-box {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-none);
+}
+
+/* 타임라인 리스트 래퍼 (세로/가로 공통)
+   - 내부의 item들이 흐름을 형성 */
+.timeline-list {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 각 개별 타임라인 단계 전체 박스 */
+.timeline-item {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 타임라인 축 위의 점/아이콘/번호 (marker) */
+.timeline-item-marker {
+  background: var(--accent);
+  border: var(--border-2) solid var(--neutral-50);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 타임라인 연결 라인 (세로/가로 라인) */
+.timeline-item-line {
+  background: var(--border-default);
+  border-radius: var(--radius-pill);
+  box-shadow: none;
+}
+
+/* 마커 옆 컨텐츠 전체 래퍼 */
+.timeline-item-content {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+}
+
+/* 날짜/연도 영역 */
+.timeline-item-date {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+  color: var(--neutral-700);
+}
+
+/* 단계/이벤트 제목 박스 */
+.timeline-item-title {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+  color: var(--neutral-900);
+}
+
+/* 상세 설명 텍스트 박스 */
+.timeline-item-body {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+  color: var(--neutral-700);
+}
+
+/* 상태/타입 배지 (진행중/완료/계획 등) */
+.timeline-item-tag {
+  background: var(--info-soft);
+  border: var(--border-1) solid var(--info);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-none);
+}
+
+/* =======================================================================================
+[3-J] PROCESS MAP (복잡한 다이어그램형 프로세스) - [v] 14개확인
+======================================================================================= */
+
+/* 프로세스 전체 다이어그램 모듈 래퍼
+   - 섹션 안에서 하나의 큰 논리 흐름 블록을 형성하는 바깥 프레임 */
+.process-map {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-none);
+}
+
+/* 프로세스 노드들을 배치하는 내부 그리드/플로우 래퍼
+   - 실제 레이아웃(컬럼/행/플로우)은 Tailwind로 제어 */
+.process-map-grid {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 기본 프로세스 단계/노드 전체 박스 (공통 베이스)
+   - main/sub 모두 이 베이스에서 파생 */
+.process-step {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 핵심 단계(주요 스텝) 노드
+   - 강조 배경 + 강조 보더 + 살짝 더 강한 그림자 */
+.process-step-main {
+  background: var(--surface);
+  border: var(--border-2) solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 보조 단계/서브 프로세스 노드
+   - 기본 step 보다 살짝 옅은 느낌의 카드 */
+.process-step-sub {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 단계/노드를 상징하는 아이콘/번호/심볼 영역
+   - 동그랗게 강조된 아이콘 배경 */
+.process-step-icon {
+  background: var(--accent);
+  border: var(--border-2) solid var(--neutral-50);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 단계 제목/라벨 텍스트 영역
+   - 색만 강조, 박스는 투명 */
+.process-step-title {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+  color: var(--neutral-900);
+}
+
+/* 단계 상세 설명/부가 안내 텍스트 영역 */
+.process-step-body {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+  color: var(--neutral-700);
+}
+
+/* 기본 흐름을 표현하는 연결 선(라인)
+   - 좌→우 / 상→하 공통 사용 */
+.process-connector {
+  background: var(--border-default);
+  border-radius: var(--radius-pill);
+  border: 0;
+  box-shadow: none;
+}
+
+/* 방향성을 강조하는 화살표 선
+   - 기본 커넥터보다 살짝 더 강조된 컬러 */
+.process-connector-arrow {
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+  border: 0;
+  box-shadow: none;
+}
+
+/* 분기/조건 갈림을 표현하는 연결 래퍼
+   - 분기 지점을 살짝 카드처럼 보이게 처리 */
+.process-branch {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 전체/특정 구간에 대한 보조 설명/주의사항 박스 */
+.process-note {
+  background: var(--info-soft);
+  border: var(--border-1) solid var(--info);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-none);
+}
+
+/* 프로세스 다이어그램에 사용된 색/아이콘/노드 타입 설명 레전드 박스 */
+.process-legend {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 레전드 내 개별 항목 (마커 + 설명) */
+.process-legend-item {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+
+/* =======================================================================================
+4) UI COMPONENTS (조작/구조용 UI 단위 — 인터랙션·상태·조작 중심) - [v] 47개 확인
+========================================================================================== */
+
+/* ---------------------------------------------------------------------------------------
+[4-A] BUTTONS (버튼 계층) - [v] 7개확인
+  - 배경 / 보더 / 라운드 / 그림자만 정의
+  - 폰트 크기·두께·내부 여백·정렬은 전부 HTML(Tailwind)에서 제어
+----------------------------------------------------------------------------------------- */
+
+/* 버튼 공통 베이스
+   - 기본 버튼 스킨 (중립톤, 살짝 떠 있는 카드 느낌) */
+.btn {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 메인 CTA 버튼
+   - CTA 컬러 + 살짝 강한 그림자 */
+.btn-cta-main {
+  background: var(--color-cta-main);
+  color: var(--color-cta-main-text);      /*버튼 폰트 컬러*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 메인 CTA 버튼 - 마우스 호버 */
+.btn-cta-main:hover {
+  background: var(--color-cta-main-hover); 
+}
+
+/* 서브 CTA 버튼
+   - 중립톤 배경 + 기본 보더 */
+.btn-cta-sub {
+  background: var(--color-cta-sub);
+  color: var(--color-cta-sub-text);      /*버튼 폰트 컬러*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 서브 CTA 버튼 - 마우스 호버 */
+.btn-cta-sub:hover {
+  background: var(--color-cta-sub-hover); 
+}
+
+
+/* 테두리/텍스트형 버튼 (Ghost)
+   - 배경은 투명, 보더만 강조 */
+.btn-ghost {
+  background: transparent;
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+/* 아이콘 버튼 (작은 원형/정사각형)
+   - 원형 라운드 + 약한 그림자 */
+.btn-icon {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 비활성 버튼 상태
+   - 연한 배경 + 연한 보더 + 그림자 제거 */
+.btn-disabled {
+  background: var(--neutral-200);
+  border: var(--border-1) solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+/* ------------------------------------------------------------------------------------------
+[4-B] ALERTS / MESSAGE BLOCKS (알림·상태 메시지) - [v] 6개확인
+  - 각 상태별 배경 / 보더 / 라운드 / 그림자만 정의
+  - 내부 텍스트 스타일·아이콘 정렬 등은 Tailwind에서 제어
+-------------------------------------------------------------------------------------------- */
+
+/* 알림 박스 베이스
+   - 중립톤 배경 + 기본 보더 + 얕은 그림자 */
+.alert {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 정보 알림 (Information)
+   - info-soft 배경 + info 보더 */
+.alert-info {
+  background: var(--info-soft);
+  border: var(--border-1) solid var(--info);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 성공 알림 (Success)
+   - success-soft 배경 + success 보더 */
+.alert-success {
+  background: var(--success-soft);
+  border: var(--border-1) solid var(--success);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 경고 알림 (Warning)
+   - warning-soft 배경 + warning 보더 */
+.alert-warning {
+  background: var(--warning-soft);
+  border: var(--border-1) solid var(--warning);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 에러 알림 (Error)
+   - error-soft 배경 + error 보더 */
+.alert-error {
+  background: var(--error-soft);
+  border: var(--border-1) solid var(--error);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 인라인 알림 (텍스트 흐름 속 작은 알림)
+   - 배경을 거의 제거 + 소프트톤 + 보더로 존재감 최소화 */
+.alert-inline {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+
+/* =======================================================================================
+[4-C] STEPS / PROCESS (단계·프로세스 UI)- [v] 5개확인
+  - 단계 흐름(1→2→3…)을 보여주는 카드/아이콘/라인 계층
+  - 정렬·간격·폰트는 Tailwind에서 제어
+======================================================================================= */
+
+/* 개별 단계 카드 기본 상태
+   - 중립톤 박스 + 비활성(기본) 단계 보더 */
+.step-item {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--color-step-inactive);  /*★역할토큰★*/ /* 비활성 스텝 색 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 현재 단계/강조 단계
+   - elevated 카드 배경 + 활성 단계 보더 + 더 강한 그림자 */
+.step-item-active {
+  background: var(--card-elevated-bg);
+  border: var(--border-2) solid var(--color-step-active);   /*★역할토큰★*/  /* 활성 스텝 색 */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* 단계 연결 라인
+   - 세로/가로 타임라인 공통을 염두에 둔 “기본 연결선”
+   - 실제 방향(세로/가로)은 Tailwind로 제어(예: border-l, border-t 등) */
+.step-line {
+  border-color: var(--color-step-line);   /*★역할토큰★*/  /* 스텝 연결 라인 색 */
+  border-width: var(--border-1);
+  /* 방향은 HTML/Tailwind에서: border-l, border-t 등으로 결정 */
+}
+
+/* 단계 아이콘 원형 배경
+   - 원형 surface + 기본 보더 + 살짝 띄운 그림자 */
+.step-icon {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--color-step-alt);     /*★역할토큰★*/  /* 보조 스텝 색 */
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 숫자 단계 표식
+   - 카드 배경 계열 + 강조 보더
+   - 숫자 폰트 크기/정렬은 Tailwind에서 담당 */
+.step-number {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--color-step-active);   /*★역할토큰★*/  /* 기본 active 기준 */ 
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+  color: var(--color-step-active);                     /*★역할토큰★*/  /* 숫자 컬러도 동일 계열 */
+}
+
+/* =======================================================================================
+[4-D] FAQ (질문·답변 UI) - [v] 5개확인
+  - 질문 영역, 아이콘, 답변 surface, 구분선을 위한 정적 스타일
+  - 레이아웃/타이포/간격은 Tailwind로 제어
+======================================================================================= */
+
+/* FAQ 전체 아이템(질문+답변 카드)
+   - 중립 배경 + 기본 보더 + 약한 그림자 */
+.faq-item {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 질문 헤더 래퍼
+   - 살짝 더 진한 surface + 하단 구분 보더 */
+.faq-question {
+  background: var(--neutral-100);
+  border-bottom: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+/* 펼침/접힘 아이콘 영역
+   - 원형 배경 + 기본 보더 + 가벼운 그림자 */
+.faq-question-icon {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 답변 surface
+   - 카드 배경 계열 + 상단 subtle 보더 */
+.faq-answer {
+  background: var(--card-bg);
+  border-top: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* FAQ 구분선 (아이템 사이 경계선)
+   - 아주 연한 보더만 담당 */
+.faq-divider {
+  border-top: var(--border-1) solid var(--border-subtle);
+}
+
+/* =======================================================================================
+[4-E] TABS (탭 UI)  - [v] 4개확인
+  - 탭 목록 바, 개별 탭, 활성 탭, 탭 패널 surface를 위한 정적 스타일
+  - 정렬·간격·타이포는 전부 Tailwind에서 제어
+======================================================================================= */
+
+/* 탭 목록 surface
+   - 연한 배경 + subtle 보더 + pill 느낌의 라운드 */
+.tab-list {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 개별 탭 버튼(비활성)
+   - 투명에 가까운 배경 + 보더 없음 / 최소한의 캡슐 라운드 */
+.tab-item {
+  background: transparent;
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-full);
+  box-shadow: none;
+}
+
+/* 활성 탭 상태
+   - surface 카드 톤 + accent 보더 + 약한 그림자 */
+.tab-item-active {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--accent);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 탭 콘텐츠 surface
+   - 기본 카드 계열 배경 + 기본 보더 + 카드 그림자 */
+.tab-panel {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* =======================================================================================
+[4-F] METRICS / TABLE / LIST (지표·표·데이터 UI) — [v] 7개확인
+   - 표/지표/리스트 계열은 "정보 구조"를 담는 표면(block surface)이 핵심
+   - 모든 스타일은 의미토큰 기반 (중립톤·보더·카드톤) + 역할토큰 맵핑
+======================================================================================= */
+
+/* 지표/수치 하나의 행
+   - 연한 배경 + subtle 보더 + 약한 그림자 */
+.metric-row {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+
+  /* 데이터 기반 강조를 위한 보조 색상(옵션)
+     → row 전체가 강조되는 경우 대비용 */
+  color: var(--color-chart-main);        /*★역할토큰*/  
+}
+
+/* 단일 지표(아이콘+수치)
+   - 카드톤 배경 + 약한 그림자
+   - KPI/지표의 기본 색상 = 메인 데이터 색 */
+.metric-item {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+
+  color: var(--color-chart-main);      /*★역할토큰*/   /* 메인 데이터 컬러 */
+}
+
+/* 수치 강조 요소
+   - 강조 surface + 없음에 가까운 보더 + 더 소프트한 라운드
+   - 차트 하이라이트와 역할 동일 */
+.metric-number {
+  background: var(--color-chart-highlight);    /*★역할토큰*/    /* 강조 포인트 배경 */
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+
+  color: var(--color-chart-sub);              /*★역할토큰*/   /* 보조 데이터 컬러 */
+}
+
+/* 표 전체 surface
+   - 기본 카드 표면 + subtle 보더 + 카드 그림자 */
+.table-surface {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 표 헤더 row surface
+   - 대체 surface + strong 보더 하단 (구획 명확화)
+   - 헤더 텍스트에 보조 데이터 컬러 적용 가능 */
+.table-header {
+  background: var(--surface-alt);
+  border-bottom: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-none);
+  box-shadow: none;
+
+  color: var(--color-chart-sub);     /*★역할토큰*/   /* 보조 데이터 컬러 */
+}
+
+/* 표 본문 row
+   - 흰색 또는 아주 연한 배경 + subtle 구분선
+   - 강조 row에 chart-highlight 적용 가능 */
+.table-row {
+  background: var(--neutral-50);
+  border-bottom: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: none;
+}
+
+/* 표 셀 surface
+   - 투명 배경 + subtle 보더 */
+.table-cell {
+  background: transparent;
+  border-right: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: none;
+}
+
+/* ======================================================================
+[4-G] BADGE / TAG / CHIP — 1% 예외 규칙
+(패딩/폰트 포함한 완전한 컴포넌트)
+
+섹션의 <header> 영역의 뱃지와
+섹션의 콘텐츠 영역의 뱃지 구분 _25.11.29
+====================================================================== */
+
+/*=============== 섹션의 헤더영역 =================*/
+
+/* 헤더 main 뱃지 */
+.header-badge-main {
+  background: var(--color-badge-main-bg);   /*(★역할토큰)★*/
+  color: var(--color-badge-main-text);   /*(★역할토큰)★*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 3px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* 헤더 리버스형 뱃지(메인색,흰색폰트) */
+.header-badge-riverse {
+  background: var(--color-badge-rivers-bg);   /*(★역할토큰)★*/
+  color: var(--color-badge-rivers-text);   /*(★역할토큰)★*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 3px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* 헤더 보더 강조형 뱃지 */
+.header-badge-border {
+  background: transparent;
+  color: var(--color-badge-border-text);    /*(★역할토큰)★*/
+  border: var(--border-2) solid var(--color-badge-border);    /*(★역할토큰)★*/
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 2px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+
+/*=============== 콘텐츠 영역 =================*/
+
+/* 콘텐츠 main 뱃지 */
+.content-badge-main {
+  background: var(--color-badge-main-bg);   /*(★역할토큰)★*/
+  color: var(--color-badge-main-text);   /*(★역할토큰)★*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 3px 14px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* 콘텐츠 main 리버스 뱃지 */
+.content-badge-riverse {
+  background: var(--color-badge-rivers-bg);   /*(★역할토큰)★*/
+  color: var(--color-badge-rivers-text);   /*(★역할토큰)★*/
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 3px 14px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+
+/* 콘텐츠 main 보더 강조형 뱃지 */
+.content-badge-border {
+  background: transparent;
+  color: var(--color-badge-border-text);      /*(★역할토큰)★*/
+  border: var(--border-2) solid var(--color-badge-border);    /*(★역할토큰)★*/
+  border-radius: var(--radius-full);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 2px 14px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+
+
+
+/* Tag — 칩보다 덜 둥글고, 더 '레이블(라벨)' 느낌 */
+.tag {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  display: inline-block;  /* 배경이 글씨까지만 보이기*/
+
+  padding: 3px 10px;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* Chip — 클릭가능한 작은 카드 느낌 (아이콘 포함 가능) */
+.chip {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+
+  padding: 4px 12px;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 700;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* 아이콘/텍스트 spacing */
+}
+
+/* Pill — 긴 알약형 강조 라벨 (CTA-level)는 아님 */
+.pill {
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+
+  padding: 4px 14px;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: white;
+}
+
+/* ======================================================================
+[4-H] PAGINATION / NAV / MISC (기타 조작 UI) - [v] 7개확인
+→ 페이지 이동, 토글, 아코디언 컨테이너의 기본 표면 스킨
+→ 레이아웃(정렬/간격/사이즈)은 Tailwind로만 제어
+====================================================================== */
+
+/* 페이지네이션 전체 바깥 surface */
+.pagination {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 개별 페이지 버튼 기본 상태 */
+.page-item {
+  background: var(--neutral-50);
+  border: var(--border-1) solid transparent;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+/* 현재 페이지(활성) 버튼 상태 */
+.page-item-active {
+  background: color-mix(in srgb, var(--accent) 14%, white);
+  border: var(--border-1) solid var(--accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 토글 스위치 바깥 트랙(ON/OFF 배경) */
+.toggle-track {
+  background: var(--neutral-200);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-inner);
+}
+
+/* 아코디언 전체 컨테이너(아이템들을 감싸는 래퍼) */
+.accordion {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 아코디언 헤더(질문 영역) 표면 */
+.accordion-header {
+  background: var(--neutral-100);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+
+/* 아코디언 내용(답변 영역) 표면 */
+.accordion-body {
+  background: var(--neutral-50);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+
+
+/* =======================================================================================
+[5] FORM COMPONENTS (입력 UI & 폼 카드) - [v] 24개확인
+======================================================================================= */
+
+/*====================================================================
+[5-A] FORM CARD & GROUP WRAPPERS  (총 4개)
+==================================================================== */
+
+/* 폼 전체 카드 래퍼 (배경·보더·shadow 포함) */
+.form-card {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* 간단 버전 폼 (히어로/CTA 내 미니 폼) */
+.form-card-compact {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 라벨 + 입력 요소 한 세트 래퍼 */
+.form-group {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 두 개의 입력을 가로로 배치하는 그룹 */
+.form-group-inline {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ------------------------------------------------
+   폼 래퍼 focus-within 반응   (★역할토큰★)
+   → 내부 input에 포커스 들어오면 카드 보더/쉐도우만 살짝 강조
+-------------------------------------------------*/
+.form-card:focus-within,
+.form-card-compact:focus-within,
+.form-group:focus-within,
+.form-group-inline:focus-within {
+  border-color: var(--color-form-focus-ring);
+  box-shadow: 0 0 0 1px var(--color-form-focus-ring);
+}
+
+/* ====================================================================
+   [5-B] INPUT ELEMENTS  (총 4개)
+   ==================================================================== */
+
+/* 공통 input 기본 스타일 (text/email/tel 등) */
+.input {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 공통 textarea 스타일 */
+.textarea {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 작은 사이즈 input (높이 축소형) */
+.input-sm {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 큰 사이즈 input (히어로 폼용) */
+.input-lg {
+  background: var(--neutral-50);
+  border: var(--border-2) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ------------------------------------------------
+   입력 요소 hover 상태 ( ★역할토큰★ )
+   → 역할토큰: --color-form-hover-bg
+-------------------------------------------------*/
+.input:hover,
+.textarea:hover,
+.input-sm:hover,
+.input-lg:hover {
+  background-color: var(--color-form-hover-bg);
+}
+
+/* ------------------------------------------------
+   입력 요소 focus 상태  ( ★역할토큰★ )
+   → 역할토큰: --color-form-focus-ring
+-------------------------------------------------*/
+.input:focus-visible,
+.textarea:focus-visible,
+.input-sm:focus-visible,
+.input-lg:focus-visible {
+  outline: none;
+  border-color: var(--color-form-focus-ring);
+  box-shadow: 0 0 0 1px var(--color-form-focus-ring);
+}
+
+/* ====================================================================
+   [5-C] SELECT / CHECK / RADIO   (총 4개)
+   ==================================================================== */
+
+/* select 요소 전용 UI 표면 */
+.select-box {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 체크박스 + 라벨 래퍼 */
+.checkbox-wrap {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+/* 라디오 + 라벨 래퍼 */
+.radio-wrap {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-full); /* 원형/알약형 옵션 대응 */
+  box-shadow: var(--shadow-none);
+}
+
+/* 토글 스위치형 입력 UI */
+.toggle-switch {
+  background: var(--neutral-200);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ====================================================================
+   [5-D] FORM MESSAGES / STATE   (총 5개)
+   ==================================================================== */
+
+/* 폼 하단 참고 메시지 박스 (중립 안내) */
+.form-note {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 입력 하단 작은 보조 힌트 텍스트 (배경만 아주 살짝) */
+.form-hint {
+  background: var(--neutral-50);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+/* 에러 상태 표시 텍스트/박스 */
+.form-error {
+  background: var(--error-soft);
+  border: var(--border-1) solid var(--error);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 경고 메시지 박스 */
+.form-warning {
+  background: var(--warning-soft);
+  border: var(--border-1) solid var(--warning);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 성공 메시지/전송 완료 상태 박스 */
+.form-success {
+  background: var(--success-soft);
+  border: var(--border-1) solid var(--success);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ====================================================================
+   [5-E] FORM CTA / ACTION (총 3개)
+   ==================================================================== */
+
+/* 제출 버튼 영역 래퍼 */
+.form-action {
+  background: var(--neutral-50);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 개인정보 수집 및 동의 박스 */
+.form-privacy {
+  background: var(--neutral-100);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 폼 하단 법적 고지/안내 박스 */
+.form-disclaimer {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+/* ====================================================================
+   [5-F] SPECIAL FORM BLOCKS (총 4개)
+   ==================================================================== */
+
+/* 4~6자리 인증코드 입력 UI */
+.otp-input {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 휴대폰번호 + 인증버튼 그리드 그룹 */
+.phone-input-group {
+  background: var(--neutral-50);
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 주소검색 버튼 + 주소입력 세트 */
+.address-input-group {
+  background: var(--neutral-50);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 파일 업로드 UI 표면 */
+.file-upload-box {
+  background: var(--neutral-100);
+  border: var(--border-2) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* =======================================================================================
+[6] NAVIGATION / FOOTER (상단/하단 구조)  [ 25.12.01 - 무채색,질감모양토큰 맵핑 ]
+
+색상은 brand.css의 무채색 의미토큰만 사용
+common.css에서는 border / radius / shadow 같은 “질감·형태 토큰” 맵핑
+====================================================================================== */
+
+/* ======================================================================
+[6-A] TOP NAVIGATION (PC) / 6개
+====================================================================== */
+
+/* 상단 네비게이션 전체 래퍼 (고정 높이/배경)
+
+배경: 기본 섹션 배경과 동일
+보더: 가장 약한 구분선(border-subtle)
+그림자: 가벼운 상단 바 느낌 (shadow-sm) */
+
+.navbar {
+background: var(--section-bg);
+border-bottom: var(--border-1) solid var(--border-subtle);
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-sm);
+}
+
+/* 내부 컨텐츠 정렬 박스 (가운데 정렬, 좌우 배치)
+
+레이아웃은 Tailwind가 담당하므로 여기선 질감만 “없음”으로 명시 */
+.navbar-inner {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+/* 로고 영역 surface (이미지/텍스트 로고 박스)
+
+기본은 투명, 필요 시 premium.css에서만 강조 효과 추가 */
+.nav-logo {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-sm);
+box-shadow: var(--shadow-none);
+}
+
+/* 상단 메뉴 링크 묶음 (가로 메뉴 컨테이너) */
+.nav-links {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+/* 개별 네비 링크 아이템
+
+기본: 투명 배경
+
+hover / active 상태는 아래에서 토큰 기반으로 정의 */
+.nav-link-item {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-md);
+box-shadow: var(--shadow-none);
+}
+
+/* 네비 링크 hover 상태
+
+살짝 떠보이는 느낌: section-alt-bg + 아주 약한 그림자 */
+.nav-link-item:hover {
+background: var(--section-alt-bg);
+box-shadow: var(--shadow-xs);
+}
+
+/* 현재 섹션 활성 상태 (is-active 클래스 수동/스크립트로 부여)
+
+배경은 elevated 카드 느낌, 보더는 default 등급 */
+.nav-link-item.is-active {
+background: var(--card-elevated-bg);
+border: var(--border-1) solid var(--border-default);
+box-shadow: var(--shadow-sm);
+}
+
+/* 우측 CTA 영역 (버튼/전화걸기 래퍼)
+
+자체는 투명, 내부 버튼은 별도 .btn-cta-*** 컴포넌트가 담당 */
+.nav-cta {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+/* ======================================================================
+[6-B] MOBILE NAVIGATION / 6개
+====================================================================== */
+
+/* 모바일 전용 상단 바 (햄버거/로고/CTA 포함)
+
+PC 네비와 동일한 철학: section-bg + subtle border + 가벼운 shadow */
+.mobile-nav {
+background: var(--section-bg);
+border-bottom: var(--border-1) solid var(--border-subtle);
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-sm);
+}
+
+/* 햄버거 버튼 영역 (터치 영역 포함)
+
+radius-md로 터치 영역만 부드럽게 */
+.mobile-nav-toggle {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-md);
+box-shadow: var(--shadow-none);
+}
+
+/* 펼쳐지는 메뉴 패널 surface
+카드보다 한 단계 높은 elevation: card-elevated-bg + shadow-lg
+
+border-default로 패널 경계감 부여 */
+.mobile-nav-panel {
+background: var(--card-elevated-bg);
+border-top: var(--border-1) solid var(--border-default);
+border-radius: var(--radius-lg);
+box-shadow: var(--shadow-lg);
+}
+
+/* 모바일 메뉴 리스트(세로 정렬)
+내부 컨테이너: 별도 질감 없음 */
+.mobile-nav-list {
+background: transparent;
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+/* 모바일 개별 메뉴 아이템
+
+아래쪽에 subtle border로 항목 구분 */
+.mobile-nav-item {
+background: transparent;
+border-bottom: var(--border-1) solid var(--border-subtle);
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+/* 모바일 메뉴 아이템 hover (터치 피드백)
+
+section-alt-bg로 살짝 강조 + 아주 약한 shadow */
+.mobile-nav-item:hover {
+background: var(--section-alt-bg);
+box-shadow: var(--shadow-xs);
+}
+
+/* 패널 뒤에 깔리는 오버레이 layer
+
+overlay 컬러는 brand.css/premium.css에서 관리
+
+여기서는 질감 토큰만 “없음”으로 명시 */
+.mobile-nav-overlay {
+background: var(--overlay-medium);
+border: var(--border-0) solid transparent;
+border-radius: var(--radius-none);
+box-shadow: var(--shadow-none);
+}
+
+
+/* ====================================================================
+   [6-C] SECONDARY NAV / SIDEBAR  / 5개
+   ==================================================================== */
+
+/* 현재 위치(빵부스러기) 안내 박스 */
+.breadcrumb {
+  background: var(--section-bg);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+}
+
+/* 빵부스러기 개별 항목 */
+.breadcrumb-item {
+  background: transparent;
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+/* 좌측/우측 고정 사이드 네비 surface */
+.sidebar-nav {
+  background: var(--card-elevated-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* 사이드 네비 리스트 */
+.sidebar-nav-list {
+  background: transparent;
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 개별 사이드 메뉴 아이템 */
+.sidebar-nav-item {
+  background: transparent;
+  border-bottom: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* ====================================================================
+   [6-D] FOOTER BLOCKS   / 7개  (토큰 리맵핑 버전) - 25.12.02
+   ==================================================================== */
+
+/* 전체 풋터 래퍼 (사이트/랜딩 하단)
+   - 섹션 교대 배경: section-alt-bg
+   - 외곽 경계선: border-default
+*/
+.footer {
+  background: var(--section-alt-bg);
+  border-top: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 풋터 상단 (링크/메뉴/카테고리)
+   - 기본 섹션 배경: section-bg
+   - 하단 구분선: border-default
+*/
+.footer-top {
+  background: var(--section-bg);
+  border-bottom: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 풋터 하단 (저작권/사업자정보)
+   - 기본 섹션 배경: section-bg
+   - 상단 구분선: border-subtle
+*/
+.footer-bottom {
+  background: var(--section-bg);
+  border-top: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 풋터 내 메뉴 리스트 래퍼 */
+.footer-nav {
+  background: transparent;
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 풋터 개별 메뉴
+   - hover 시 배경/테두리 입힐 때 사용할 베이스
+*/
+.footer-nav-item {
+  background: transparent;
+  border: var(--border-0) solid transparent;
+  border-radius: var(--radius-sm);      /* radius 토큰 사용 */
+  box-shadow: var(--shadow-none);
+}
+
+/* 사업자정보/정책/문구 영역 surface
+   - 살짝 떠 있는 카드 느낌: card-elevated-bg + shadow-sm
+   - 일반 보더: border-default
+*/
+.footer-meta {
+  background: var(--card-elevated-bg);
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 보안배지/인증/결제마크 영역(선택)
+   - 기본 카드 배경: card-bg
+   - 아주 연한 보더: border-subtle
+*/
+.footer-badge-bar {
+  background: var(--card-bg);
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-none);
+}
+
+
+/* =======================================================================================
+[7] EFFECT UTILS (표면·보더·그림자 유틸)  - [v] 34개확인
+========================================================================================== */
+/* =======================================================================================
+   [7-A] DIVIDER / 구분선 유틸  / [v] 4개확인
+   - 섹션/블록 사이를 나누는 "라인 전용" 스타일
+   - background / border / radius / shadow 만 사용
+   ======================================================================================= */
+
+/* 연한 구분선 (border-subtle 기반, 섹션/블록 구획용) */
+.divider {
+  background: transparent;
+  border-top: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 강조 구분선 (border-strong 기반, 영역 분리 강조) */
+.divider-strong {
+  background: transparent;
+  border-top: var(--border-2) solid var(--border-strong);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 아주 옅은 점선/가느다란 구분선 (보조선) */
+.divider-muted {
+  background: transparent;
+  border-top: var(--border-1) dotted var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 점선 스타일 구분선 (주의/보조 안내 구역 구분용) */
+.divider-dashed {
+  background: transparent;
+  border-top: var(--border-1) dashed var(--warning-soft);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* ====================================================================
+   [7-B] BORDER UTILS / 보더 계층  / [v] 9개확인
+   - 컴포넌트에 "테두리 값만" 부여하는 스킨 유틸
+   - background: none / radius: none / shadow: none
+   ==================================================================== */
+
+/* 아주 연한 보더 (neutral-soft 계열) */
+.border-subtle {
+  background: transparent;
+  border: var(--border-1) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 기본 보더 */
+.border-default {
+  background: transparent;
+  border: var(--border-1) solid var(--border-default);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 강한 보더 */
+.border-strong {
+  background: transparent;
+  border: var(--border-2) solid var(--border-strong);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 포인트색 보더 (accent 계열) */
+.border-accent {
+  background: transparent;
+  border: var(--border-1) solid var(--accent);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 성공 상태 보더 */
+.border-success {
+  background: transparent;
+  border: var(--border-1) solid var(--success);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 경고 상태 보더 */
+.border-warning {
+  background: transparent;
+  border: var(--border-1) solid var(--warning);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 에러 상태 보더 */
+.border-error {
+  background: transparent;
+  border: var(--border-1) solid var(--error);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 정보 안내 보더 */
+.border-info {
+  background: transparent;
+  border: var(--border-1) solid var(--info);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* 소프트톤 보더 (success-soft, info-soft 등 연한 톤 전용) */
+.border-soft {
+  background: transparent;
+  border: var(--border-1) solid var(--soft-border);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-none);
+}
+
+/* ====================================================================
+   [7-C] RADIUS UTILS / 모서리 라운드  / [v] 7개확인
+   - 컴포넌트의 모서리 형태만 변경하는 순수 radius 유틸
+   - background / border / shadow = none
+   ==================================================================== */
+
+.radius-none {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-none);
+  box-shadow: none;
+}
+
+.radius-sm {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+
+.radius-md {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.radius-lg {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+
+.radius-xl {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xl);
+  box-shadow: none;
+}
+
+.radius-pill {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  box-shadow: none;
+}
+
+.radius-full {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: none;
+}
+
+/* ====================================================================
+   [7-D] SHADOW UTILS / 그림자 레벨  / [v] 7개확인
+   - 컴포넌트의 그림자 레벨만 조정하는 순수 shadow 유틸
+   - background / border / radius = none
+   ==================================================================== */
+
+.shadow-none {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 약한 카드 그림자 (기본 카드/블록용) */
+.shadow-soft {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+/* 일반 카드 기본 그림자 (표준 Elevation) */
+.shadow-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 떠 있는 카드/모달용 그림자 (강화된 Elevation) */
+.shadow-elevated {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* 강조형 강한 그림자 (히어로·CTA) */
+.shadow-strong {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--shadow-lg);
+}
+
+/* 안쪽으로 파인 인너 섀도 (inset) */
+.shadow-inner {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* 부드러운 아웃라인(포커스 링 유사) */
+.shadow-outline-soft {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+}
+
+/* ====================================================================
+   [7-E] OVERLAY / DIM SURFACE  / [v] 7개확인
+   - 모달/패널/이미지 위에 씌우는 Dim·스크림 전용 유틸
+   - position/size/레이아웃은 전부 Tailwind에서 제어
+   - 여기서는 background / border / radius / shadow만 정의
+   ==================================================================== */
+
+.overlay-soft-bg {
+  background: var(--overlay-soft);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.overlay-medium-bg {
+  background: var(--overlay-medium);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.overlay-strong-bg {
+  background: var(--overlay-strong);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 전체 화면/섹션 Dim 처리용 어두운 배경 */
+.overlay-dark-bg {
+  background: rgba(15, 23, 42, 0.75); /* slate-900 계열 어두운 딤 */
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 상단 → 하단 스크림 (위쪽을 어둡게) */
+.scrim-top {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.65),
+    transparent
+  );
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 하단 → 상단 스크림 (아래쪽을 어둡게) */
+.scrim-bottom {
+  background: linear-gradient(
+    to top,
+    rgba(15, 23, 42, 0.65),
+    transparent
+  );
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 좌·우 → 중앙 스크림 (양 옆을 어둡게) */
+.scrim-side {
+  background: linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.65),
+    transparent 40%,
+    transparent 60%,
+    rgba(15, 23, 42, 0.65)
+  );
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+
+/* ====================================================================================================
+[8] ICON / MEDIA (아이콘·아바타·미디어 프레임)  - [V] 31개확인
+-------------------------------------------------------------------------------------------------------
+→ 아이콘, 아바타, 로고, 이미지/영상 썸네일을 감싸는   "표면·테두리·모서리·그림자" 전용 컴포넌트 계층
+======================================================================================================= */
+/* ====================================================================
+   [8-A] ICON (아이콘 컬러)
+   - 아이콘 자체
+   - 크기/정렬/간격은 전부 Tailwind에서 제어
+   - 여기서는 background 만 정의
+   ==================================================================== */
+
+/* 핵심 아이콘 색상 */
+.icon-main {
+  color: var(--color-icon-main);
+  opacity: 0.9;   /* 패턴4에서 삭제 */
+}
+
+/* 보조·기능 아이콘 색상 */
+
+.icon-sub {
+  color: var(--color-icon-sub);
+  opacity: 0.9;
+}
+
+/* 혜택·감성 아이콘 색상 */
+.icon-impact {
+  color: var(--color-icon-impact);
+  opacity: 0.9;
+}
+
+/* ====================================================================
+   [8-B] ICON SURFACES (아이콘 배경/표면)  / [V] 6개확인
+   - 아이콘을 감싸는 표면 전용 컴포넌트
+   - 크기/정렬/간격은 전부 Tailwind에서 제어
+   - 여기서는 background / border / radius / shadow만 정의
+   ==================================================================== */
+
+/* 원형 아이콘 배경 surface */
+.icon-circle {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 정사각형 아이콘 배경 surface - 아이콘 색상(primary) */
+.icon-square {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  color: var(--primary);
+}
+
+/* 연한 틴트 아이콘 배경 surface (소프트톤) */
+.icon-soft {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 강조 색상 아이콘 배경 surface (accent 기반) */
+.icon-accent {
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 75%, black);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 얇은 보더 중심의 아이콘 배경 surface */
+.icon-outline {
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: none;
+}
+
+/* 아주 작은 아이콘/심볼용 뱃지 surface
+   → 1% 예외: 내부 패딩까지 포함하는 캡슐형 배지 */
+.icon-badge {
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, black);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  padding: 2px 6px; /* micro UI 예외: 사이즈까지 포함 */
+}
+
+/* ====================================================================
+   [8-B] AVATAR FRAMES (아바타/프로필 이미지 프레임)  / 3개
+   - 프로필/후기/전문가 소개 등에 사용하는 이미지 프레임
+   - overflow: hidden 사용 → 이미지 모양 유지
+   - 크기/정렬/비율은 Tailwind에서 제어
+   ==================================================================== */
+
+/* 기본 아바타 프레임 surface (원형 또는 둥근 사각형) */
+.avatar-frame {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full); /* 아바타는 대부분 원형 */
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* 강조 보더가 있는 아바타 프레임 (후기/전문가 프로필) */
+.avatar-ring {
+  background: var(--neutral-50);
+  border: 2px solid var(--accent); /* 강조 링 */
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* 톤 다운된 아바타 프레임 (흑백/문서형 이미지용) */
+.avatar-muted {
+  background: var(--neutral-200);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* ====================================================================
+   [8-C] LOGO SURFACES (로고용 표면) / 3개
+   - 로고를 감싸는 작은 캡슐/타일/스트립 전용 surface
+   - 배경·보더·모서리·그림자만 정의 (크기·패딩·정렬은 Tailwind)
+   ==================================================================== */
+
+/* 단일 작은 로고 배지 (파트너/클라이언트 로고용) */
+.logo-badge {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill); /* 캡슐형 느낌 */
+  box-shadow: var(--shadow-xs);
+}
+
+/* 로고 그리드용 개별 타일 (2~4열 로고 레이아웃) */
+.logo-tile {
+  background: var(--neutral-50);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+/* 가로로 긴 로고 스트립 surface (슬라이더/마르키 전용) */
+.logo-strip {
+  background: var(--neutral-50);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: var(--radius-none); /* 스트립은 대부분 직선형 */
+  box-shadow: var(--shadow-none);
+}
+
+/* ==========================================================================
+   [8-D] MEDIA FRAMES (이미지·영상 프레임) / 6개
+   - 이미지/영상/썸네일을 감싸는 표면 전용 박스
+   - background · border · radius · shadow만 정의 (레이아웃·크기는 Tailwind)
+   ========================================================================== */
+
+/* 1) 기본 미디어 프레임 (이미지/영상 공통 박스) */
+.media-frame {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden; /* 이미지가 radius 안에 딱 맞게 */
+}
+
+/* 2) 대체 스타일 미디어 프레임 (살짝 다른 톤/보더) */
+.media-frame-alt {
+  background: var(--neutral-50);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+/* 3) 톤 다운된 미디어 프레임 (흑백/설명 이미지용) */
+.media-frame-muted {
+  background: var(--neutral-200);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-none);
+  overflow: hidden;
+}
+
+/* 4) 작은 썸네일 프레임 (블로그 카드/리스트 썸네일) */
+.thumbnail-frame {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+/* 5) 미디어 오버레이 (텍스트 가독성 ↑) */
+.media-overlay {
+  background: var(--overlay-medium); /* 반투명 오버레이 */
+  border-radius: var(--radius-md);
+  border: none;
+  box-shadow: none;
+}
+
+/* 6) 미디어 상단 모서리 배지 (NEW / BEST / 재생 아이콘 등) */
+.media-badge {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+  padding: 2px 6px; /* 배지 타입 예외(패딩 포함) */
+}
+
+/* ==========================================================================
+   [8-E] ICON + MEDIA COMBO (2개)
+   - 아이콘 + 작은 미디어가 함께 배치될 때 사용하는 복합 surface
+   - background · border · radius · shadow만 정의
+   ========================================================================== */
+
+/* 1) 아이콘 + 미디어가 함께 있는 복합 프레임 */
+.icon-with-media {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden; /* 내부 아이콘/이미지가 radius 안에 맞게 */
+}
+
+/* 2) 영상 길이/조회수/페이지 수 같은 메타정보 칩 surface */
+.media-stat-chip {
+  background: var(--overlay-strong); /* 어두운 오버레이 위에 텍스트용 */
+  border-radius: var(--radius-pill);
+  border: none;
+  box-shadow: var(--shadow-none);
+  padding: 2px 8px; /* '칩' UI 예외로 패딩 포함 */
+}
+
+/* ==========================================================================
+   [8-F] 이미지 자체의 공통 프레임 <img>
+   - 이미지 <img> 양식 surface
+   - background · border · radius · shadow만 정의
+   ========================================================================== */
+
+  /* 1) 모든 이미지 기본 스킨 */ 
+  .img-base {
+    border: 0; 
+    border-radius: 
+    var(--radius-md); 
+    box-shadow: var(--shadow-sm); 
+    overflow: hidden; 
+  }
+
+/* ==========================================================================
+   [8-G] CAROUSEL CONTROLS (슬라이드 버튼·도트·진행바) — 11개
+   - 역할: 슬라이드 내비게이션 “겉모습(스킨)”만 담당
+   - 크기/간격/위치는 전부 Tailwind(레이아웃)에서 제어
+   ========================================================================== */
+
+/* 1) 캐러셀 컨트롤 전체 래퍼 (하단/측면에 깔리는 박스) */
+.carousel-controls {
+  background: color-mix(in srgb, var(--neutral-900) 8%, transparent);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+/* 2) 슬라이드와 같은 줄(인라인)에 배치되는 컨트롤 래퍼 */
+.carousel-controls-inline {
+  background: color-mix(in srgb, var(--neutral-900) 4%, transparent);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-none);
+}
+
+/* 3) 좌·우 공통 화살표 버튼 베이스 */
+.carousel-arrow {
+  background: color-mix(in srgb, var(--neutral-900) 80%, transparent);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-card);
+}
+
+/* 4) 이전 슬라이드 화살표 (시각적 차별이 필요하면 톤만 살짝 변경) */
+.carousel-arrow-prev {
+  background: color-mix(in srgb, var(--neutral-900) 70%, transparent);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-card);
+}
+
+/* 5) 다음 슬라이드 화살표 */
+.carousel-arrow-next {
+  background: color-mix(in srgb, var(--neutral-900) 90%, transparent);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-card);
+}
+
+/* 6) 도트 전체 래퍼 (인디케이터 영역) */
+.carousel-dots {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-none);
+}
+
+/* 7) 개별 도트(비활성 기본 상태) */
+.carousel-dot {
+  background: color-mix(in srgb, var(--neutral-300) 70%, transparent);
+  border-radius: var(--radius-full);
+  border: none;
+  box-shadow: var(--shadow-none);
+}
+
+/* 8) 현재 활성 슬라이드를 나타내는 도트 */
+.carousel-dot-active {
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  border: none;
+  box-shadow: var(--shadow-soft);
+}
+
+/* 9) "현재 슬라이드 / 전체" 텍스트/배지 영역 */
+.carousel-counter {
+  background: color-mix(in srgb, var(--neutral-900) 85%, transparent);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+}
+
+/* 10) 진행 상태 바 전체 래퍼 (트랙) */
+.carousel-progress {
+  background: var(--neutral-200);        /* 트랙 배경 */
+  border-radius: var(--radius-pill);
+  border: none;
+  box-shadow: var(--shadow-none);
+  overflow: hidden;                      /* 내부 바가 radius를 따라가도록 */
+}
+
+/* 11) 실제 진행량을 표현하는 막대(채워지는 바) */
+.carousel-progress-bar {
+  background: var(--accent);             /* 진행 색상 */
+  border-radius: var(--radius-pill);
+  border: none;
+  box-shadow: var(--shadow-none);
+}
+
+
+
+/* 랜딩만들며 정의했던 컴포넌트 남은 쪼가리 */
+
+/* .input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent);
+} */
+
+/* .input::placeholder {
+  color: var(--neutral-400);
+} */
