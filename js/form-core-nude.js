@@ -12,7 +12,7 @@
   var GOOGLE_FORM_ACTION =
     'https://docs.google.com/forms/u/0/d/e/1FAIpQLSfYx_yfBolWOxvX90JyjRZov7PLPlaDMB2Q8tpYkJnLva7C8g/formResponse?pli=1';
 
-  var THANKYOU_URL = 'https://landingops.com/result';
+  var THANKYOU_URL = 'http://signalstudio-event.shop/result';
 
 // 버튼 컬러(활성/비활성)
   var BTN_ACTIVE_BG   = '';
@@ -383,7 +383,7 @@
 
     // ─────────────────────────────
     // 8. 초기 상태 설정
-    //    - 아직 입력 전: 기본 CTA + 파란색 + 활성화
+    //    - 아직 입력 전: 기본 CTA + 버튼 브랜드색 + 활성화
     //    - hasInteracted=false 이므로 updateSubmitButtonState는 버튼을 건드리지 않음
     // ─────────────────────────────
     submitBtn.disabled = false;

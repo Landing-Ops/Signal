@@ -3,7 +3,7 @@
   <head>
 
   <!-- ============================
-      기본 메타
+      기본 메타스크립트
   ============================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +37,7 @@
   ============================ -->
   <link rel="canonical" href="" />
 
-    <!-- Tailwind CDN (초기 제작용) -->
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/brand.css" />
     <link rel="stylesheet" href="./css/common.css" />
@@ -65,39 +65,8 @@
 
 
   <!--전환 스크립트 -->
-  <!-- Danggeun Market Code -->
-  <script src="https://karrot-pixel.business.daangn.com/karrot-pixel.js"></script>
-  <script>
-    window.karrotPixel.init('1765339718944413001');   
-    window.karrotPixel.track('ViewContent');   // 당근, 2차, 상세페이지 조회, 이걸로 홈페이지 실접속자 트래킹
-  </script>
-  <!-- End Danggeun Market Code -->
-
-  <!-- 카카오톡 픽셀 (시작) -->
-  <script type="text/javascript" charset="UTF-8" src="//t1.daumcdn.net/kas/static/kp.js"></script>
-  <script type="text/javascript">
-
-        kakaoPixel('8282134825207378258').pageView();
-        kakaoPixel('8282134825207378258').viewContent();   // 카톡, 2차, 상세페이지 조회, 이걸로 랜딩페이지 실접속자 트래킹
-  </script>
-  <!-- 카카오톡 픽셀 (끝) -->
 
   <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '733576705979991');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=733576705979991&ev=PageView&noscript=1"
-  /></noscript>
   <!-- End Meta Pixel Code -->
 
   </head>
@@ -121,38 +90,7 @@
               </span>
             </h1>
 
-            <!-- <p class="header-sub-text">
-              유통마진 없는 원가로 DB를 개발하고,
-              <br class="hidden md:block" />
-              시장 반응에 맞춰 홈페이지를 반복 개선합니다.
-              <br class="hidden md:block"/>
-              <span class="highlight-text">
-                그 결과, 광고비는 절감되고 계약률은 꾸준히 오릅니다.
-              </span>
-            </p> -->
-            
-            <!-- <p class="header-lead-text md:text-xl">
-              <span class="highlight-bg">
-                AS도 안 되는 헛DB에 더 이상 돈 낭비하지 마세요.
-              </span>
-              <br class="hidden md:block"/>
-              광고형 홈페이지 운영 시스템으로 DB를 직접 생산하면,
-              <br class="hidden md:block"/>
-              광고비는 획기적으로 줄고 계약 기회는 세 배 이상 늘어납니다.
-            </p> -->
-
-            <!-- <div class="pt-2 flex justify-center">
-              <a
-                href="#cta"
-                class="btn-cta-main btn-text inline-flex items-center gap-2 px-5 py-3 fx-btn-soft-glow"
-                data-evt="cta_click_hero"
-              >
-                1:1 무료상담 신청하기
-              </a>
-            </div>
-          </div> -->
-
-          <!-- 이미지 / 비주얼 -->
+          <!-- 랜딩페이지 이미지 삽입 -->
           <figure class="flex justify-center my-2">
             <img
               src="./img/signal_landing_event7080_after.png"
@@ -160,6 +98,7 @@
               class="img-base w-full max-w-md md:max-w-[680px] h-auto"
             />
           </figure>
+
           <!-- 입력폼 -->
           <form
             data-form
@@ -223,8 +162,6 @@
                 placeholder="이벤트 촬영물에 대한 시그널스튜디오의 공식사례 및 홍보자료 활용에 대한 동의후에 칠순·팔순 맞이 가족사진&초대형 액자 제공 전액을 무료로 제공해드립니다. 확인하셨습니까 ?
   
 예시답변 ) 네, 네 확인했습니다."
-
-
               ></textarea>
             </div>
             <!-- 📌 (시작) 유입매체/타겟 저장용 hidden 필드 -->
@@ -260,7 +197,7 @@
         </div>
       </section>
     </main>
-  <!-- <hr class="divider" />  구분선 -->
+    
 <!-- ================= 푸터 ================= -->
 <footer class="footer">
   <div class="footer-top">
