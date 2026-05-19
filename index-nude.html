@@ -853,7 +853,7 @@
       </button>
     </div>
 
-    <!--5-2, 자연 연속 흐름 슬라이드 + 클릭 확대 모달-->
+    <!--5-2, 자연 연속 흐름 슬라이드 + 좌우 드래그 + 클릭 확대 모달-->
     <script>
       (function () {
         const sliders = document.querySelectorAll("[data-auto-slider]");
@@ -914,14 +914,17 @@
 
         function lightboxGoNext() {
           if (!lightboxImages.length) return;
+
           lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
           showLightboxImage();
         }
 
         function lightboxGoPrev() {
           if (!lightboxImages.length) return;
+
           lightboxIndex =
             (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+
           showLightboxImage();
         }
 
@@ -1023,7 +1026,7 @@
           });
 
           /*
-            자연스럽게 이어지게 하기 위해 원본 슬라이드를 한 번 더 복제.
+            자연스럽게 이어지도록 원본 슬라이드 한 세트를 뒤에 복제.
             화면상 구조:
             1 2 3 4 5 6 7 1 2 3 4 5 6 7
           */
@@ -1038,36 +1041,55 @@
           let animationId = null;
           let lastTime = null;
           let isPaused = false;
+          let resumeTimer = null;
 
           let pointerDown = false;
           let pointerStartX = 0;
           let pointerStartY = 0;
+          let pointerStartOffsetX = 0;
           let pointerMoved = false;
           let pointerFigure = null;
+          let dragMode = "none";
 
-          const speed = 36;
+          const speed = 28;
           // 자동 흐름 속도
           // 숫자가 클수록 빠르게 흐름
-          // 24~48 사이 추천
+          // 20~36 사이 추천
 
-          const resumeDelay = 3500;
-          // 터치/클릭 후 자동 흐름 재시작 대기 시간
-          // 3500 = 3.5초
+          const resumeDelay = 4000;
+          // 사용자가 터치/드래그한 뒤 자동 흐름 재시작까지 기다리는 시간
+          // 4000 = 4초
 
           const clickThreshold = 8;
           // 클릭과 드래그 구분 기준
-          // 8px 이상 움직이면 클릭이 아니라 움직임으로 판단
+          // 8px 이상 움직이면 클릭이 아니라 드래그로 판단
 
-          let resumeTimer = null;
+          const directionThreshold = 10;
+          // 가로/세로 방향 판단 시작 기준
+          // 너무 작으면 세로 스크롤도 가로 드래그로 오해할 수 있음
 
           function measureLoopWidth() {
-            loopWidth = 0;
+            const allSlides = Array.from(track.children);
 
-            originalSlides.forEach(function (slide) {
-              const style = window.getComputedStyle(track);
-              const gap = parseFloat(style.columnGap || style.gap || 0);
-              loopWidth += slide.offsetWidth + gap;
-            });
+            if (!allSlides[0] || !allSlides[originalSlides.length]) {
+              loopWidth = 0;
+              return;
+            }
+
+            loopWidth =
+              allSlides[originalSlides.length].offsetLeft - allSlides[0].offsetLeft;
+          }
+
+          function normalizeOffset() {
+            if (!loopWidth) return;
+
+            while (offsetX <= -loopWidth) {
+              offsetX += loopWidth;
+            }
+
+            while (offsetX > 0) {
+              offsetX -= loopWidth;
+            }
           }
 
           function applyTransform() {
@@ -1084,17 +1106,7 @@
 
             if (!isPaused && loopWidth > 0) {
               offsetX -= (speed * delta) / 1000;
-
-              /*
-                핵심:
-                7번 끝에서 1번으로 돌아가는 게 아니라,
-                똑같은 복제 묶음 위치로 순간 이동하기 때문에
-                눈에는 끊김 없이 계속 흐르는 것처럼 보임.
-              */
-              if (Math.abs(offsetX) >= loopWidth) {
-                offsetX += loopWidth;
-              }
-
+              normalizeOffset();
               applyTransform();
             }
 
@@ -1123,6 +1135,7 @@
 
           function startSlider() {
             measureLoopWidth();
+            normalizeOffset();
             applyTransform();
 
             if (animationId) {
@@ -1135,29 +1148,85 @@
           slider.addEventListener("pointerdown", function (event) {
             pointerDown = true;
             pointerMoved = false;
+            dragMode = "none";
+
             pointerStartX = event.clientX;
             pointerStartY = event.clientY;
+            pointerStartOffsetX = offsetX;
             pointerFigure = event.target.closest("figure");
 
             pauseSlider();
           });
 
-          slider.addEventListener("pointermove", function (event) {
-            if (!pointerDown) return;
+          slider.addEventListener(
+            "pointermove",
+            function (event) {
+              if (!pointerDown) return;
 
-            const diffX = Math.abs(event.clientX - pointerStartX);
-            const diffY = Math.abs(event.clientY - pointerStartY);
+              const diffX = event.clientX - pointerStartX;
+              const diffY = event.clientY - pointerStartY;
 
-            if (diffX > clickThreshold || diffY > clickThreshold) {
-              pointerMoved = true;
-            }
-          });
+              const absX = Math.abs(diffX);
+              const absY = Math.abs(diffY);
 
-          slider.addEventListener("pointerup", function () {
+              if (absX > clickThreshold || absY > clickThreshold) {
+                pointerMoved = true;
+              }
+
+              /*
+                처음에는 가로/세로 방향을 판단만 함.
+                세로 움직임이 더 크면 페이지 스크롤로 보고 슬라이더 개입 중단.
+              */
+              if (dragMode === "none") {
+                if (absX < directionThreshold && absY < directionThreshold) {
+                  return;
+                }
+
+                if (absY > absX) {
+                  dragMode = "vertical";
+                  pointerDown = false;
+                  resumeSliderLater();
+                  return;
+                }
+
+                dragMode = "horizontal";
+
+                if (slider.setPointerCapture && event.pointerId !== undefined) {
+                  try {
+                    slider.setPointerCapture(event.pointerId);
+                  } catch (error) {}
+                }
+              }
+
+              /*
+                좌우 움직임일 때만 슬라이더를 손가락/마우스 움직임에 맞춰 이동.
+              */
+              if (dragMode === "horizontal") {
+                event.preventDefault();
+
+                offsetX = pointerStartOffsetX + diffX;
+                normalizeOffset();
+                applyTransform();
+              }
+            },
+            { passive: false }
+          );
+
+          slider.addEventListener("pointerup", function (event) {
             if (!pointerDown) return;
 
             pointerDown = false;
 
+            if (slider.releasePointerCapture && event.pointerId !== undefined) {
+              try {
+                slider.releasePointerCapture(event.pointerId);
+              } catch (error) {}
+            }
+
+            /*
+              거의 움직이지 않았으면 클릭으로 판단해서 확대 모달 열기.
+              드래그였다면 모달을 열지 않고 현재 위치에서 다시 자동 흐름 시작.
+            */
             if (!pointerMoved && pointerFigure) {
               const slideIndex = Number(pointerFigure.getAttribute("data-slide-index"));
 
@@ -1167,11 +1236,13 @@
               }
             }
 
+            dragMode = "none";
             resumeSliderLater();
           });
 
           slider.addEventListener("pointercancel", function () {
             pointerDown = false;
+            dragMode = "none";
             resumeSliderLater();
           });
 
@@ -1180,10 +1251,14 @@
 
           window.addEventListener("resize", function () {
             measureLoopWidth();
+            normalizeOffset();
+            applyTransform();
           });
 
           window.addEventListener("load", function () {
             measureLoopWidth();
+            normalizeOffset();
+            applyTransform();
           });
 
           startSlider();
