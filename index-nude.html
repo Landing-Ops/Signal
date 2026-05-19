@@ -340,16 +340,16 @@
           </figure>
 
         <!-- 이미지 자동 슬라이드 삽입 -->
-      <div
-        class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-pan-y cursor-grab select-none snap-x snap-proximity [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        data-auto-slider
-      >
+        <div
+          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-hidden py-2 touch-pan-y select-none"
+          data-auto-slider
+        >
           <div
-            class="flex w-max gap-4 md:gap-5"
+            class="flex w-max gap-4 md:gap-5 will-change-transform"
             data-slider-track
           >
             <!-- 슬라이드 이미지1 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-1.webp"
                 alt=""
@@ -359,7 +359,7 @@
             </figure>
 
             <!-- 슬라이드 이미지2 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-2.webp"
                 alt=""
@@ -369,7 +369,7 @@
             </figure>
 
             <!-- 슬라이드 이미지3 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-3.webp"
                 alt=""
@@ -379,7 +379,7 @@
             </figure>
 
             <!-- 슬라이드 이미지4 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-4.webp"
                 alt=""
@@ -389,7 +389,7 @@
             </figure>
 
             <!-- 슬라이드 이미지5 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-5.webp"
                 alt=""
@@ -399,7 +399,7 @@
             </figure>
 
             <!-- 슬라이드 이미지6 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-6.webp"
                 alt=""
@@ -409,7 +409,7 @@
             </figure>
 
             <!-- 슬라이드 이미지7 -->
-            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center">
               <img
                 src="./img/section 5-2-slide-7.webp"
                 alt=""
@@ -853,11 +853,14 @@
       </button>
     </div>
 
-    <!--5-2, 안정형 무한 슬라이드 + PC/모바일 방향잠금 + 클릭 확대-->
+    <!--5-2, 자연 연속 흐름 슬라이드 + 클릭 확대 모달-->
     <script>
       (function () {
         const sliders = document.querySelectorAll("[data-auto-slider]");
 
+        /* =========================
+          확대 모달 관련 요소
+        ========================= */
         const lightbox = document.querySelector("[data-slider-lightbox]");
         const lightboxImg = lightbox ? lightbox.querySelector("[data-lightbox-img]") : null;
         const lightboxCount = lightbox ? lightbox.querySelector("[data-lightbox-count]") : null;
@@ -875,7 +878,8 @@
           lightboxImg.src = lightboxImages[lightboxIndex];
 
           if (lightboxCount) {
-            lightboxCount.textContent = lightboxIndex + 1 + " / " + lightboxImages.length;
+            lightboxCount.textContent =
+              lightboxIndex + 1 + " / " + lightboxImages.length;
           }
         }
 
@@ -916,64 +920,90 @@
 
         function lightboxGoPrev() {
           if (!lightboxImages.length) return;
-          lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+          lightboxIndex =
+            (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
           showLightboxImage();
         }
 
-        if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
-        if (lightboxNext) lightboxNext.addEventListener("click", lightboxGoNext);
-        if (lightboxPrev) lightboxPrev.addEventListener("click", lightboxGoPrev);
+        if (lightboxClose) {
+          lightboxClose.addEventListener("click", closeLightbox);
+        }
+
+        if (lightboxNext) {
+          lightboxNext.addEventListener("click", lightboxGoNext);
+        }
+
+        if (lightboxPrev) {
+          lightboxPrev.addEventListener("click", lightboxGoPrev);
+        }
 
         if (lightbox) {
           lightbox.addEventListener("click", function (event) {
-            if (event.target === lightbox) closeLightbox();
+            if (event.target === lightbox) {
+              closeLightbox();
+            }
           });
 
-          let lbDown = false;
-          let lbStartX = 0;
-          let lbCurrentX = 0;
+          let modalDown = false;
+          let modalStartX = 0;
+          let modalCurrentX = 0;
 
           lightbox.addEventListener("pointerdown", function (event) {
-            lbDown = true;
-            lbStartX = event.clientX;
-            lbCurrentX = event.clientX;
+            modalDown = true;
+            modalStartX = event.clientX;
+            modalCurrentX = event.clientX;
           });
 
           lightbox.addEventListener("pointermove", function (event) {
-            if (!lbDown) return;
-            lbCurrentX = event.clientX;
+            if (!modalDown) return;
+            modalCurrentX = event.clientX;
           });
 
           lightbox.addEventListener("pointerup", function () {
-            if (!lbDown) return;
+            if (!modalDown) return;
 
-            lbDown = false;
-            const diffX = lbCurrentX - lbStartX;
+            modalDown = false;
+
+            const diffX = modalCurrentX - modalStartX;
 
             if (Math.abs(diffX) > 50) {
-              if (diffX < 0) lightboxGoNext();
-              else lightboxGoPrev();
+              if (diffX < 0) {
+                lightboxGoNext();
+              } else {
+                lightboxGoPrev();
+              }
             }
           });
 
           lightbox.addEventListener("pointercancel", function () {
-            lbDown = false;
+            modalDown = false;
           });
         }
 
         document.addEventListener("keydown", function (event) {
           if (!lightbox || lightbox.classList.contains("hidden")) return;
 
-          if (event.key === "Escape") closeLightbox();
-          if (event.key === "ArrowRight") lightboxGoNext();
-          if (event.key === "ArrowLeft") lightboxGoPrev();
+          if (event.key === "Escape") {
+            closeLightbox();
+          }
+
+          if (event.key === "ArrowRight") {
+            lightboxGoNext();
+          }
+
+          if (event.key === "ArrowLeft") {
+            lightboxGoPrev();
+          }
         });
 
+        /* =========================
+          자연 연속 흐름 슬라이더
+        ========================= */
         if (!sliders.length) return;
 
         sliders.forEach(function (slider) {
-          if (slider.dataset.sliderReady === "true") return;
-          slider.dataset.sliderReady = "true";
+          if (slider.dataset.marqueeReady === "true") return;
+          slider.dataset.marqueeReady = "true";
 
           const track = slider.querySelector("[data-slider-track]");
           const originalSlides = track ? Array.from(track.children) : [];
@@ -984,6 +1014,7 @@
 
           originalSlides.forEach(function (slide, index) {
             const img = slide.querySelector("img");
+
             slide.setAttribute("data-slide-index", index);
 
             if (img) {
@@ -991,114 +1022,87 @@
             }
           });
 
-          const originalCount = originalSlides.length;
-
+          /*
+            자연스럽게 이어지게 하기 위해 원본 슬라이드를 한 번 더 복제.
+            화면상 구조:
+            1 2 3 4 5 6 7 1 2 3 4 5 6 7
+          */
           originalSlides.forEach(function (slide) {
             const clone = slide.cloneNode(true);
             clone.setAttribute("aria-hidden", "true");
             track.appendChild(clone);
           });
 
-          originalSlides
-            .slice()
-            .reverse()
-            .forEach(function (slide) {
-              const clone = slide.cloneNode(true);
-              clone.setAttribute("aria-hidden", "true");
-              track.insertBefore(clone, track.firstChild);
-            });
+          let offsetX = 0;
+          let loopWidth = 0;
+          let animationId = null;
+          let lastTime = null;
+          let isPaused = false;
 
-          const slides = Array.from(track.children);
+          let pointerDown = false;
+          let pointerStartX = 0;
+          let pointerStartY = 0;
+          let pointerMoved = false;
+          let pointerFigure = null;
 
-          let timer = null;
-          let resumeTimer = null;
-          let normalizeTimer = null;
+          const speed = 36;
+          // 자동 흐름 속도
+          // 숫자가 클수록 빠르게 흐름
+          // 24~48 사이 추천
 
-          let isPointerDown = false;
-          let dragMode = "none"; 
-          // none = 아직 방향 미정
-          // horizontal = 좌우 슬라이드 조작
-          // vertical = 페이지 세로 스크롤
-
-          let startX = 0;
-          let startY = 0;
-          let startScrollLeft = 0;
-          let moved = false;
-          let startFigure = null;
-
-          const slideDelay = 3500;
-          // 자동 슬라이드 간격. 3500 = 3.5초
-
-          const resumeDelay = 6000;
-          // 사용자가 조작한 뒤 자동 슬라이드 재시작까지 대기 시간
+          const resumeDelay = 3500;
+          // 터치/클릭 후 자동 흐름 재시작 대기 시간
+          // 3500 = 3.5초
 
           const clickThreshold = 8;
-          // 클릭/드래그 구분 기준
+          // 클릭과 드래그 구분 기준
+          // 8px 이상 움직이면 클릭이 아니라 움직임으로 판단
 
-          const directionThreshold = 12;
-          // 모바일에서 가로/세로 방향을 판단하기 시작하는 기준
+          let resumeTimer = null;
 
-          function getOriginalStartLeft() {
-            return slides[originalCount].offsetLeft;
-          }
+          function measureLoopWidth() {
+            loopWidth = 0;
 
-          function getOriginalEndLeft() {
-            return slides[originalCount * 2].offsetLeft;
-          }
-
-          function getStepSize() {
-            if (!slides[0] || !slides[1]) return slider.clientWidth;
-            return slides[1].offsetLeft - slides[0].offsetLeft;
-          }
-
-          function jumpToOriginalStart() {
-            slider.scrollLeft = getOriginalStartLeft();
-          }
-
-          function normalizeScrollPosition() {
-            const startLeft = getOriginalStartLeft();
-            const endLeft = getOriginalEndLeft();
-            const blockWidth = endLeft - startLeft;
-
-            if (!blockWidth) return;
-
-            const previousBehavior = slider.style.scrollBehavior;
-            slider.style.scrollBehavior = "auto";
-
-            if (slider.scrollLeft >= endLeft) {
-              slider.scrollLeft = slider.scrollLeft - blockWidth;
-            }
-
-            if (slider.scrollLeft < startLeft) {
-              slider.scrollLeft = slider.scrollLeft + blockWidth;
-            }
-
-            slider.style.scrollBehavior = previousBehavior;
-          }
-
-          function nextSlide() {
-            normalizeScrollPosition();
-
-            slider.scrollBy({
-              left: getStepSize(),
-              behavior: "smooth"
+            originalSlides.forEach(function (slide) {
+              const style = window.getComputedStyle(track);
+              const gap = parseFloat(style.columnGap || style.gap || 0);
+              loopWidth += slide.offsetWidth + gap;
             });
           }
 
-          function startAutoSlide() {
-            stopAutoSlide();
-            timer = setInterval(nextSlide, slideDelay);
+          function applyTransform() {
+            track.style.transform = "translate3d(" + offsetX + "px, 0, 0)";
           }
 
-          function stopAutoSlide() {
-            if (timer) {
-              clearInterval(timer);
-              timer = null;
+          function animate(time) {
+            if (lastTime === null) {
+              lastTime = time;
             }
+
+            const delta = time - lastTime;
+            lastTime = time;
+
+            if (!isPaused && loopWidth > 0) {
+              offsetX -= (speed * delta) / 1000;
+
+              /*
+                핵심:
+                7번 끝에서 1번으로 돌아가는 게 아니라,
+                똑같은 복제 묶음 위치로 순간 이동하기 때문에
+                눈에는 끊김 없이 계속 흐르는 것처럼 보임.
+              */
+              if (Math.abs(offsetX) >= loopWidth) {
+                offsetX += loopWidth;
+              }
+
+              applyTransform();
+            }
+
+            animationId = requestAnimationFrame(animate);
           }
 
-          function pauseAutoSlide() {
-            stopAutoSlide();
+          function pauseSlider() {
+            isPaused = true;
 
             if (resumeTimer) {
               clearTimeout(resumeTimer);
@@ -1106,147 +1110,83 @@
             }
           }
 
-          function resumeAutoSlideLater() {
-            if (resumeTimer) clearTimeout(resumeTimer);
+          function resumeSliderLater() {
+            if (resumeTimer) {
+              clearTimeout(resumeTimer);
+            }
 
             resumeTimer = setTimeout(function () {
-              startAutoSlide();
+              isPaused = false;
+              lastTime = null;
             }, resumeDelay);
           }
 
-          function scheduleNormalize(delay) {
-            if (normalizeTimer) clearTimeout(normalizeTimer);
+          function startSlider() {
+            measureLoopWidth();
+            applyTransform();
 
-            normalizeTimer = setTimeout(function () {
-              normalizeScrollPosition();
-            }, delay);
+            if (animationId) {
+              cancelAnimationFrame(animationId);
+            }
+
+            animationId = requestAnimationFrame(animate);
           }
 
           slider.addEventListener("pointerdown", function (event) {
-            isPointerDown = true;
-            dragMode = "none";
-            moved = false;
+            pointerDown = true;
+            pointerMoved = false;
+            pointerStartX = event.clientX;
+            pointerStartY = event.clientY;
+            pointerFigure = event.target.closest("figure");
 
-            startX = event.clientX;
-            startY = event.clientY;
-            startScrollLeft = slider.scrollLeft;
-            startFigure = event.target.closest("figure");
-
-            pauseAutoSlide();
-            slider.classList.add("cursor-grabbing");
+            pauseSlider();
           });
 
           slider.addEventListener("pointermove", function (event) {
-            if (!isPointerDown) return;
+            if (!pointerDown) return;
 
-            const diffX = event.clientX - startX;
-            const diffY = event.clientY - startY;
+            const diffX = Math.abs(event.clientX - pointerStartX);
+            const diffY = Math.abs(event.clientY - pointerStartY);
 
-            const absX = Math.abs(diffX);
-            const absY = Math.abs(diffY);
-
-            if (absX > clickThreshold || absY > clickThreshold) {
-              moved = true;
-            }
-
-            if (dragMode === "none") {
-              if (absX < directionThreshold && absY < directionThreshold) {
-                return;
-              }
-
-              if (absY > absX) {
-                dragMode = "vertical";
-                isPointerDown = false;
-                slider.classList.remove("cursor-grabbing");
-                resumeAutoSlideLater();
-                return;
-              }
-
-              dragMode = "horizontal";
-
-              if (slider.setPointerCapture && event.pointerId !== undefined) {
-                try {
-                  slider.setPointerCapture(event.pointerId);
-                } catch (error) {}
-              }
-            }
-
-            if (dragMode === "horizontal") {
-              event.preventDefault();
-              slider.scrollLeft = startScrollLeft - diffX;
+            if (diffX > clickThreshold || diffY > clickThreshold) {
+              pointerMoved = true;
             }
           });
 
-          slider.addEventListener("pointerup", function (event) {
-            if (!isPointerDown) return;
+          slider.addEventListener("pointerup", function () {
+            if (!pointerDown) return;
 
-            isPointerDown = false;
-            slider.classList.remove("cursor-grabbing");
+            pointerDown = false;
 
-            if (slider.releasePointerCapture && event.pointerId !== undefined) {
-              try {
-                slider.releasePointerCapture(event.pointerId);
-              } catch (error) {}
-            }
-
-            if (!moved && startFigure) {
-              const slideIndex = Number(startFigure.getAttribute("data-slide-index"));
+            if (!pointerMoved && pointerFigure) {
+              const slideIndex = Number(pointerFigure.getAttribute("data-slide-index"));
 
               if (!Number.isNaN(slideIndex)) {
-                openLightbox(originalImages, slideIndex, resumeAutoSlideLater);
+                openLightbox(originalImages, slideIndex, resumeSliderLater);
                 return;
               }
             }
 
-            scheduleNormalize(1200);
-            resumeAutoSlideLater();
+            resumeSliderLater();
           });
 
           slider.addEventListener("pointercancel", function () {
-            isPointerDown = false;
-            dragMode = "none";
-            slider.classList.remove("cursor-grabbing");
-
-            scheduleNormalize(1200);
-            resumeAutoSlideLater();
+            pointerDown = false;
+            resumeSliderLater();
           });
 
-          slider.addEventListener("pointerleave", function () {
-            if (!isPointerDown) return;
-
-            isPointerDown = false;
-            dragMode = "none";
-            slider.classList.remove("cursor-grabbing");
-
-            scheduleNormalize(1200);
-            resumeAutoSlideLater();
-          });
-
-          slider.addEventListener("scroll", function () {
-            if (isPointerDown) return;
-
-            if (normalizeTimer) clearTimeout(normalizeTimer);
-
-            normalizeTimer = setTimeout(function () {
-              normalizeScrollPosition();
-            }, 1200);
-          });
-
-          slider.addEventListener("wheel", function () {
-            pauseAutoSlide();
-            resumeAutoSlideLater();
-          });
+          slider.addEventListener("mouseenter", pauseSlider);
+          slider.addEventListener("mouseleave", resumeSliderLater);
 
           window.addEventListener("resize", function () {
-            jumpToOriginalStart();
+            measureLoopWidth();
           });
 
           window.addEventListener("load", function () {
-            jumpToOriginalStart();
+            measureLoopWidth();
           });
 
-          jumpToOriginalStart();
-          startAutoSlide();
+          startSlider();
         });
       })();
     </script>
