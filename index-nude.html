@@ -341,7 +341,7 @@
 
         <!-- 이미지 자동 슬라이드 삽입 -->
         <div
-          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-pan-x cursor-grab select-none snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-auto cursor-grab select-none snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-auto-slider
         >
           <div
@@ -853,7 +853,7 @@
       </button>
     </div>
 
-    <!--5-2, 자연 스크롤 무한 슬라이드 + PC 마우스 드래그 + 클릭 확대-->
+    <!--5-2, 자연 스크롤 무한 슬라이드 + PC 드래그 + 모바일 세로스크롤 보호 + 클릭 확대-->
     <script>
       (function () {
         const sliders = document.querySelectorAll("[data-auto-slider]");
@@ -899,7 +899,6 @@
           lightbox.classList.remove("hidden");
           lightbox.classList.add("flex");
           lightbox.setAttribute("aria-hidden", "false");
-
           document.body.classList.add("overflow-hidden");
         }
 
@@ -909,7 +908,6 @@
           lightbox.classList.add("hidden");
           lightbox.classList.remove("flex");
           lightbox.setAttribute("aria-hidden", "true");
-
           document.body.classList.remove("overflow-hidden");
 
           if (lightboxResume) {
@@ -1026,7 +1024,10 @@
 
           const originalCount = originalSlides.length;
 
-          /* 앞뒤 복제해서 무한 슬라이드처럼 만들기 */
+          /*
+            무한 슬라이드용 복제
+            구조: 복제 7장 + 원본 7장 + 복제 7장
+          */
           originalSlides.forEach(function (slide) {
             const clone = slide.cloneNode(true);
             clone.setAttribute("aria-hidden", "true");
@@ -1050,6 +1051,8 @@
 
           let isPointerDown = false;
           let isMouseDrag = false;
+          let isVerticalScroll = false;
+
           let startX = 0;
           let startY = 0;
           let startScrollLeft = 0;
@@ -1067,6 +1070,10 @@
           const clickThreshold = 8;
           // 클릭과 드래그를 구분하는 기준
           // 8px 이상 움직이면 드래그로 판단
+
+          const verticalGuard = 12;
+          // 모바일에서 세로 스크롤로 판단하는 최소 이동 거리
+          // 세로 이동이 이 값보다 크고, 가로 이동보다 크면 슬라이더 개입 중단
 
           function getOriginalStartLeft() {
             return slides[originalCount].offsetLeft;
@@ -1147,6 +1154,7 @@
           slider.addEventListener("pointerdown", function (event) {
             isPointerDown = true;
             isMouseDrag = event.pointerType === "mouse";
+            isVerticalScroll = false;
             moved = false;
 
             startX = event.clientX;
@@ -1157,7 +1165,16 @@
             pauseAutoSlide();
             slider.classList.add("cursor-grabbing");
 
-            if (slider.setPointerCapture && event.pointerId !== undefined) {
+            /*
+              중요:
+              PC 마우스만 pointer capture.
+              모바일 터치는 capture 하지 않아야 세로 스크롤이 자연스럽게 살아남.
+            */
+            if (
+              isMouseDrag &&
+              slider.setPointerCapture &&
+              event.pointerId !== undefined
+            ) {
               slider.setPointerCapture(event.pointerId);
             }
           });
@@ -1168,13 +1185,30 @@
             const diffX = event.clientX - startX;
             const diffY = event.clientY - startY;
 
-            if (Math.abs(diffX) > clickThreshold || Math.abs(diffY) > clickThreshold) {
+            const absX = Math.abs(diffX);
+            const absY = Math.abs(diffY);
+
+            /*
+              모바일에서 세로 이동이 더 크면:
+              이건 슬라이더 조작이 아니라 페이지 스크롤로 판단.
+              슬라이더 개입을 완전히 중단.
+            */
+            if (!isMouseDrag && absY > absX && absY > verticalGuard) {
+              isVerticalScroll = true;
+              isPointerDown = false;
+              moved = true;
+              slider.classList.remove("cursor-grabbing");
+              resumeAutoSlideLater();
+              return;
+            }
+
+            if (absX > clickThreshold || absY > clickThreshold) {
               moved = true;
             }
 
             /*
-              PC 마우스일 때만 scrollLeft로 직접 이동.
-              모바일 터치는 브라우저 기본 관성 스크롤을 그대로 사용.
+              PC 마우스 드래그일 때만 직접 가로 이동.
+              모바일 터치는 브라우저 기본 터치 스크롤에 맡김.
             */
             if (isMouseDrag) {
               event.preventDefault();
@@ -1186,10 +1220,13 @@
             if (!isPointerDown) return;
 
             isPointerDown = false;
-            isMouseDrag = false;
             slider.classList.remove("cursor-grabbing");
 
-            if (slider.releasePointerCapture && event.pointerId !== undefined) {
+            if (
+              isMouseDrag &&
+              slider.releasePointerCapture &&
+              event.pointerId !== undefined
+            ) {
               try {
                 slider.releasePointerCapture(event.pointerId);
               } catch (error) {}
@@ -1197,9 +1234,9 @@
 
             /*
               클릭이면 확대 모달 열기.
-              드래그였다면 모달 열지 않고, 현재 관성/스크롤 위치 유지.
+              드래그였거나 세로 스크롤이면 모달 열지 않음.
             */
-            if (!moved && startFigure) {
+            if (!moved && !isVerticalScroll && startFigure) {
               const slideIndex = Number(startFigure.getAttribute("data-slide-index"));
 
               if (!Number.isNaN(slideIndex)) {
@@ -1208,16 +1245,24 @@
               }
             }
 
-            setTimeout(normalizeScrollPosition, 350);
+            /*
+              모바일 터치는 관성 스크롤 시간을 더 줌.
+              PC 마우스 드래그는 빠르게 위치 보정.
+            */
+            setTimeout(normalizeScrollPosition, isMouseDrag ? 350 : 1000);
+
+            isMouseDrag = false;
+            isVerticalScroll = false;
             resumeAutoSlideLater();
           });
 
           slider.addEventListener("pointercancel", function () {
             isPointerDown = false;
             isMouseDrag = false;
+            isVerticalScroll = false;
             slider.classList.remove("cursor-grabbing");
 
-            setTimeout(normalizeScrollPosition, 350);
+            setTimeout(normalizeScrollPosition, 1000);
             resumeAutoSlideLater();
           });
 
@@ -1225,10 +1270,12 @@
             if (!isPointerDown) return;
 
             isPointerDown = false;
-            isMouseDrag = false;
             slider.classList.remove("cursor-grabbing");
 
-            setTimeout(normalizeScrollPosition, 350);
+            setTimeout(normalizeScrollPosition, isMouseDrag ? 350 : 1000);
+
+            isMouseDrag = false;
+            isVerticalScroll = false;
             resumeAutoSlideLater();
           });
 
@@ -1241,7 +1288,7 @@
 
             scrollTimer = setTimeout(function () {
               normalizeScrollPosition();
-            }, 400);
+            }, 500);
           });
 
           slider.addEventListener("wheel", function () {
