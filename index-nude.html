@@ -341,15 +341,15 @@
 
         <!-- 이미지 자동 슬라이드 삽입 -->
         <div
-          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-hidden py-2 touch-pan-y cursor-grab select-none"
+          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-pan-x cursor-grab select-none snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-auto-slider
         >
           <div
-            class="flex w-full gap-4 md:gap-5 transition-transform ease-in-out"
+            class="flex w-max gap-4 md:gap-5"
             data-slider-track
           >
             <!-- 슬라이드 이미지1 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-1.webp"
                 alt=""
@@ -359,7 +359,7 @@
             </figure>
 
             <!-- 슬라이드 이미지2 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-2.webp"
                 alt=""
@@ -369,7 +369,7 @@
             </figure>
 
             <!-- 슬라이드 이미지3 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-3.webp"
                 alt=""
@@ -379,7 +379,7 @@
             </figure>
 
             <!-- 슬라이드 이미지4 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-4.webp"
                 alt=""
@@ -389,7 +389,7 @@
             </figure>
 
             <!-- 슬라이드 이미지5 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-5.webp"
                 alt=""
@@ -399,7 +399,7 @@
             </figure>
 
             <!-- 슬라이드 이미지6 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-6.webp"
                 alt=""
@@ -409,7 +409,7 @@
             </figure>
 
             <!-- 슬라이드 이미지7 -->
-            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+            <figure class="w-[92vw] max-w-[478px] md:w-[31vw] md:max-w-[446px] shrink-0 flex justify-center snap-center">
               <img
                 src="./img/section 5-2-slide-7.webp"
                 alt=""
@@ -798,11 +798,205 @@
       })();
     </script>
 
-    <!--5-2, 이미지 무한 자동 슬라이드 + 드래그 슬라이드-->
+    <!-- 섹션5-2. 슬라이드 이미지 클릭시 확대 모달 -->
+    <div
+      class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 px-4 py-6"
+      data-slider-lightbox
+      aria-hidden="true"
+    >
+      <button
+        type="button"
+        class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-2xl font-bold text-black"
+        data-lightbox-close
+        aria-label="닫기"
+      >
+        &#10005;
+      </button>
+
+      <button
+        type="button"
+        class="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-3xl font-bold text-black md:left-8"
+        data-lightbox-prev
+        aria-label="이전 이미지"
+      >
+        &#10094;
+      </button>
+
+      <figure class="w-full max-w-[960px] mx-auto text-center select-none">
+        <img
+          src=""
+          alt=""
+          draggable="false"
+          class="block w-full max-h-[82vh] object-contain mx-auto select-none"
+          data-lightbox-img
+        />
+        <figcaption
+          class="mt-3 text-sm font-semibold text-white"
+          data-lightbox-count
+        ></figcaption>
+      </figure>
+
+      <button
+        type="button"
+        class="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-3xl font-bold text-black md:right-8"
+        data-lightbox-next
+        aria-label="다음 이미지"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <!--5-2, 자연 스크롤 무한 슬라이드 + PC 마우스 드래그 + 클릭 확대-->
     <script>
       (function () {
         const sliders = document.querySelectorAll("[data-auto-slider]");
 
+        /* =========================
+          확대 모달 관련 요소
+        ========================= */
+        const lightbox = document.querySelector("[data-slider-lightbox]");
+        const lightboxImg = lightbox ? lightbox.querySelector("[data-lightbox-img]") : null;
+        const lightboxCount = lightbox ? lightbox.querySelector("[data-lightbox-count]") : null;
+        const lightboxClose = lightbox ? lightbox.querySelector("[data-lightbox-close]") : null;
+        const lightboxPrev = lightbox ? lightbox.querySelector("[data-lightbox-prev]") : null;
+        const lightboxNext = lightbox ? lightbox.querySelector("[data-lightbox-next]") : null;
+
+        let lightboxImages = [];
+        let lightboxIndex = 0;
+        let lightboxResume = null;
+
+        let lightboxDragging = false;
+        let lightboxStartX = 0;
+        let lightboxCurrentX = 0;
+
+        function showLightboxImage() {
+          if (!lightboxImg || !lightboxImages.length) return;
+
+          lightboxImg.src = lightboxImages[lightboxIndex];
+
+          if (lightboxCount) {
+            lightboxCount.textContent =
+              lightboxIndex + 1 + " / " + lightboxImages.length;
+          }
+        }
+
+        function openLightbox(images, index, resumeCallback) {
+          if (!lightbox || !lightboxImg || !images.length) return;
+
+          lightboxImages = images;
+          lightboxIndex = index;
+          lightboxResume = resumeCallback || null;
+
+          showLightboxImage();
+
+          lightbox.classList.remove("hidden");
+          lightbox.classList.add("flex");
+          lightbox.setAttribute("aria-hidden", "false");
+
+          document.body.classList.add("overflow-hidden");
+        }
+
+        function closeLightbox() {
+          if (!lightbox) return;
+
+          lightbox.classList.add("hidden");
+          lightbox.classList.remove("flex");
+          lightbox.setAttribute("aria-hidden", "true");
+
+          document.body.classList.remove("overflow-hidden");
+
+          if (lightboxResume) {
+            lightboxResume();
+            lightboxResume = null;
+          }
+        }
+
+        function lightboxGoNext() {
+          if (!lightboxImages.length) return;
+
+          lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+          showLightboxImage();
+        }
+
+        function lightboxGoPrev() {
+          if (!lightboxImages.length) return;
+
+          lightboxIndex =
+            (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+
+          showLightboxImage();
+        }
+
+        if (lightboxClose) {
+          lightboxClose.addEventListener("click", closeLightbox);
+        }
+
+        if (lightboxNext) {
+          lightboxNext.addEventListener("click", lightboxGoNext);
+        }
+
+        if (lightboxPrev) {
+          lightboxPrev.addEventListener("click", lightboxGoPrev);
+        }
+
+        if (lightbox) {
+          lightbox.addEventListener("click", function (event) {
+            if (event.target === lightbox) {
+              closeLightbox();
+            }
+          });
+
+          lightbox.addEventListener("pointerdown", function (event) {
+            lightboxDragging = true;
+            lightboxStartX = event.clientX;
+            lightboxCurrentX = event.clientX;
+          });
+
+          lightbox.addEventListener("pointermove", function (event) {
+            if (!lightboxDragging) return;
+            lightboxCurrentX = event.clientX;
+          });
+
+          lightbox.addEventListener("pointerup", function () {
+            if (!lightboxDragging) return;
+
+            lightboxDragging = false;
+
+            const diffX = lightboxCurrentX - lightboxStartX;
+
+            if (Math.abs(diffX) > 50) {
+              if (diffX < 0) {
+                lightboxGoNext();
+              } else {
+                lightboxGoPrev();
+              }
+            }
+          });
+
+          lightbox.addEventListener("pointercancel", function () {
+            lightboxDragging = false;
+          });
+        }
+
+        document.addEventListener("keydown", function (event) {
+          if (!lightbox || lightbox.classList.contains("hidden")) return;
+
+          if (event.key === "Escape") {
+            closeLightbox();
+          }
+
+          if (event.key === "ArrowRight") {
+            lightboxGoNext();
+          }
+
+          if (event.key === "ArrowLeft") {
+            lightboxGoPrev();
+          }
+        });
+
+        /* =========================
+          슬라이더 본체
+        ========================= */
         if (!sliders.length) return;
 
         sliders.forEach(function (slider) {
@@ -811,9 +1005,21 @@
 
           if (!track || originalSlides.length <= 1) return;
 
+          const originalImages = [];
+
+          originalSlides.forEach(function (slide, index) {
+            const img = slide.querySelector("img");
+
+            slide.setAttribute("data-slide-index", index);
+
+            if (img) {
+              originalImages.push(img.getAttribute("src"));
+            }
+          });
+
           const originalCount = originalSlides.length;
 
-          // 원본 앞뒤로 슬라이드 복제해서 무한 슬라이드처럼 만들기
+          /* 앞뒤 복제해서 무한 슬라이드처럼 만들기 */
           originalSlides.forEach(function (slide) {
             const clone = slide.cloneNode(true);
             clone.setAttribute("aria-hidden", "true");
@@ -831,58 +1037,73 @@
 
           const slides = Array.from(track.children);
 
-          // 가운데 원본 묶음의 첫 번째 이미지부터 시작
-          let currentIndex = originalCount;
           let timer = null;
+          let resumeTimer = null;
+          let scrollTimer = null;
 
-          let isDragging = false;
+          let isPointerDown = false;
+          let isMouseDrag = false;
           let startX = 0;
-          let currentX = 0;
-          let baseOffset = 0;
+          let startY = 0;
+          let startScrollLeft = 0;
+          let moved = false;
+          let startFigure = null;
 
-          const slideDelay = 3500;   // 자동 슬라이드 간격
-          const animationMs = 1500;  // 넘어가는 속도
-          const dragThreshold = 50;  // 드래그 판정 거리
+          const slideDelay = 3500;
+          // 자동 슬라이드가 다음 이미지로 넘어가기까지 기다리는 시간
+          // 3500 = 3.5초
 
-          function getCenterOffset(index) {
-            const slide = slides[index];
-            return slide.offsetLeft - (slider.clientWidth - slide.clientWidth) / 2;
+          const resumeDelay = 5000;
+          // 사용자가 직접 조작한 뒤 자동 슬라이드가 다시 시작되기까지 기다리는 시간
+          // 5000 = 5초
+
+          const clickThreshold = 8;
+          // 클릭과 드래그를 구분하는 기준
+          // 8px 이상 움직이면 드래그로 판단
+
+          function getOriginalStartLeft() {
+            return slides[originalCount].offsetLeft;
           }
 
-          function setTranslate(offset, animate) {
-            track.style.transition = animate
-              ? "transform " + animationMs + "ms ease-in-out"
-              : "none";
-
-            track.style.transform = "translate3d(" + -offset + "px, 0, 0)";
+          function getOriginalEndLeft() {
+            return slides[originalCount * 2].offsetLeft;
           }
 
-          function moveTo(index, animate) {
-            currentIndex = index;
-            const offset = getCenterOffset(currentIndex);
-            setTranslate(offset, animate);
-          }
-
-          function normalizeIndex() {
-            // 뒤쪽 복제 영역으로 넘어갔으면 원본 첫 번째로 순간 이동
-            if (currentIndex >= originalCount * 2) {
-              currentIndex = originalCount;
-              moveTo(currentIndex, false);
+          function getStepSize() {
+            if (!slides[0] || !slides[1]) {
+              return slider.clientWidth;
             }
 
-            // 앞쪽 복제 영역으로 넘어갔으면 원본 마지막으로 순간 이동
-            if (currentIndex < originalCount) {
-              currentIndex = originalCount * 2 - 1;
-              moveTo(currentIndex, false);
+            return slides[1].offsetLeft - slides[0].offsetLeft;
+          }
+
+          function jumpToOriginalStart() {
+            slider.scrollLeft = getOriginalStartLeft();
+          }
+
+          function normalizeScrollPosition() {
+            const startLeft = getOriginalStartLeft();
+            const endLeft = getOriginalEndLeft();
+            const blockWidth = endLeft - startLeft;
+
+            if (!blockWidth) return;
+
+            if (slider.scrollLeft >= endLeft) {
+              slider.scrollLeft = slider.scrollLeft - blockWidth;
+            }
+
+            if (slider.scrollLeft < startLeft) {
+              slider.scrollLeft = slider.scrollLeft + blockWidth;
             }
           }
 
           function nextSlide() {
-            moveTo(currentIndex + 1, true);
-          }
+            normalizeScrollPosition();
 
-          function prevSlide() {
-            moveTo(currentIndex - 1, true);
+            slider.scrollBy({
+              left: getStepSize(),
+              behavior: "smooth"
+            });
           }
 
           function startAutoSlide() {
@@ -897,71 +1118,139 @@
             }
           }
 
-          function onPointerDown(event) {
-            isDragging = true;
-            startX = event.clientX;
-            currentX = startX;
-            baseOffset = getCenterOffset(currentIndex);
-
+          function pauseAutoSlide() {
             stopAutoSlide();
 
-            track.style.transition = "none";
+            if (resumeTimer) {
+              clearTimeout(resumeTimer);
+              resumeTimer = null;
+            }
+          }
+
+          function resumeAutoSlideLater() {
+            if (resumeTimer) {
+              clearTimeout(resumeTimer);
+            }
+
+            resumeTimer = setTimeout(function () {
+              startAutoSlide();
+            }, resumeDelay);
+          }
+
+          slider.addEventListener("pointerdown", function (event) {
+            isPointerDown = true;
+            isMouseDrag = event.pointerType === "mouse";
+            moved = false;
+
+            startX = event.clientX;
+            startY = event.clientY;
+            startScrollLeft = slider.scrollLeft;
+            startFigure = event.target.closest("figure");
+
+            pauseAutoSlide();
             slider.classList.add("cursor-grabbing");
 
             if (slider.setPointerCapture && event.pointerId !== undefined) {
               slider.setPointerCapture(event.pointerId);
             }
-          }
+          });
 
-          function onPointerMove(event) {
-            if (!isDragging) return;
+          slider.addEventListener("pointermove", function (event) {
+            if (!isPointerDown) return;
 
-            currentX = event.clientX;
-            const diffX = currentX - startX;
+            const diffX = event.clientX - startX;
+            const diffY = event.clientY - startY;
 
-            track.style.transform =
-              "translate3d(" + (-baseOffset + diffX) + "px, 0, 0)";
-          }
-
-          function onPointerUp() {
-            if (!isDragging) return;
-
-            isDragging = false;
-            slider.classList.remove("cursor-grabbing");
-
-            const diffX = currentX - startX;
-
-            if (Math.abs(diffX) > dragThreshold) {
-              if (diffX < 0) {
-                nextSlide();
-              } else {
-                prevSlide();
-              }
-            } else {
-              moveTo(currentIndex, true);
+            if (Math.abs(diffX) > clickThreshold || Math.abs(diffY) > clickThreshold) {
+              moved = true;
             }
 
-            startAutoSlide();
-          }
+            /*
+              PC 마우스일 때만 scrollLeft로 직접 이동.
+              모바일 터치는 브라우저 기본 관성 스크롤을 그대로 사용.
+            */
+            if (isMouseDrag) {
+              event.preventDefault();
+              slider.scrollLeft = startScrollLeft - diffX;
+            }
+          });
 
-          track.addEventListener("transitionend", normalizeIndex);
+          slider.addEventListener("pointerup", function (event) {
+            if (!isPointerDown) return;
 
-          slider.addEventListener("pointerdown", onPointerDown);
-          slider.addEventListener("pointermove", onPointerMove);
-          slider.addEventListener("pointerup", onPointerUp);
-          slider.addEventListener("pointercancel", onPointerUp);
-          slider.addEventListener("pointerleave", onPointerUp);
+            isPointerDown = false;
+            isMouseDrag = false;
+            slider.classList.remove("cursor-grabbing");
+
+            if (slider.releasePointerCapture && event.pointerId !== undefined) {
+              try {
+                slider.releasePointerCapture(event.pointerId);
+              } catch (error) {}
+            }
+
+            /*
+              클릭이면 확대 모달 열기.
+              드래그였다면 모달 열지 않고, 현재 관성/스크롤 위치 유지.
+            */
+            if (!moved && startFigure) {
+              const slideIndex = Number(startFigure.getAttribute("data-slide-index"));
+
+              if (!Number.isNaN(slideIndex)) {
+                openLightbox(originalImages, slideIndex, resumeAutoSlideLater);
+                return;
+              }
+            }
+
+            setTimeout(normalizeScrollPosition, 350);
+            resumeAutoSlideLater();
+          });
+
+          slider.addEventListener("pointercancel", function () {
+            isPointerDown = false;
+            isMouseDrag = false;
+            slider.classList.remove("cursor-grabbing");
+
+            setTimeout(normalizeScrollPosition, 350);
+            resumeAutoSlideLater();
+          });
+
+          slider.addEventListener("pointerleave", function () {
+            if (!isPointerDown) return;
+
+            isPointerDown = false;
+            isMouseDrag = false;
+            slider.classList.remove("cursor-grabbing");
+
+            setTimeout(normalizeScrollPosition, 350);
+            resumeAutoSlideLater();
+          });
+
+          slider.addEventListener("scroll", function () {
+            if (isPointerDown) return;
+
+            if (scrollTimer) {
+              clearTimeout(scrollTimer);
+            }
+
+            scrollTimer = setTimeout(function () {
+              normalizeScrollPosition();
+            }, 400);
+          });
+
+          slider.addEventListener("wheel", function () {
+            pauseAutoSlide();
+            resumeAutoSlideLater();
+          });
 
           window.addEventListener("resize", function () {
-            moveTo(currentIndex, false);
+            jumpToOriginalStart();
           });
 
-          // 이미지 로딩 후 위치 안정화
           window.addEventListener("load", function () {
-            moveTo(currentIndex, false);
+            jumpToOriginalStart();
           });
 
-          moveTo(currentIndex, false);
+          jumpToOriginalStart();
           startAutoSlide();
         });
       })();
