@@ -137,7 +137,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   2컨셉 촬영
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   컨셉별 트랜디한 의상 대여
                 </p>
               </div>
@@ -154,7 +154,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   촬영 의상&amp;소품 무료
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   한복, 캐주얼, 정장 드레스 대여 가능
                 </p>
               </div>
@@ -171,7 +171,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   부모님 헤어&amp;메이크업
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   헤어&amp;메이크업 전문가 서비스
                 </p>
               </div>
@@ -188,7 +188,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   고급 액자 제공
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   28x36cm 액자 1점 제공
                 </p>
               </div>
@@ -205,7 +205,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   포켓용 사진 제공
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   포켓사진 4매 최종 수정본 사진
                 </p>
               </div>
@@ -222,7 +222,7 @@
                 <p class="text-[18px] md:text-[32px] font-extrabold leading-tight text-[#df7895]">
                   리터칭 수정본 제공
                 </p>
-                <p class="mt-1 text-[14px] md:text-[20px] font-semibold leading-snug text-black">
+                <p class="mt-1 text-[13px] md:text-[20px] font-semibold leading-snug text-black">
                   전문가가 수정한 최종 수정본 제공
                 </p>
               </div>
@@ -324,11 +324,12 @@
         </div>
       </section>
 
-      <!-- =============== 섹션5 (CTA). 이미지+ 슬라이드 + 이미지=============== -->
+      <!-- =============== 섹션5 (CTA). 이미지+ 자동 슬라이드 + 이미지=============== -->
       <section id="" class="section"> 
         <div
-          class="container mx-auto grid max-w-7xl grid-cols-1 
-          items-center justify-items-center gap-10 px-4 py-0">
+          class="container mx-auto grid max-w-[1440px] grid-cols-1 
+          items-center justify-items-center gap-10 px-4 py-0"
+          >
           <!-- 랜딩 이미지 삽입 -->
           <figure class="flex justify-center my-2">
             <img
@@ -337,10 +338,92 @@
               class="w-full max-w-md md:max-w-[680px] h-auto"
             />
           </figure>
+
+        <!-- 이미지 자동 슬라이드 삽입 -->
+        <div
+          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-hidden py-2 touch-pan-y cursor-grab select-none"
+          data-auto-slider
+        >
+          <div
+            class="flex w-full gap-4 md:gap-5 transition-transform ease-in-out"
+            data-slider-track
+          >
+            <!-- 슬라이드 이미지1 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-1.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지2 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-2.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지3 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-3.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지4 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-4.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지5 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-5.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지6 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-6.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+
+            <!-- 슬라이드 이미지7 -->
+            <figure class="w-[92%] md:w-[31%] shrink-0 flex justify-center">
+              <img
+                src="./img/section 5-2-slide-7.webp"
+                alt=""
+                draggable="false"
+                class="block w-full h-auto pointer-events-none select-none"
+              />
+            </figure>
+          </div>
+        </div>
+
           <!-- 랜딩 이미지 삽입 -->
           <figure class="flex justify-center my-2">
             <img
-              src="./img/section 5-2.webp"
+              src="./img/section 5-3.webp"
               alt=""
               class="w-full max-w-md md:max-w-[680px] h-auto"
             />
@@ -688,6 +771,175 @@
         window.addEventListener("load", playVideo);
         document.addEventListener("touchstart", playVideo, { once: true });
         document.addEventListener("click", playVideo, { once: true });
+      })();
+    </script>
+
+    <!--5-2, 이미지 무한 자동 슬라이드 + 드래그 슬라이드-->
+    <script>
+      (function () {
+        const sliders = document.querySelectorAll("[data-auto-slider]");
+
+        if (!sliders.length) return;
+
+        sliders.forEach(function (slider) {
+          const track = slider.querySelector("[data-slider-track]");
+          const originalSlides = track ? Array.from(track.children) : [];
+
+          if (!track || originalSlides.length <= 1) return;
+
+          const originalCount = originalSlides.length;
+
+          // 원본 앞뒤로 슬라이드 복제해서 무한 슬라이드처럼 만들기
+          originalSlides.forEach(function (slide) {
+            const clone = slide.cloneNode(true);
+            clone.setAttribute("aria-hidden", "true");
+            track.appendChild(clone);
+          });
+
+          originalSlides
+            .slice()
+            .reverse()
+            .forEach(function (slide) {
+              const clone = slide.cloneNode(true);
+              clone.setAttribute("aria-hidden", "true");
+              track.insertBefore(clone, track.firstChild);
+            });
+
+          const slides = Array.from(track.children);
+
+          // 가운데 원본 묶음의 첫 번째 이미지부터 시작
+          let currentIndex = originalCount;
+          let timer = null;
+
+          let isDragging = false;
+          let startX = 0;
+          let currentX = 0;
+          let baseOffset = 0;
+
+          const slideDelay = 3500;   // 자동 슬라이드 간격
+          const animationMs = 1500;  // 넘어가는 속도
+          const dragThreshold = 50;  // 드래그 판정 거리
+
+          function getCenterOffset(index) {
+            const slide = slides[index];
+            return slide.offsetLeft - (slider.clientWidth - slide.clientWidth) / 2;
+          }
+
+          function setTranslate(offset, animate) {
+            track.style.transition = animate
+              ? "transform " + animationMs + "ms ease-in-out"
+              : "none";
+
+            track.style.transform = "translate3d(" + -offset + "px, 0, 0)";
+          }
+
+          function moveTo(index, animate) {
+            currentIndex = index;
+            const offset = getCenterOffset(currentIndex);
+            setTranslate(offset, animate);
+          }
+
+          function normalizeIndex() {
+            // 뒤쪽 복제 영역으로 넘어갔으면 원본 첫 번째로 순간 이동
+            if (currentIndex >= originalCount * 2) {
+              currentIndex = originalCount;
+              moveTo(currentIndex, false);
+            }
+
+            // 앞쪽 복제 영역으로 넘어갔으면 원본 마지막으로 순간 이동
+            if (currentIndex < originalCount) {
+              currentIndex = originalCount * 2 - 1;
+              moveTo(currentIndex, false);
+            }
+          }
+
+          function nextSlide() {
+            moveTo(currentIndex + 1, true);
+          }
+
+          function prevSlide() {
+            moveTo(currentIndex - 1, true);
+          }
+
+          function startAutoSlide() {
+            stopAutoSlide();
+            timer = setInterval(nextSlide, slideDelay);
+          }
+
+          function stopAutoSlide() {
+            if (timer) {
+              clearInterval(timer);
+              timer = null;
+            }
+          }
+
+          function onPointerDown(event) {
+            isDragging = true;
+            startX = event.clientX;
+            currentX = startX;
+            baseOffset = getCenterOffset(currentIndex);
+
+            stopAutoSlide();
+
+            track.style.transition = "none";
+            slider.classList.add("cursor-grabbing");
+
+            if (slider.setPointerCapture && event.pointerId !== undefined) {
+              slider.setPointerCapture(event.pointerId);
+            }
+          }
+
+          function onPointerMove(event) {
+            if (!isDragging) return;
+
+            currentX = event.clientX;
+            const diffX = currentX - startX;
+
+            track.style.transform =
+              "translate3d(" + (-baseOffset + diffX) + "px, 0, 0)";
+          }
+
+          function onPointerUp() {
+            if (!isDragging) return;
+
+            isDragging = false;
+            slider.classList.remove("cursor-grabbing");
+
+            const diffX = currentX - startX;
+
+            if (Math.abs(diffX) > dragThreshold) {
+              if (diffX < 0) {
+                nextSlide();
+              } else {
+                prevSlide();
+              }
+            } else {
+              moveTo(currentIndex, true);
+            }
+
+            startAutoSlide();
+          }
+
+          track.addEventListener("transitionend", normalizeIndex);
+
+          slider.addEventListener("pointerdown", onPointerDown);
+          slider.addEventListener("pointermove", onPointerMove);
+          slider.addEventListener("pointerup", onPointerUp);
+          slider.addEventListener("pointercancel", onPointerUp);
+          slider.addEventListener("pointerleave", onPointerUp);
+
+          window.addEventListener("resize", function () {
+            moveTo(currentIndex, false);
+          });
+
+          // 이미지 로딩 후 위치 안정화
+          window.addEventListener("load", function () {
+            moveTo(currentIndex, false);
+          });
+
+          moveTo(currentIndex, false);
+          startAutoSlide();
+        });
       })();
     </script>
 
