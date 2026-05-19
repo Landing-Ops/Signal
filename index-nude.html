@@ -340,10 +340,10 @@
           </figure>
 
         <!-- 이미지 자동 슬라이드 삽입 -->
-        <div
-          class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-auto cursor-grab select-none snap-x snap-mandatory scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          data-auto-slider
-        >
+      <div
+        class="w-full max-w-[520px] md:max-w-[1440px] mx-auto overflow-x-auto overflow-y-hidden py-2 touch-pan-y cursor-grab select-none snap-x snap-proximity [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        data-auto-slider
+      >
           <div
             class="flex w-max gap-4 md:gap-5"
             data-slider-track
@@ -853,14 +853,11 @@
       </button>
     </div>
 
-    <!--5-2, 자연 스크롤 무한 슬라이드 + PC 드래그 + 모바일 세로스크롤 보호 + 클릭 확대-->
+    <!--5-2, 안정형 무한 슬라이드 + PC/모바일 방향잠금 + 클릭 확대-->
     <script>
       (function () {
         const sliders = document.querySelectorAll("[data-auto-slider]");
 
-        /* =========================
-          확대 모달 관련 요소
-        ========================= */
         const lightbox = document.querySelector("[data-slider-lightbox]");
         const lightboxImg = lightbox ? lightbox.querySelector("[data-lightbox-img]") : null;
         const lightboxCount = lightbox ? lightbox.querySelector("[data-lightbox-count]") : null;
@@ -872,18 +869,13 @@
         let lightboxIndex = 0;
         let lightboxResume = null;
 
-        let lightboxDragging = false;
-        let lightboxStartX = 0;
-        let lightboxCurrentX = 0;
-
         function showLightboxImage() {
           if (!lightboxImg || !lightboxImages.length) return;
 
           lightboxImg.src = lightboxImages[lightboxIndex];
 
           if (lightboxCount) {
-            lightboxCount.textContent =
-              lightboxIndex + 1 + " / " + lightboxImages.length;
+            lightboxCount.textContent = lightboxIndex + 1 + " / " + lightboxImages.length;
           }
         }
 
@@ -918,93 +910,71 @@
 
         function lightboxGoNext() {
           if (!lightboxImages.length) return;
-
           lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
           showLightboxImage();
         }
 
         function lightboxGoPrev() {
           if (!lightboxImages.length) return;
-
-          lightboxIndex =
-            (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
-
+          lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
           showLightboxImage();
         }
 
-        if (lightboxClose) {
-          lightboxClose.addEventListener("click", closeLightbox);
-        }
-
-        if (lightboxNext) {
-          lightboxNext.addEventListener("click", lightboxGoNext);
-        }
-
-        if (lightboxPrev) {
-          lightboxPrev.addEventListener("click", lightboxGoPrev);
-        }
+        if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+        if (lightboxNext) lightboxNext.addEventListener("click", lightboxGoNext);
+        if (lightboxPrev) lightboxPrev.addEventListener("click", lightboxGoPrev);
 
         if (lightbox) {
           lightbox.addEventListener("click", function (event) {
-            if (event.target === lightbox) {
-              closeLightbox();
-            }
+            if (event.target === lightbox) closeLightbox();
           });
 
+          let lbDown = false;
+          let lbStartX = 0;
+          let lbCurrentX = 0;
+
           lightbox.addEventListener("pointerdown", function (event) {
-            lightboxDragging = true;
-            lightboxStartX = event.clientX;
-            lightboxCurrentX = event.clientX;
+            lbDown = true;
+            lbStartX = event.clientX;
+            lbCurrentX = event.clientX;
           });
 
           lightbox.addEventListener("pointermove", function (event) {
-            if (!lightboxDragging) return;
-            lightboxCurrentX = event.clientX;
+            if (!lbDown) return;
+            lbCurrentX = event.clientX;
           });
 
           lightbox.addEventListener("pointerup", function () {
-            if (!lightboxDragging) return;
+            if (!lbDown) return;
 
-            lightboxDragging = false;
-
-            const diffX = lightboxCurrentX - lightboxStartX;
+            lbDown = false;
+            const diffX = lbCurrentX - lbStartX;
 
             if (Math.abs(diffX) > 50) {
-              if (diffX < 0) {
-                lightboxGoNext();
-              } else {
-                lightboxGoPrev();
-              }
+              if (diffX < 0) lightboxGoNext();
+              else lightboxGoPrev();
             }
           });
 
           lightbox.addEventListener("pointercancel", function () {
-            lightboxDragging = false;
+            lbDown = false;
           });
         }
 
         document.addEventListener("keydown", function (event) {
           if (!lightbox || lightbox.classList.contains("hidden")) return;
 
-          if (event.key === "Escape") {
-            closeLightbox();
-          }
-
-          if (event.key === "ArrowRight") {
-            lightboxGoNext();
-          }
-
-          if (event.key === "ArrowLeft") {
-            lightboxGoPrev();
-          }
+          if (event.key === "Escape") closeLightbox();
+          if (event.key === "ArrowRight") lightboxGoNext();
+          if (event.key === "ArrowLeft") lightboxGoPrev();
         });
 
-        /* =========================
-          슬라이더 본체
-        ========================= */
         if (!sliders.length) return;
 
         sliders.forEach(function (slider) {
+          if (slider.dataset.sliderReady === "true") return;
+          slider.dataset.sliderReady = "true";
+
           const track = slider.querySelector("[data-slider-track]");
           const originalSlides = track ? Array.from(track.children) : [];
 
@@ -1014,7 +984,6 @@
 
           originalSlides.forEach(function (slide, index) {
             const img = slide.querySelector("img");
-
             slide.setAttribute("data-slide-index", index);
 
             if (img) {
@@ -1024,10 +993,6 @@
 
           const originalCount = originalSlides.length;
 
-          /*
-            무한 슬라이드용 복제
-            구조: 복제 7장 + 원본 7장 + 복제 7장
-          */
           originalSlides.forEach(function (slide) {
             const clone = slide.cloneNode(true);
             clone.setAttribute("aria-hidden", "true");
@@ -1047,11 +1012,13 @@
 
           let timer = null;
           let resumeTimer = null;
-          let scrollTimer = null;
+          let normalizeTimer = null;
 
           let isPointerDown = false;
-          let isMouseDrag = false;
-          let isVerticalScroll = false;
+          let dragMode = "none"; 
+          // none = 아직 방향 미정
+          // horizontal = 좌우 슬라이드 조작
+          // vertical = 페이지 세로 스크롤
 
           let startX = 0;
           let startY = 0;
@@ -1060,20 +1027,16 @@
           let startFigure = null;
 
           const slideDelay = 3500;
-          // 자동 슬라이드가 다음 이미지로 넘어가기까지 기다리는 시간
-          // 3500 = 3.5초
+          // 자동 슬라이드 간격. 3500 = 3.5초
 
-          const resumeDelay = 5000;
-          // 사용자가 직접 조작한 뒤 자동 슬라이드가 다시 시작되기까지 기다리는 시간
-          // 5000 = 5초
+          const resumeDelay = 6000;
+          // 사용자가 조작한 뒤 자동 슬라이드 재시작까지 대기 시간
 
           const clickThreshold = 8;
-          // 클릭과 드래그를 구분하는 기준
-          // 8px 이상 움직이면 드래그로 판단
+          // 클릭/드래그 구분 기준
 
-          const verticalGuard = 12;
-          // 모바일에서 세로 스크롤로 판단하는 최소 이동 거리
-          // 세로 이동이 이 값보다 크고, 가로 이동보다 크면 슬라이더 개입 중단
+          const directionThreshold = 12;
+          // 모바일에서 가로/세로 방향을 판단하기 시작하는 기준
 
           function getOriginalStartLeft() {
             return slides[originalCount].offsetLeft;
@@ -1084,10 +1047,7 @@
           }
 
           function getStepSize() {
-            if (!slides[0] || !slides[1]) {
-              return slider.clientWidth;
-            }
-
+            if (!slides[0] || !slides[1]) return slider.clientWidth;
             return slides[1].offsetLeft - slides[0].offsetLeft;
           }
 
@@ -1102,6 +1062,9 @@
 
             if (!blockWidth) return;
 
+            const previousBehavior = slider.style.scrollBehavior;
+            slider.style.scrollBehavior = "auto";
+
             if (slider.scrollLeft >= endLeft) {
               slider.scrollLeft = slider.scrollLeft - blockWidth;
             }
@@ -1109,6 +1072,8 @@
             if (slider.scrollLeft < startLeft) {
               slider.scrollLeft = slider.scrollLeft + blockWidth;
             }
+
+            slider.style.scrollBehavior = previousBehavior;
           }
 
           function nextSlide() {
@@ -1142,19 +1107,24 @@
           }
 
           function resumeAutoSlideLater() {
-            if (resumeTimer) {
-              clearTimeout(resumeTimer);
-            }
+            if (resumeTimer) clearTimeout(resumeTimer);
 
             resumeTimer = setTimeout(function () {
               startAutoSlide();
             }, resumeDelay);
           }
 
+          function scheduleNormalize(delay) {
+            if (normalizeTimer) clearTimeout(normalizeTimer);
+
+            normalizeTimer = setTimeout(function () {
+              normalizeScrollPosition();
+            }, delay);
+          }
+
           slider.addEventListener("pointerdown", function (event) {
             isPointerDown = true;
-            isMouseDrag = event.pointerType === "mouse";
-            isVerticalScroll = false;
+            dragMode = "none";
             moved = false;
 
             startX = event.clientX;
@@ -1164,19 +1134,6 @@
 
             pauseAutoSlide();
             slider.classList.add("cursor-grabbing");
-
-            /*
-              중요:
-              PC 마우스만 pointer capture.
-              모바일 터치는 capture 하지 않아야 세로 스크롤이 자연스럽게 살아남.
-            */
-            if (
-              isMouseDrag &&
-              slider.setPointerCapture &&
-              event.pointerId !== undefined
-            ) {
-              slider.setPointerCapture(event.pointerId);
-            }
           });
 
           slider.addEventListener("pointermove", function (event) {
@@ -1188,29 +1145,33 @@
             const absX = Math.abs(diffX);
             const absY = Math.abs(diffY);
 
-            /*
-              모바일에서 세로 이동이 더 크면:
-              이건 슬라이더 조작이 아니라 페이지 스크롤로 판단.
-              슬라이더 개입을 완전히 중단.
-            */
-            if (!isMouseDrag && absY > absX && absY > verticalGuard) {
-              isVerticalScroll = true;
-              isPointerDown = false;
-              moved = true;
-              slider.classList.remove("cursor-grabbing");
-              resumeAutoSlideLater();
-              return;
-            }
-
             if (absX > clickThreshold || absY > clickThreshold) {
               moved = true;
             }
 
-            /*
-              PC 마우스 드래그일 때만 직접 가로 이동.
-              모바일 터치는 브라우저 기본 터치 스크롤에 맡김.
-            */
-            if (isMouseDrag) {
+            if (dragMode === "none") {
+              if (absX < directionThreshold && absY < directionThreshold) {
+                return;
+              }
+
+              if (absY > absX) {
+                dragMode = "vertical";
+                isPointerDown = false;
+                slider.classList.remove("cursor-grabbing");
+                resumeAutoSlideLater();
+                return;
+              }
+
+              dragMode = "horizontal";
+
+              if (slider.setPointerCapture && event.pointerId !== undefined) {
+                try {
+                  slider.setPointerCapture(event.pointerId);
+                } catch (error) {}
+              }
+            }
+
+            if (dragMode === "horizontal") {
               event.preventDefault();
               slider.scrollLeft = startScrollLeft - diffX;
             }
@@ -1222,21 +1183,13 @@
             isPointerDown = false;
             slider.classList.remove("cursor-grabbing");
 
-            if (
-              isMouseDrag &&
-              slider.releasePointerCapture &&
-              event.pointerId !== undefined
-            ) {
+            if (slider.releasePointerCapture && event.pointerId !== undefined) {
               try {
                 slider.releasePointerCapture(event.pointerId);
               } catch (error) {}
             }
 
-            /*
-              클릭이면 확대 모달 열기.
-              드래그였거나 세로 스크롤이면 모달 열지 않음.
-            */
-            if (!moved && !isVerticalScroll && startFigure) {
+            if (!moved && startFigure) {
               const slideIndex = Number(startFigure.getAttribute("data-slide-index"));
 
               if (!Number.isNaN(slideIndex)) {
@@ -1245,24 +1198,16 @@
               }
             }
 
-            /*
-              모바일 터치는 관성 스크롤 시간을 더 줌.
-              PC 마우스 드래그는 빠르게 위치 보정.
-            */
-            setTimeout(normalizeScrollPosition, isMouseDrag ? 350 : 1000);
-
-            isMouseDrag = false;
-            isVerticalScroll = false;
+            scheduleNormalize(1200);
             resumeAutoSlideLater();
           });
 
           slider.addEventListener("pointercancel", function () {
             isPointerDown = false;
-            isMouseDrag = false;
-            isVerticalScroll = false;
+            dragMode = "none";
             slider.classList.remove("cursor-grabbing");
 
-            setTimeout(normalizeScrollPosition, 1000);
+            scheduleNormalize(1200);
             resumeAutoSlideLater();
           });
 
@@ -1270,25 +1215,21 @@
             if (!isPointerDown) return;
 
             isPointerDown = false;
+            dragMode = "none";
             slider.classList.remove("cursor-grabbing");
 
-            setTimeout(normalizeScrollPosition, isMouseDrag ? 350 : 1000);
-
-            isMouseDrag = false;
-            isVerticalScroll = false;
+            scheduleNormalize(1200);
             resumeAutoSlideLater();
           });
 
           slider.addEventListener("scroll", function () {
             if (isPointerDown) return;
 
-            if (scrollTimer) {
-              clearTimeout(scrollTimer);
-            }
+            if (normalizeTimer) clearTimeout(normalizeTimer);
 
-            scrollTimer = setTimeout(function () {
+            normalizeTimer = setTimeout(function () {
               normalizeScrollPosition();
-            }, 500);
+            }, 1200);
           });
 
           slider.addEventListener("wheel", function () {
