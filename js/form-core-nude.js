@@ -174,15 +174,46 @@
     }
 
     // ─────────────────────────────
-    // 3-2. uid 생성 및 hidden 필드 세팅
+    // 3-2. sessionStorage 기반 uid 생성 및 hidden 필드 세팅
+    // - 같은 탭/같은 세션에서는 같은 uid 유지
+    // - 전화번호 오입력 후 바로 재제출해도 같은 고객 흐름으로 묶기 위함
+    // - 단, 너무 오래 지난 세션은 새 uid 발급
     // ─────────────────────────────
+    var UID_STORAGE_KEY = 'signal_landing_uid';
+    var UID_CREATED_AT_KEY = 'signal_landing_uid_created_at';
+    var UID_TTL_MS = 5 * 60 * 1000; // 5분
+
     function createUid() {
       return Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
 
+    function getSessionUid() {
+      var now = Date.now();
+
+      try {
+        var savedUid = sessionStorage.getItem(UID_STORAGE_KEY);
+        var savedAt = Number(sessionStorage.getItem(UID_CREATED_AT_KEY) || 0);
+
+        // 기존 uid가 있고, [5]분 이내면 기존 uid 재사용
+        if (savedUid && savedAt && now - savedAt < UID_TTL_MS) {
+          return savedUid;
+        }
+
+        // 없거나 오래 지났으면 새 uid 발급
+        var newUid = createUid();
+        sessionStorage.setItem(UID_STORAGE_KEY, newUid);
+        sessionStorage.setItem(UID_CREATED_AT_KEY, String(now));
+
+        return newUid;
+      } catch (error) {
+        // sessionStorage 사용이 막힌 환경에서는 임시 uid 발급
+        return createUid();
+      }
+    }
+
     var uidEl = fieldElements['uid'];
-    if (uidEl && !uidEl.value) {
-      uidEl.value = createUid();
+    if (uidEl) {
+      uidEl.value = getSessionUid();
     }
 
     // ─────────────────────────────
@@ -429,15 +460,13 @@
       submitBtn.style.backgroundColor = BTN_DISABLED_BG;
       submitBtn.style.color = BTN_DISABLED_TX;
 
-      // uid 값 확인 [★새로 추가된것★]
-      var uid = fieldElements['uid'] ? fieldElements['uid'].value : '';
+      // uid 값 확인
+      // 같은 탭/같은 세션에서는 기존 uid 유지
+      // 세션이 없거나 만료되었으면 새 uid 발급
+      var uid = getSessionUid();
 
-      if (!uid) {
-        uid = createUid();
-
-        if (fieldElements['uid']) {
-          fieldElements['uid'].value = uid;
-        }
+      if (fieldElements['uid']) {
+        fieldElements['uid'].value = uid;
       }
 
       // 폼 데이터를 FormData 형태로 수집
