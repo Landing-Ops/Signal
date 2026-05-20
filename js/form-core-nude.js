@@ -70,7 +70,7 @@
       {
         key: 'name',
         selector: '[data-field="name"]',
-        entryName: 'entry.138235026',       // Google Form entry
+        entryName: 'entry.180948987',       // Google Form entry
         type: 'text',                        // text / phone / textarea / select / checkbox
         minLength: 2,
         message: '이름을 입력해주세요.'
@@ -115,6 +115,13 @@
         entryName: 'entry.1307854358',  // ← 구글 폼에서 실제 매체 필드 entry.* 값으로 맞춰줘야 함
         type: 'hidden',
         message: '유입 경로 정보가 없습니다.'
+      },
+      {
+      key: 'uid',
+      selector: '[data-field="uid"]',
+      entryName: 'entry.138235026',
+      type: 'hidden',
+      message: 'uid가 없습니다.'
       }
     ];
 
@@ -164,6 +171,18 @@
 
       // 실제 hidden input 값에 저장
       sourceEl.value = srcLabel;
+    }
+
+    // ─────────────────────────────
+    // 3-2. uid 생성 및 hidden 필드 세팅
+    // ─────────────────────────────
+    function createUid() {
+      return Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    }
+
+    var uidEl = fieldElements['uid'];
+    if (uidEl && !uidEl.value) {
+      uidEl.value = createUid();
     }
 
     // ─────────────────────────────
@@ -410,6 +429,17 @@
       submitBtn.style.backgroundColor = BTN_DISABLED_BG;
       submitBtn.style.color = BTN_DISABLED_TX;
 
+      // uid 값 확인 [★새로 추가된것★]
+      var uid = fieldElements['uid'] ? fieldElements['uid'].value : '';
+
+      if (!uid) {
+        uid = createUid();
+
+        if (fieldElements['uid']) {
+          fieldElements['uid'].value = uid;
+        }
+      }
+
       // 폼 데이터를 FormData 형태로 수집
       var formData = new FormData(form);
 
@@ -419,32 +449,31 @@
         body: formData,
         mode: 'no-cors'
       })
-        .then(function () {
-          // 실제 Google 응답은 확인할 수 없으므로 바로 땡큐페이지 이동 처리
-          hoa();
-        })
-        .catch(function () {
-          // 혹시 실패해도 사용자 경험은 동일하게 유지
-          hoa();
-        });
+      //  <<<<< ★새롭게 추가된것★
+      .then(function () {
+        // 실제 Google 응답은 확인할 수 없으므로 바로 땡큐페이지 이동 처리
+        hoa(uid);
+      })
+      .catch(function () {
+        // 혹시 실패해도 사용자 경험은 동일하게 유지
+        hoa(uid);
+        }); // <<<<<  ★새롭게 추가된것★
     });
 
     // ─────────────────────────────
     // 10. 전송 후 후처리 함수 (hoa)
     //     - 알림 → 상단 스크롤 → 땡큐페이지 이동
     // ─────────────────────────────
-    function hoa() {
+    // <<< ★hoa 함수 전체 새롭게 바뀐거임★
+    function hoa(uid) {
       alert('신청이 완료되었습니다.');
 
       // 상단으로 부드럽게 스크롤
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // 랜덤 토큰 생성 (단순 추적용)
-      var tx = Math.random().toString(36).substr(2) + Date.now().toString(36);
-
       // 땡큐페이지로 이동
-      window.location.href = THANKYOU_URL + '?tx=' + tx;
-    }
+      window.location.href = THANKYOU_URL + '?uid=' + encodeURIComponent(uid);
+    } // <<< ★hoa 함수 전체 새롭게 바뀐거임★
   });
 })();
 
