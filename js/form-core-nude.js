@@ -217,6 +217,38 @@
     }
 
     // ─────────────────────────────
+    // 3-3. 촬영목적별 땡큐페이지 URL 분기
+    // ─────────────────────────────
+    function getThankyouInfoByGoal(goal) {
+      if (goal === '리마인드 웨딩') {
+        return {
+          url: 'http://signalstudio-event.shop/result-wedding.html',
+          topic: 'wedding'
+        };
+      }
+
+      if (goal === '환갑·칠순·팔순') {
+        return {
+          url: 'http://signalstudio-event.shop/result-chilsun.html',
+          topic: 'chilsun'
+        };
+      }
+
+      if (goal === '가족사진 (8인이하)' || goal === '가족사진 (9인이상)') {
+        return {
+          url: 'http://signalstudio-event.shop/result-family.html',
+          topic: 'family'
+        };
+      }
+
+      // 예외 상황용 기본값
+      return {
+        url: THANKYOU_URL,
+        topic: 'unknown'
+      };
+    }
+
+    // ─────────────────────────────
     // 3-A. 전화번호 입력 마스킹 (숫자만 + 최대 11자리)
     //      - HTML에 maxlength 없어도 JS에서 강제 제한
     // ─────────────────────────────
@@ -469,6 +501,9 @@
         fieldElements['uid'].value = uid;
       }
 
+      // 촬영목적 값 확인
+      var goal = fieldElements['goal'] ? fieldElements['goal'].value : '';
+
       // 폼 데이터를 FormData 형태로 수집
       var formData = new FormData(form);
 
@@ -480,13 +515,11 @@
       })
       //  <<<<< ★새롭게 추가된것★
       .then(function () {
-        // 실제 Google 응답은 확인할 수 없으므로 바로 땡큐페이지 이동 처리
-        hoa(uid);
+        hoa(uid, goal);
       })
       .catch(function () {
-        // 혹시 실패해도 사용자 경험은 동일하게 유지
-        hoa(uid);
-        }); // <<<<<  ★새롭게 추가된것★
+        hoa(uid, goal);
+      }); // <<<<<  ★새롭게 추가된것★
     });
 
     // ─────────────────────────────
@@ -494,14 +527,23 @@
     //     - 알림 → 상단 스크롤 → 땡큐페이지 이동
     // ─────────────────────────────
     // <<< ★hoa 함수 전체 새롭게 바뀐거임★
-    function hoa(uid) {
+      function hoa(uid, goal) {
       alert('신청이 완료되었습니다.');
 
       // 상단으로 부드럽게 스크롤
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // 땡큐페이지로 이동
-      window.location.href = THANKYOU_URL + '?uid=' + encodeURIComponent(uid);
+      var thankyouInfo = getThankyouInfoByGoal(goal);
+      var source = fieldElements['source'] ? fieldElements['source'].value : '';
+
+      var params = new URLSearchParams();
+      params.set('uid', uid);
+      params.set('topic', thankyouInfo.topic);
+      params.set('goal', goal);
+      params.set('src', source);
+
+      // 촬영목적별 땡큐페이지로 이동
+      window.location.href = thankyouInfo.url + '?' + params.toString();
     } // <<< ★hoa 함수 전체 새롭게 바뀐거임★
   });
 })();
