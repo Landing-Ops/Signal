@@ -10,9 +10,9 @@
   // 1. 기본 설정 (Google Form / Thank-you URL)
   // ─────────────────────────────
   var GOOGLE_FORM_ACTION =
-    'https://docs.google.com/forms/u/0/d/e/1FAIpQLSdS5xmgRUCH41Ppyx_MQ7T8Q5ngmftP1d-5hp0KCBcDhPcrKQ/formResponse';
+    'https://docs.google.com/forms/u/0/d/e/1FAIpQLSfts65XB6bolNn_cvLVj2wLUOfGGLqipyyoZQCzeZHUeA5BWQ/formResponse';
 
-  var THANKYOU_URL = 'http://signalstudio-event.shop/result';
+  var THANKYOU_URL = 'https://landing-ops.github.io/Signal/result';
 
 // 버튼 컬러(활성/비활성)
   var BTN_ACTIVE_BG   = '';
@@ -70,7 +70,7 @@
       {
         key: 'name',
         selector: '[data-field="name"]',
-        entryName: 'entry.180948987',       // Google Form entry
+        entryName: 'entry.1197164677',       // Google Form entry
         type: 'text',                        // text / phone / textarea / select / checkbox
         minLength: 2,
         message: '이름을 입력해주세요.'
@@ -78,28 +78,28 @@
       {
         key: 'phone',
         selector: '[data-field="phone"]',
-        entryName: 'entry.41455611',
+        entryName: 'entry.889929332',
         type: 'phone',
         message: '핸드폰 번호를 입력해주세요.'
       },
       {
         key: 'goal',  
         selector: '[data-field="goal"]',
-        entryName: 'entry.2073120631',
+        entryName: 'entry.213300287',
         type: 'select',
         message: '촬영목적을 선택해주세요.'
       },
       {
         key: 'hope-date',  
         selector: '[data-field="hope-date"]',
-        entryName: 'entry.675575655',
+        entryName: 'entry.2092989672',
         type: 'select',
         message: '촬영 희망시기를 선택해주세요.'
       },
       {
         key: 'family-schedule',  
         selector: '[data-field="family-schedule"]',
-        entryName: 'entry.186311751',
+        entryName: 'entry.971754179',
         type: 'select',
         message: '가족 일정 상태를 선택해주세요.'
       },
@@ -112,14 +112,14 @@
       {
         key: 'source',
         selector: '[data-field="source"]',  //  유입매체&타겟정보
-        entryName: 'entry.1307854358',  // ← 구글 폼에서 실제 매체 필드 entry.* 값으로 맞춰줘야 함
+        entryName: 'entry.841900972',  // ← 구글 폼에서 실제 매체 필드 entry.* 값으로 맞춰줘야 함
         type: 'hidden',
         message: '유입 경로 정보가 없습니다.'
       },
       {
       key: 'uid',
       selector: '[data-field="uid"]',
-      entryName: 'entry.138235026',
+      entryName: 'entry.1826381699',
       type: 'hidden',
       message: 'uid가 없습니다.'
       }
