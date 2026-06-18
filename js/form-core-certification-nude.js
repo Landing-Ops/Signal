@@ -365,10 +365,12 @@
       if (!phone) { alert('휴대폰 번호를 정확히 입력해주세요.'); return; }
 
       otpActionBtn.disabled = true;
-      setOtpMsg('인증번호 발송 중...', '');
+      setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
 
-      // ★ alert을 API 호출 전으로 이동 → 버튼 클릭 즉시 팝업
-      alert('휴대폰번호로 [인증번호]가 전송되었습니다. 전송된 인증번호 \n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
+      // 0.5초 뒤 팝업 메시지
+      setTimeout(function () {
+        alert('휴대폰번호로 [인증번호]가 전송되었습니다. 전송된 인증번호 \n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
+      }, 500);
 
       callOtpApi({ action: 'send', phone: phone })
         .then(function (res) {
@@ -376,9 +378,7 @@
             codeSent = true;
             setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
             if (otpCodeEl) otpCodeEl.focus();
-
           } else {
-            // 실제로 발송 실패한 경우에만 에러 alert
             alert(res.message || '발송에 실패했습니다. 다시 시도해주세요.');
             setOtpMsg(res.message || '발송에 실패했습니다.', '#d33');
           }
