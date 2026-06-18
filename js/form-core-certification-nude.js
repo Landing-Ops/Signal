@@ -293,7 +293,7 @@
       document.head.appendChild(style);
     })();
 
-    // (2) HTML 주입 - 
+    // (2) 입력폼 번호 항목 하단에 인증번호 HTML 주입 
     var oldOtp = form.querySelector('[data-otp-box]');
     if (oldOtp) oldOtp.remove();
 
