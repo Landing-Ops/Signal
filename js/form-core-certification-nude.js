@@ -303,7 +303,8 @@
       otpBox.setAttribute('data-otp-box', '');
       otpBox.innerHTML =
         '<div class="otp-row">' +
-          '<input data-otp-code type="tel" maxlength="6" inputmode="numeric" ' +
+          '<input data-otp-code type="text" maxlength="6" inputmode="numeric" ' +
+          'pattern="[0-9]*" autocomplete="one-time-code" ' +
             'autocomplete="one-time-code" ' +
             'class="input otp-code-input px-4 py-3" placeholder="인증번호를 입력해주세요" />' +
           '<button type="button" data-otp-action class="otp-action-btn">인증번호 받기</button>' +
@@ -363,21 +364,29 @@
     function doSend() {
       var phone = getValidPhoneDigits();
       if (!phone) { alert('휴대폰 번호를 정확히 입력해주세요.'); return; }
+
       otpActionBtn.disabled = true;
       setOtpMsg('인증번호 발송 중...', '');
+
+      // ★ alert을 API 호출 전으로 이동 → 버튼 클릭 즉시 팝업
+      alert('휴대폰번호로 [인증번호]가 전송되었습니다. 전송된 인증번호 \n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
+
       callOtpApi({ action: 'send', phone: phone })
         .then(function (res) {
           if (res.ok) {
             codeSent = true;
             setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
-            alert('휴대폰번호로 인증번호가 전송되었습니다.\n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
             if (otpCodeEl) otpCodeEl.focus();
           } else {
-            alert(res.message || '발송에 실패했습니다.');
+            // 실제로 발송 실패한 경우에만 에러 alert
+            alert(res.message || '발송에 실패했습니다. 다시 시도해주세요.');
             setOtpMsg(res.message || '발송에 실패했습니다.', '#d33');
           }
         })
-        .catch(function () { alert('네트워크 오류로 발송에 실패했습니다.'); })
+        .catch(function () {
+          alert('네트워크 오류로 발송에 실패했습니다.');
+          setOtpMsg('네트워크 오류로 발송에 실패했습니다.', '#d33');
+        })
         .then(function () { refreshOtpButton(); });
     }
 
