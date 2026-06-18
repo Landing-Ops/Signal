@@ -497,6 +497,14 @@
       // 세션이 없거나 만료되었으면 새 uid 발급
       var uid = getSessionUid();
 
+      // ★폼 제출 시점 기준으로 5분 창 리셋
+      // 이전: 랜딩 첫 로드 시각부터 5분
+      // 변경: 가장 최근 제출 시각부터 5분
+      // → 오타 수정 후 재제출 시 같은 UID로 묶이는 시간이 더 정확해짐
+      try {
+        sessionStorage.setItem(UID_CREATED_AT_KEY, String(Date.now()));
+      } catch (e) {}
+
       if (fieldElements['uid']) {
         fieldElements['uid'].value = uid;
       }
