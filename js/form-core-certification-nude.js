@@ -304,8 +304,7 @@
       otpBox.innerHTML =
         '<div class="otp-row">' +
           '<input data-otp-code type="text" maxlength="6" inputmode="numeric" ' +
-          'pattern="[0-9]*" autocomplete="one-time-code" ' +
-            'autocomplete="one-time-code" ' +
+            'pattern="[0-9]*" autocomplete="off" ' +
             'class="input otp-code-input px-4 py-3" placeholder="인증번호를 입력해주세요" />' +
           '<button type="button" data-otp-action class="otp-action-btn">인증번호 받기</button>' +
         '</div>' +
@@ -340,26 +339,6 @@
     }
     function getCode() {
       return ((otpCodeEl && otpCodeEl.value) || '').replace(/\D/g, '');
-    }
-    // WebOTP: 문자 도착 시 코드 자동 입력 (지원 브라우저에서만 — 주로 안드로이드 크롬/삼성인터넷)
-    var otpAbort = null;
-    function startWebOtp() {
-      if (!('OTPCredential' in window)) return;   // iOS·인앱웹뷰 등 미지원 → 조용히 패스
-      if (!otpCodeEl) return;
-      try { if (otpAbort) otpAbort.abort(); } catch (e) {}
-      otpAbort = new AbortController();
-      navigator.credentials.get({ otp: { transport: ['sms'] }, signal: otpAbort.signal })
-        .then(function (otp) {
-          if (!otp || !otp.code || isPhoneVerified) return;
-          otpCodeEl.value = String(otp.code).replace(/\D/g, '').slice(0, 6);
-          refreshOtpButton();
-          if (getCode().length === 6) doVerify();   // 6자리면 자동 확인까지
-        })
-        .catch(function () { /* 취소·미지원·거부 → 무시하고 수동입력으로 */ });
-    }
-    function stopWebOtp() {
-      try { if (otpAbort) otpAbort.abort(); } catch (e) {}
-      otpAbort = null;
     }
 
     // 상태에 맞게 버튼 모양/문구 갱신
@@ -397,7 +376,6 @@
             codeSent = true;
             setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
             if (otpCodeEl) otpCodeEl.focus();
-            startWebOtp();   // 문자 자동입력 리스너 시작
 
           } else {
             // 실제로 발송 실패한 경우에만 에러 alert
@@ -422,7 +400,6 @@
         .then(function (res) {
           if (res.ok) {
             isPhoneVerified = true;
-            stopWebOtp();
 
             if (otpCodeEl) otpCodeEl.disabled = true;
             setOtpMsg('', '');
@@ -465,7 +442,6 @@
         if (!isPhoneVerified && !codeSent) return;
         isPhoneVerified = false;
         codeSent = false;
-        stopWebOtp();
 
         if (otpCodeEl) { otpCodeEl.disabled = false; otpCodeEl.value = ''; }
         setOtpMsg('번호가 변경되어 다시 인증이 필요합니다.', '#d33');
