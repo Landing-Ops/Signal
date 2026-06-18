@@ -222,21 +222,21 @@
     function getThankyouInfoByGoal(goal) {
       if (goal === '리마인드 웨딩') {
         return {
-          url: 'http://signalstudio-event.shop/result-wedding.html',
+          url: 'https://landing-ops.github.io/Signal/result-wedding.html',
           topic: 'wedding'
         };
       }
 
       if (goal === '환갑·칠순·팔순') {
         return {
-          url: 'http://signalstudio-event.shop/result-chilsun.html',
+          url: 'https://landing-ops.github.io/Signal/result-chilsun.html',
           topic: 'chilsun'
         };
       }
 
       if (goal === '가족사진 (8인이하)' || goal === '가족사진 (9인이상)') {
         return {
-          url: 'http://signalstudio-event.shop/result-family.html',
+          url: 'https://landing-ops.github.io/Signal/result-family.html',
           topic: 'family'
         };
       }
