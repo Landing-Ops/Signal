@@ -304,6 +304,7 @@
       otpBox.innerHTML =
         '<div class="otp-row">' +
           '<input data-otp-code type="tel" maxlength="6" inputmode="numeric" ' +
+            'autocomplete="one-time-code" ' +
             'class="input otp-code-input px-4 py-3" placeholder="인증번호를 입력해주세요" />' +
           '<button type="button" data-otp-action class="otp-action-btn">인증번호 받기</button>' +
         '</div>' +
